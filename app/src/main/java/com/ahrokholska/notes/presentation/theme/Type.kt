@@ -1,4 +1,4 @@
-package com.ahrokholska.notes.ui.theme
+package com.ahrokholska.notes.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
