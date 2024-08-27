@@ -1,4 +1,4 @@
-package com.ahrokholska.notes.presentation.screens.home.common
+package com.ahrokholska.notes.presentation.common.bottomBar
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons

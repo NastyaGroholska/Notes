@@ -1,4 +1,4 @@
-package com.ahrokholska.notes.presentation.screens.home.common
+package com.ahrokholska.notes.presentation.common.bottomBar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -44,6 +44,7 @@ private val plusClearance = 8.dp
 
 @Composable
 fun BottomAppBar(
+    modifier: Modifier = Modifier,
     currentScreen: BottomBarScreen? = null,
     onPlusClick: () -> Unit = {},
     onScreenClick: (screen: BottomBarScreen) -> Unit = {}
@@ -52,7 +53,7 @@ fun BottomAppBar(
     val colorScheme = MaterialTheme.colorScheme
     val plusSizePx by remember { derivedStateOf { with(density) { plusSize.toPx() } } }
     val plusClearancePx by remember { derivedStateOf { with(density) { plusClearance.toPx() } } }
-    Box(contentAlignment = Alignment.TopCenter) {
+    Box(modifier = modifier, contentAlignment = Alignment.TopCenter) {
         Icon(
             modifier = Modifier
                 .offset(y = -plusSize / 2)
