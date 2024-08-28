@@ -1,5 +1,6 @@
 package com.ahrokholska.notes.presentation.screens.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -22,6 +23,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,9 +39,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -80,12 +86,41 @@ fun HomeScreenContent(
     ) {
         var bottomBarHeight by remember { mutableStateOf(0.dp) }
         val density = LocalDensity.current
+        if (pinnedNotes.isEmpty() && (otherNotes.isEmpty() || otherNotes.all { it.isEmpty() })) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Spacer(modifier = Modifier.weight(0.3f))
+                Image(
+                    painter = painterResource(R.drawable.illustration_go),
+                    contentDescription = null
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = stringResource(R.string.start_your_journey),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = stringResource(R.string.notes_your_first_idea_and_start),
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.secondary
+                )
+                Spacer(modifier = Modifier.height(21.dp))
+                Icon(imageVector = Icons.Filled.ArrowDownward, contentDescription = null)
+                Spacer(modifier = Modifier.weight(0.5f))
+            }
+        }
         LazyColumn(modifier = Modifier.fillMaxSize()) {
-            item {
-                NoteList(
-                    title = stringResource(R.string.pinned_notes),
-                    notes = pinnedNotes,
-                    onViewAllClick = {})
+            if (pinnedNotes.isNotEmpty()) {
+                item {
+                    NoteList(
+                        title = stringResource(R.string.pinned_notes),
+                        notes = pinnedNotes,
+                        onViewAllClick = {})
+                }
             }
             items(otherNotes) { noteList ->
                 if (noteList.isNotEmpty()) {
