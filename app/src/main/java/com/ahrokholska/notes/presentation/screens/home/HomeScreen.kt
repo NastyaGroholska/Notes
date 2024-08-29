@@ -58,10 +58,16 @@ import com.ahrokholska.notes.presentation.theme.background
 import com.ahrokholska.notes.presentation.theme.noteColors
 
 @Composable
-fun HomeScreen(viewModel: HomeScreenViewModel = hiltViewModel()) {
+fun HomeScreen(
+    viewModel: HomeScreenViewModel = hiltViewModel(),
+    onPlusClick: () -> Unit,
+    onScreenClick: (screen: BottomBarScreen) -> Unit
+) {
     HomeScreenContent(
         pinnedNotes = viewModel.pinnedNotes.collectAsState().value,
-        otherNotes = viewModel.allNotes.collectAsState().value
+        otherNotes = viewModel.allNotes.collectAsState().value,
+        onPlusClick = onPlusClick,
+        onScreenClick = onScreenClick
     )
 }
 
@@ -192,7 +198,7 @@ private fun NoteList(
 }
 
 @Composable
-fun NoteItem(title: String, text: String, color: Color, type: NoteType? = null) {
+private fun NoteItem(title: String, text: String, color: Color, type: NoteType? = null) {
     Column(
         modifier = Modifier
             .fillMaxHeight()

@@ -24,4 +24,11 @@
     <string name="pinned_notes">Pinned Notes</string>
     <string name="start_your_journey">Start Your Journey</string>
     <string name="notes_your_first_idea_and_start">Every big step start with small step.\nNotes your first idea and start\nyour journey!</string>
+
+    <!--TopBar-->
+    <string name="back">Back</string>
+
+    <!--SelectNoteTypeScreen-->
+    <string name="new_notes">New Notes</string>
+    <string name="what_do_you_want_to_note">What Do You Want to Note?</string>
 </resources>

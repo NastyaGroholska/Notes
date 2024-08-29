@@ -12,6 +12,7 @@ val Pink40 = Color(0xFF7D5260)
 
 val background = Color(0xFFF3E7FF)
 val BlackAlpha20 = Color(0x33000000)
+val BlackAlpha40 = Color(0x66000000)
 
 val noteColors = listOf(
     Color(0xFFFFFFFF),
