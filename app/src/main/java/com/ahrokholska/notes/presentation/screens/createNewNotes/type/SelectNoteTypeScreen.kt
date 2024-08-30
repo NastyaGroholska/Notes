@@ -1,6 +1,7 @@
 package com.ahrokholska.notes.presentation.screens.createNewNotes.type
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,12 +36,15 @@ import com.ahrokholska.notes.presentation.theme.BlackAlpha40
 import com.ahrokholska.notes.presentation.theme.background
 
 @Composable
-fun SelectNoteTypeScreen(onBackClick: () -> Unit) {
-    SelectNoteTypeScreenContent(onBackClick = onBackClick)
+fun SelectNoteTypeScreen(onBackClick: () -> Unit, onTypeClick: (NoteType) -> Unit) {
+    SelectNoteTypeScreenContent(onBackClick = onBackClick, onTypeClick = onTypeClick)
 }
 
 @Composable
-fun SelectNoteTypeScreenContent(onBackClick: () -> Unit = {}) {
+fun SelectNoteTypeScreenContent(
+    onBackClick: () -> Unit = {},
+    onTypeClick: (NoteType) -> Unit = {}
+) {
     Scaffold(
         containerColor = background,
         topBar = {
@@ -69,7 +73,8 @@ fun SelectNoteTypeScreenContent(onBackClick: () -> Unit = {}) {
                     title = stringResource(id = type.title),
                     description = stringResource(id = type.description),
                     icon = type.icon,
-                    color = type.color
+                    color = type.color,
+                    onClick = { onTypeClick(type) }
                 )
                 if (index < (NoteType.entries.size - 1)) {
                     Spacer(modifier = Modifier.height(24.dp))
@@ -80,11 +85,18 @@ fun SelectNoteTypeScreenContent(onBackClick: () -> Unit = {}) {
 }
 
 @Composable
-private fun Type(title: String, description: String, icon: ImageVector, color: Color) {
+private fun Type(
+    title: String,
+    description: String,
+    icon: ImageVector,
+    color: Color,
+    onClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = color, shape = RoundedCornerShape(8.dp))
+            .clickable { onClick() }
             .padding(16.dp)
     ) {
         Box(

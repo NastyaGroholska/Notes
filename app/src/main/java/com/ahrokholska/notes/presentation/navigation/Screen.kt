@@ -1,5 +1,6 @@
 package com.ahrokholska.notes.presentation.navigation
 
+import com.ahrokholska.notes.presentation.model.NoteType
 import kotlinx.serialization.Serializable
 
 sealed class Screen {
@@ -7,8 +8,11 @@ sealed class Screen {
     data object Home : Screen()
 
     @Serializable
-    data object CreateNewNotesGraph : Screen(){
+    data object CreateNewNotesGraph : Screen() {
         @Serializable
         data object SelectNoteType : Screen()
+
+        @Serializable
+        data class CreateNote(val type: NoteType) : Screen()
     }
 }
