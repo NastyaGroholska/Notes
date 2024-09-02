@@ -32,6 +32,10 @@
     <string name="new_notes">New Notes</string>
     <string name="what_do_you_want_to_note">What Do You Want to Note?</string>
 
+    <!--InterestingIdeaNoteScreen-->
+    <string name="new_idea">💡 New Idea</string>
+    <string name="your_idea">Your idea</string>
+
     <!--BuySomethingNoteScreen-->
     <string name="monthly_needs">🛒 Monthly Needs</string>
     <string name="enter_item_name">Enter item name</string>
