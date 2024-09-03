@@ -40,4 +40,9 @@
     <string name="monthly_needs">🛒 Monthly Needs</string>
     <string name="enter_item_name">Enter item name</string>
     <string name="add_checkbox">+ Add checkbox</string>
+
+    <!--GoalsNoteScreen-->
+    <string name="goal">✨ Goal</string>
+    <string name="add_subtask">+ Add subtask</string>
+    <string name="add_main_task">+ Add main task</string>
 </resources>
