@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import com.ahrokholska.notes.presentation.model.NoteType
 import com.ahrokholska.notes.presentation.screens.createNewNotes.fill.screenTypes.buy.BuySomethingNoteScreen
 import com.ahrokholska.notes.presentation.screens.createNewNotes.fill.screenTypes.goal.GoalsNoteScreen
+import com.ahrokholska.notes.presentation.screens.createNewNotes.fill.screenTypes.guidance.GuidanceNoteScreen
 import com.ahrokholska.notes.presentation.screens.createNewNotes.fill.screenTypes.idea.InterestingIdeaNoteScreen
 
 @Composable
@@ -12,7 +13,7 @@ fun CreateNoteScreen(type: NoteType, onBackClick: () -> Unit) {
         NoteType.InterestingIdea -> InterestingIdeaNoteScreen(onBackClick = onBackClick)
         NoteType.BuyingSomething -> BuySomethingNoteScreen(onBackClick = onBackClick)
         NoteType.Goals -> GoalsNoteScreen(onBackClick = onBackClick)
-        NoteType.Guidance -> TODO()
+        NoteType.Guidance -> GuidanceNoteScreen(onBackClick = onBackClick)
         NoteType.RoutineTasks -> TODO()
     }
 }

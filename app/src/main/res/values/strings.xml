@@ -45,4 +45,8 @@
     <string name="goal">✨ Goal</string>
     <string name="add_subtask">+ Add subtask</string>
     <string name="add_main_task">+ Add main task</string>
+
+    <!--GuidanceNoteScreen-->
+    <string name="guidance_title">📋 Guidance</string>
+    <string name="your_guidance">Your guidance</string>
 </resources>
