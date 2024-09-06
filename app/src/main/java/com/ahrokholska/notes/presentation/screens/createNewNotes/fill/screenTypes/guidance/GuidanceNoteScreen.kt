@@ -144,7 +144,7 @@ fun GuidanceNoteScreenContent(
 
 @Preview
 @Composable
-private fun InterestingIdeaNoteScreenPreview() {
+private fun GuidanceNoteScreenPreview() {
     GuidanceNoteScreenContent(
         title = "",
         image = "",

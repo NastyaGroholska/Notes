@@ -10,15 +10,15 @@ val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
-val background = Color(0xFFF3E7FF)
+val background = Color(0xFFF7EEFF)
 val BlackAlpha20 = Color(0x33000000)
 val BlackAlpha40 = Color(0x66000000)
 
 val noteColors = listOf(
     Color(0xFFFFFFFF),
     Color(0xFFF7DEE3),
-    Color(0xFFEFE9F7),
+    Color(0xFFD9CFE7),
     Color(0xFFDAF6E4),
     Color(0xFFFDEBAB),
-    Color(0xFFDAF6E4)
+    Color(0xFFF7F6D4)
 )

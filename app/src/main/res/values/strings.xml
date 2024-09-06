@@ -49,4 +49,8 @@
     <!--GuidanceNoteScreen-->
     <string name="guidance_title">📋 Guidance</string>
     <string name="your_guidance">Your guidance</string>
+
+    <!--GuidanceNoteScreen-->
+    <string name="title">Title</string>
+    <string name="add_sub_notes">+ Add Sub Notes</string>
 </resources>
