@@ -9,9 +9,13 @@ import com.ahrokholska.notes.presentation.screens.createNewNotes.fill.screenType
 import com.ahrokholska.notes.presentation.screens.createNewNotes.fill.screenTypes.routine.RoutineTasksNoteScreen
 
 @Composable
-fun CreateNoteScreen(type: NoteType, onBackClick: () -> Unit) {
+fun CreateNoteScreen(type: NoteType, onBackClick: () -> Unit, onNoteSaved: () -> Unit) {
     when (type) {
-        NoteType.InterestingIdea -> InterestingIdeaNoteScreen(onBackClick = onBackClick)
+        NoteType.InterestingIdea -> InterestingIdeaNoteScreen(
+            onBackClick = onBackClick,
+            onNoteSaved = onNoteSaved
+        )
+
         NoteType.BuyingSomething -> BuySomethingNoteScreen(onBackClick = onBackClick)
         NoteType.Goals -> GoalsNoteScreen(onBackClick = onBackClick)
         NoteType.Guidance -> GuidanceNoteScreen(onBackClick = onBackClick)

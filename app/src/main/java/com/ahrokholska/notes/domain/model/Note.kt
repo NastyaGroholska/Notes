@@ -1,3 +1,39 @@
 package com.ahrokholska.notes.domain.model
 
-data class Note(val title: String, val text: String, val type: NoteType)
+sealed class Note {
+    abstract val id: Int
+    abstract val isFinished: Boolean
+    abstract val isPinned: Boolean
+
+    data class InterestingIdea(
+        override val id: Int = 0,
+        val title: String,
+        val body: String,
+        override val isFinished: Boolean = false,
+        override val isPinned: Boolean = false
+    ) : Note()
+
+    data class BuyingSomething(
+        override val id: Int = 0,
+        override val isFinished: Boolean = false,
+        override val isPinned: Boolean = false
+    ) : Note()
+
+    data class Goals(
+        override val id: Int = 0,
+        override val isFinished: Boolean = false,
+        override val isPinned: Boolean = false
+    ) : Note()
+
+    data class Guidance(
+        override val id: Int = 0,
+        override val isFinished: Boolean = false,
+        override val isPinned: Boolean = false
+    ) : Note()
+
+    data class RoutineTasks(
+        override val id: Int = 0,
+        override val isFinished: Boolean = false,
+        override val isPinned: Boolean = false
+    ) : Note()
+}

@@ -18,20 +18,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ahrokholska.notes.R
+import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarSave
 import com.ahrokholska.notes.presentation.common.topBar.TopBar
 import com.ahrokholska.notes.presentation.theme.background
 
 @Composable
 fun InterestingIdeaNoteScreen(
     viewModel: InterestingIdeaNoteScreenViewModel = hiltViewModel(),
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onNoteSaved: () -> Unit
 ) {
     InterestingIdeaNoteScreenContent(
         title = viewModel.title.collectAsState().value,
         body = viewModel.body.collectAsState().value,
         onTitleChange = viewModel::changeTitle,
         onBodyChange = viewModel::changeBody,
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
+        onSaveClick = { title, body -> viewModel.saveNote(title, body, onNoteSaved) }
     )
 }
 
@@ -42,7 +45,10 @@ fun InterestingIdeaNoteScreenContent(
     onBackClick: () -> Unit = {},
     onTitleChange: (String) -> Unit = {},
     onBodyChange: (String) -> Unit = {},
+    onSaveClick: (String, String) -> Unit = { _, _ -> },
 ) {
+    val adjustedTitle = title.ifEmpty { stringResource(R.string.new_idea) }
+    val adjustedBody = body.ifEmpty { stringResource(R.string.your_idea) }
     Scaffold(
         containerColor = background,
         topBar = {
@@ -50,7 +56,8 @@ fun InterestingIdeaNoteScreenContent(
                 modifier = Modifier.statusBarsPadding(),
                 onBackClick = onBackClick
             )
-        }
+        },
+        bottomBar = { BottomBarSave { onSaveClick(adjustedTitle, adjustedBody) } }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -61,7 +68,7 @@ fun InterestingIdeaNoteScreenContent(
         ) {
             BasicTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = title.ifEmpty { stringResource(R.string.new_idea) },
+                value = adjustedTitle,
                 onValueChange = onTitleChange,
                 textStyle = MaterialTheme.typography.displaySmall
             )
@@ -71,7 +78,7 @@ fun InterestingIdeaNoteScreenContent(
             Spacer(modifier = Modifier.height(16.dp))
             BasicTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = body.ifEmpty { stringResource(R.string.your_idea) },
+                value = adjustedBody,
                 onValueChange = onBodyChange,
                 textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.secondary)
             )
@@ -86,8 +93,8 @@ fun InterestingIdeaNoteScreenContent(
 @Composable
 private fun InterestingIdeaNoteScreenPreview() {
     InterestingIdeaNoteScreenContent(
-        "",
-        "Create a mobile app UI Kit that provide a basic notes functionality but with some improvement. \n" +
+        title = "",
+        body = "Create a mobile app UI Kit that provide a basic notes functionality but with some improvement. \n" +
                 "\n" +
                 "There will be a choice to select what kind of notes that user needed, so the experience while taking notes can be unique based on the needs.",
     )

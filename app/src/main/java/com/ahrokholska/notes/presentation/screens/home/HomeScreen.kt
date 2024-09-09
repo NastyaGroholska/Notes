@@ -51,7 +51,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ahrokholska.notes.R
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomAppBar
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
+import com.ahrokholska.notes.presentation.common.notes.InterestingIdeaNote
 import com.ahrokholska.notes.presentation.model.Note
+import com.ahrokholska.notes.presentation.model.Note2
 import com.ahrokholska.notes.presentation.model.NoteType
 import com.ahrokholska.notes.presentation.theme.BlackAlpha20
 import com.ahrokholska.notes.presentation.theme.background
@@ -65,6 +67,7 @@ fun HomeScreen(
 ) {
     HomeScreenContent(
         pinnedNotes = viewModel.pinnedNotes.collectAsState().value,
+        interestingIdeaNotes = viewModel.interestingIdeaNotes.collectAsState().value,
         otherNotes = viewModel.allNotes.collectAsState().value,
         onPlusClick = onPlusClick,
         onScreenClick = onScreenClick
@@ -77,8 +80,9 @@ private val noteCornerRadius = 8.dp
 
 @Composable
 fun HomeScreenContent(
-    pinnedNotes: List<Note>,
-    otherNotes: List<List<Note>>,
+    pinnedNotes: List<Note2>,
+    interestingIdeaNotes: List<Note.InterestingIdea>,
+    otherNotes: List<List<Note2>>,
     onPlusClick: () -> Unit = {},
     onScreenClick: (screen: BottomBarScreen) -> Unit = {}
 ) {
@@ -92,7 +96,7 @@ fun HomeScreenContent(
     ) {
         var bottomBarHeight by remember { mutableStateOf(0.dp) }
         val density = LocalDensity.current
-        if (pinnedNotes.isEmpty() && (otherNotes.isEmpty() || otherNotes.all { it.isEmpty() })) {
+        if (pinnedNotes.isEmpty() && interestingIdeaNotes.isEmpty() && (otherNotes.isEmpty() || otherNotes.all { it.isEmpty() })) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -122,15 +126,23 @@ fun HomeScreenContent(
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             if (pinnedNotes.isNotEmpty()) {
                 item {
-                    NoteList(
+                    NoteListOld(
                         title = stringResource(R.string.pinned_notes),
                         notes = pinnedNotes,
                         onViewAllClick = {})
                 }
             }
+            if (interestingIdeaNotes.isNotEmpty()) {
+                item {
+                    NoteList(
+                        title = stringResource(NoteType.InterestingIdea.title),
+                        notes = interestingIdeaNotes,
+                        onViewAllClick = {})
+                }
+            }
             items(otherNotes) { noteList ->
                 if (noteList.isNotEmpty()) {
-                    NoteList(
+                    NoteListOld(
                         title = stringResource(noteList.first().type.title),
                         notes = noteList,
                         shouldShowNoteType = false,
@@ -149,6 +161,51 @@ fun HomeScreenContent(
             onPlusClick = onPlusClick,
             onScreenClick = onScreenClick
         )
+    }
+}
+
+@Composable
+private fun NoteListOld(
+    title: String,
+    notes: List<Note2>,
+    onViewAllClick: () -> Unit,
+    shouldShowNoteType: Boolean = true
+) {
+    Column(modifier = Modifier.padding(vertical = 24.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = contentPadding),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                modifier = Modifier.clickable { onViewAllClick() },
+                text = stringResource(R.string.view_all),
+                color = MaterialTheme.colorScheme.primary,
+                style = TextStyle(textDecoration = TextDecoration.Underline)
+            )
+        }
+        Row(
+            modifier = Modifier
+                .padding(top = 12.dp)
+                .horizontalScroll(rememberScrollState())
+                .height(IntrinsicSize.Max)
+        ) {
+            notes.forEach { note ->
+                NoteItem(
+                    title = note.title,
+                    text = note.text,
+                    color = note.color,
+                    type = if (shouldShowNoteType) note.type else null
+                )
+            }
+        }
     }
 }
 
@@ -186,12 +243,19 @@ private fun NoteList(
                 .height(IntrinsicSize.Max)
         ) {
             notes.forEach { note ->
-                NoteItem(
-                    title = note.title,
-                    text = note.text,
-                    color = note.color,
-                    type = if (shouldShowNoteType) note.type else null
-                )
+                when (note) {
+                    is Note.BuyingSomething -> TODO()
+                    is Note.Goals -> TODO()
+                    is Note.Guidance -> TODO()
+                    is Note.InterestingIdea -> InterestingIdeaNote(
+                        title = note.title,
+                        text = note.body,
+                        color = note.color,
+                        shouldShowNoteType = shouldShowNoteType
+                    )
+
+                    is Note.RoutineTasks -> TODO()
+                }
             }
         }
     }
@@ -251,18 +315,25 @@ private fun NoteItem(title: String, text: String, color: Color, type: NoteType? 
 private fun HomeScreenPreview() {
     HomeScreenContent(
         pinnedNotes = listOf(
-            Note(
+            Note2(
                 title = "\uD83D\uDCA1 New Product Idea Design",
                 text = "Create a mobile app UI Kit that provide a basic notes functionality but with some improvement. \n\n" +
                         "There will be a choice to select what kind of notes that user needed, so the experience while taking notes can be unique based on the needs.",
                 type = NoteType.InterestingIdea,
                 color = noteColors[0]
             ),
-            Note(
+            Note2(
                 title = "\uD83D\uDCA1 New Product Idea Design",
                 text = "Create a mobile app UI",
                 type = NoteType.InterestingIdea,
                 color = noteColors[3]
+            )
+        ),
+        interestingIdeaNotes = listOf(
+            Note.InterestingIdea(
+                title = "\uD83D\uDCA1 New Product Idea Design",
+                body = "Create a mobile app UI",
+                color = noteColors[4]
             )
         ),
         otherNotes = listOf()

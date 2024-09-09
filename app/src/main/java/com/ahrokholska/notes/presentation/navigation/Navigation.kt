@@ -39,7 +39,15 @@ fun Navigation() {
 
             composable<Screen.CreateNewNotesGraph.CreateNote> {
                 val args = it.toRoute<Screen.CreateNewNotesGraph.CreateNote>()
-                CreateNoteScreen(type = args.type, onBackClick = navController::navigateUp)
+                CreateNoteScreen(
+                    type = args.type,
+                    onBackClick = navController::navigateUp,
+                    onNoteSaved = {
+                        navController.popBackStack(
+                            route = Screen.CreateNewNotesGraph,
+                            inclusive = true
+                        )
+                    })
             }
         }
     }
