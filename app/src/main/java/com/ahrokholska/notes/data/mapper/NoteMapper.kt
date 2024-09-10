@@ -14,15 +14,14 @@ fun Note.toEntity() = when (this) {
 fun Note.InterestingIdea.toEntity() = InterestingIdeaNoteEntity(
     id = id,
     title = title,
-    body = body,
-    isFinished = isFinished,
-    isPinned = isPinned
+    body = body
 )
 
-fun InterestingIdeaNoteEntity.toDomain() = Note.InterestingIdea(
-    id = id,
-    title = title,
-    body = body,
-    isFinished = isFinished,
-    isPinned = isPinned
-)
+fun InterestingIdeaNoteEntity.toDomain(isFinished: Boolean, isPinned: Boolean) =
+    Note.InterestingIdea(
+        id = id,
+        title = title,
+        body = body,
+        isFinished = isFinished,
+        isPinned = isPinned
+    )

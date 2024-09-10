@@ -45,8 +45,15 @@ class NotesRepositoryImpl @Inject constructor(private val notesDao: NotesDao) : 
         }
 
     override fun getAllInterestingIdeaNotes(): Flow<List<Note.InterestingIdea>> =
-        notesDao.getAllInterestingIdeaNotes().map { list -> list.map { it.toDomain() } }
+        notesDao.getAllInterestingIdeaNotes().map { it.toDomain() }
 
     override fun getLast10InterestingIdeaNotes(): Flow<List<Note.InterestingIdea>> =
-        notesDao.getLast10InterestingIdeaNotes().map { list -> list.map { it.toDomain() } }
+        notesDao.getLast10InterestingIdeaNotes().map { it.toDomain() }
+
+    private fun List<NotesDao.InterestingIdeaNoteAndPinnedFinishedEntity>.toDomain() = map {
+        it.note.toDomain(
+            isFinished = it.finished != null,
+            isPinned = it.pinned != null
+        )
+    }
 }
