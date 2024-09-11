@@ -52,8 +52,8 @@ import com.ahrokholska.notes.R
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomAppBar
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
 import com.ahrokholska.notes.presentation.common.notes.InterestingIdeaNote
-import com.ahrokholska.notes.presentation.model.Note
 import com.ahrokholska.notes.presentation.model.Note2
+import com.ahrokholska.notes.presentation.model.NotePreview
 import com.ahrokholska.notes.presentation.model.NoteType
 import com.ahrokholska.notes.presentation.theme.BlackAlpha20
 import com.ahrokholska.notes.presentation.theme.background
@@ -81,7 +81,7 @@ private val noteCornerRadius = 8.dp
 @Composable
 fun HomeScreenContent(
     pinnedNotes: List<Note2>,
-    interestingIdeaNotes: List<Note.InterestingIdea>,
+    interestingIdeaNotes: List<NotePreview.InterestingIdea>,
     otherNotes: List<List<Note2>>,
     onPlusClick: () -> Unit = {},
     onScreenClick: (screen: BottomBarScreen) -> Unit = {}
@@ -212,7 +212,7 @@ private fun NoteListOld(
 @Composable
 private fun NoteList(
     title: String,
-    notes: List<Note>,
+    notes: List<NotePreview>,
     onViewAllClick: () -> Unit,
     shouldShowNoteType: Boolean = true
 ) {
@@ -244,17 +244,17 @@ private fun NoteList(
         ) {
             notes.forEach { note ->
                 when (note) {
-                    is Note.BuyingSomething -> TODO()
-                    is Note.Goals -> TODO()
-                    is Note.Guidance -> TODO()
-                    is Note.InterestingIdea -> InterestingIdeaNote(
+                    is NotePreview.BuyingSomething -> TODO()
+                    is NotePreview.Goals -> TODO()
+                    is NotePreview.Guidance -> TODO()
+                    is NotePreview.InterestingIdea -> InterestingIdeaNote(
                         title = note.title,
                         text = note.body,
                         color = note.color,
                         shouldShowNoteType = shouldShowNoteType
                     )
 
-                    is Note.RoutineTasks -> TODO()
+                    is NotePreview.RoutineTasks -> TODO()
                 }
             }
         }
@@ -330,7 +330,7 @@ private fun HomeScreenPreview() {
             )
         ),
         interestingIdeaNotes = listOf(
-            Note.InterestingIdea(
+            NotePreview.InterestingIdea(
                 title = "\uD83D\uDCA1 New Product Idea Design",
                 body = "Create a mobile app UI",
                 color = noteColors[4]

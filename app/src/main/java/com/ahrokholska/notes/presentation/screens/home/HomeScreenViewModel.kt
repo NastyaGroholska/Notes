@@ -7,8 +7,8 @@ import com.ahrokholska.notes.domain.model.NoteType
 import com.ahrokholska.notes.domain.useCase.GetAllNoteListsUseCase
 import com.ahrokholska.notes.domain.useCase.GetLast10InterestingIdeaNotesUseCase
 import com.ahrokholska.notes.domain.useCase.GetPinnedNotesUseCase
-import com.ahrokholska.notes.presentation.model.Note
 import com.ahrokholska.notes.presentation.model.Note2
+import com.ahrokholska.notes.presentation.model.NotePreview
 import com.ahrokholska.notes.presentation.theme.noteColors
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -36,12 +36,10 @@ class HomeScreenViewModel @Inject constructor(
     val interestingIdeaNotes = getLast10InterestingIdeaNotesUseCase()
         .map { list ->
             list.mapIndexed { index, item ->
-                Note.InterestingIdea(
+                NotePreview.InterestingIdea(
                     id = item.id,
                     title = item.title,
                     body = item.body,
-                    isFinished = item.isFinished,
-                    isPinned = item.isPinned,
                     color = noteColors[index % noteColors.size]
                 )
             }

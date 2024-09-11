@@ -2,6 +2,7 @@ package com.ahrokholska.notes.data.mapper
 
 import com.ahrokholska.notes.data.local.entities.InterestingIdeaNoteEntity
 import com.ahrokholska.notes.domain.model.Note
+import com.ahrokholska.notes.domain.model.NotePreview
 
 fun Note.toEntity() = when (this) {
     is Note.BuyingSomething -> TODO()
@@ -24,4 +25,11 @@ fun InterestingIdeaNoteEntity.toDomain(isFinished: Boolean, isPinned: Boolean) =
         body = body,
         isFinished = isFinished,
         isPinned = isPinned
+    )
+
+fun InterestingIdeaNoteEntity.toDomainPreview() =
+    NotePreview.InterestingIdea(
+        id = id,
+        title = title,
+        body = body
     )

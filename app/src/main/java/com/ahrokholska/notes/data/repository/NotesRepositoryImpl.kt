@@ -1,9 +1,10 @@
 package com.ahrokholska.notes.data.repository
 
 import com.ahrokholska.notes.data.local.NotesDao
-import com.ahrokholska.notes.data.mapper.toDomain
+import com.ahrokholska.notes.data.mapper.toDomainPreview
 import com.ahrokholska.notes.data.mapper.toEntity
 import com.ahrokholska.notes.domain.model.Note
+import com.ahrokholska.notes.domain.model.NotePreview
 import com.ahrokholska.notes.domain.repository.NotesRepository
 import com.ahrokholska.notes.utils.ResultUtils.getResult
 import kotlinx.coroutines.Dispatchers
@@ -44,16 +45,13 @@ class NotesRepositoryImpl @Inject constructor(private val notesDao: NotesDao) : 
             }
         }
 
-    override fun getAllInterestingIdeaNotes(): Flow<List<Note.InterestingIdea>> =
-        notesDao.getAllInterestingIdeaNotes().map { it.toDomain() }
+    override fun getAllInterestingIdeaNotes(): Flow<List<NotePreview.InterestingIdea>> =
+        notesDao.getAllInterestingIdeaNotes().map { list ->
+            list.map { it.toDomainPreview() }
+        }
 
-    override fun getLast10InterestingIdeaNotes(): Flow<List<Note.InterestingIdea>> =
-        notesDao.getLast10InterestingIdeaNotes().map { it.toDomain() }
-
-    private fun List<NotesDao.InterestingIdeaNoteAndPinnedFinishedEntity>.toDomain() = map {
-        it.note.toDomain(
-            isFinished = it.finished != null,
-            isPinned = it.pinned != null
-        )
-    }
+    override fun getLast10InterestingIdeaNotes(): Flow<List<NotePreview.InterestingIdea>> =
+        notesDao.getLast10InterestingIdeaNotes().map { list ->
+            list.map { it.toDomainPreview() }
+        }
 }

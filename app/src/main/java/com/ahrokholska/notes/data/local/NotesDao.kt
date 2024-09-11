@@ -31,30 +31,21 @@ abstract class NotesDao {
     protected abstract fun deleteFinishedRecord(noteId: Int, type: NoteType)
 
     @Query(
-        "SELECT *" +
-                "FROM interesting_idea_note LEFT JOIN " +
-                "(SELECT note_id as pinned_note_id FROM pinned_notes WHERE pinned_notes.note_type = :type) " +
-                "ON interesting_idea_note.id = pinned_note_id " +
-                "LEFT JOIN (SELECT note_id as finished_note_id FROM finished_notes WHERE finished_notes.note_type = :type) " +
-                "ON interesting_idea_note.id = finished_note_id"
-    )
-    abstract fun getAllInterestingIdeaNotes(type: NoteType = NoteType.InterestingIdea): Flow<List<InterestingIdeaNoteAndPinnedFinishedEntity>>
-
-    @Query(
-        "SELECT *" +
-                "FROM interesting_idea_note LEFT JOIN " +
-                "(SELECT note_id as pinned_note_id FROM pinned_notes WHERE pinned_notes.note_type = :type) " +
-                "ON interesting_idea_note.id = pinned_note_id " +
+        "SELECT interesting_idea_note.*" +
+                "FROM interesting_idea_note " +
                 "LEFT JOIN (SELECT note_id as finished_note_id FROM finished_notes WHERE finished_notes.note_type = :type) " +
                 "ON interesting_idea_note.id = finished_note_id " +
+                "WHERE finished_note_id is null"
+    )
+    abstract fun getAllInterestingIdeaNotes(type: NoteType = NoteType.InterestingIdea): Flow<List<InterestingIdeaNoteEntity>>
+
+    @Query(
+        "SELECT interesting_idea_note.*" +
+                "FROM interesting_idea_note " +
+                "LEFT JOIN (SELECT note_id as finished_note_id FROM finished_notes WHERE finished_notes.note_type = :type) " +
+                "ON interesting_idea_note.id = finished_note_id " +
+                "WHERE finished_note_id is null " +
                 "ORDER BY id LIMIT 10"
     )
-    abstract fun getLast10InterestingIdeaNotes(type: NoteType = NoteType.InterestingIdea): Flow<List<InterestingIdeaNoteAndPinnedFinishedEntity>>
-
-    data class InterestingIdeaNoteAndPinnedFinishedEntity(
-        @Embedded
-        val note: InterestingIdeaNoteEntity,
-        val pinned: Int?,
-        val finished: Int?,
-    )
+    abstract fun getLast10InterestingIdeaNotes(type: NoteType = NoteType.InterestingIdea): Flow<List<InterestingIdeaNoteEntity>>
 }
