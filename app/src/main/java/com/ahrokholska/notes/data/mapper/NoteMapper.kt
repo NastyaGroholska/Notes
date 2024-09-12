@@ -1,5 +1,6 @@
 package com.ahrokholska.notes.data.mapper
 
+import com.ahrokholska.notes.data.local.entities.BuySomethingNoteEntityWithItems
 import com.ahrokholska.notes.data.local.entities.InterestingIdeaNoteEntity
 import com.ahrokholska.notes.domain.model.Note
 import com.ahrokholska.notes.domain.model.NotePreview
@@ -33,3 +34,9 @@ fun InterestingIdeaNoteEntity.toDomainPreview() =
         title = title,
         body = body
     )
+
+fun BuySomethingNoteEntityWithItems.toDomainPreview() = NotePreview.BuyingSomething(
+    id = note.id,
+    title = note.title,
+    items = items.map { it.checked to it.text }
+)

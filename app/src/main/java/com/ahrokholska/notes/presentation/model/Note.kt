@@ -19,6 +19,8 @@ sealed class Note {
 
     data class BuyingSomething(
         override val id: Int = 0,
+        val title: String,
+        val items: List<Pair<Boolean, String>>,
         override val isFinished: Boolean = false,
         override val isPinned: Boolean = false,
         override val color: Color

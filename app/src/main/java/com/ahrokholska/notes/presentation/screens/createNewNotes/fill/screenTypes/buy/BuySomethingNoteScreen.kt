@@ -28,13 +28,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ahrokholska.notes.R
+import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarSave
 import com.ahrokholska.notes.presentation.common.topBar.TopBar
 import com.ahrokholska.notes.presentation.theme.background
 
 @Composable
 fun BuySomethingNoteScreen(
     viewModel: BuySomethingNoteScreenViewModel = hiltViewModel(),
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onNoteSaved: () -> Unit
 ) {
     BuySomethingNoteScreenContent(
         title = viewModel.title.collectAsState().value,
@@ -42,7 +44,11 @@ fun BuySomethingNoteScreen(
         onAddItemClick = viewModel::addItem,
         onTitleChange = viewModel::changeTitle,
         onItemChange = viewModel::changeItem,
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
+        onSaveClick = { title, items ->
+            //TODO validation
+            viewModel.saveNote(title, items, onNoteSaved)
+        }
     )
 }
 
@@ -54,7 +60,9 @@ fun BuySomethingNoteScreenContent(
     onAddItemClick: () -> Unit = {},
     onTitleChange: (String) -> Unit = {},
     onItemChange: (String, Int) -> Unit = { _, _ -> },
+    onSaveClick: (String, List<String>) -> Unit = { _, _ -> }
 ) {
+    val adjustedTitle = title.ifEmpty { stringResource(R.string.monthly_needs) }
     Scaffold(
         containerColor = background,
         topBar = {
@@ -62,7 +70,8 @@ fun BuySomethingNoteScreenContent(
                 modifier = Modifier.statusBarsPadding(),
                 onBackClick = onBackClick
             )
-        }
+        },
+        bottomBar = { BottomBarSave { onSaveClick(adjustedTitle, items) } }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -74,7 +83,7 @@ fun BuySomethingNoteScreenContent(
             item {
                 BasicTextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = title.ifEmpty { stringResource(R.string.monthly_needs) },
+                    value = adjustedTitle,
                     onValueChange = onTitleChange,
                     textStyle = MaterialTheme.typography.displaySmall
                 )

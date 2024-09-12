@@ -1,4 +1,4 @@
-package com.ahrokholska.notes.domain.useCase
+package com.ahrokholska.notes.domain.useCase.getAllNotes
 
 import com.ahrokholska.notes.domain.repository.NotesRepository
 import javax.inject.Inject

@@ -1,4 +1,4 @@
-package com.ahrokholska.notes.domain.useCase
+package com.ahrokholska.notes.domain.useCase.getLast10Notes
 
 import com.ahrokholska.notes.domain.repository.NotesRepository
 import javax.inject.Inject

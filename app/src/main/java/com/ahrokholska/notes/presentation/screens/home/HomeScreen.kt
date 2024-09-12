@@ -51,6 +51,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ahrokholska.notes.R
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomAppBar
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
+import com.ahrokholska.notes.presentation.common.notes.BuySomethingNote
 import com.ahrokholska.notes.presentation.common.notes.InterestingIdeaNote
 import com.ahrokholska.notes.presentation.model.Note2
 import com.ahrokholska.notes.presentation.model.NotePreview
@@ -68,6 +69,7 @@ fun HomeScreen(
     HomeScreenContent(
         pinnedNotes = viewModel.pinnedNotes.collectAsState().value,
         interestingIdeaNotes = viewModel.interestingIdeaNotes.collectAsState().value,
+        buySomethingNotes = viewModel.buySomethingNotes.collectAsState().value,
         otherNotes = viewModel.allNotes.collectAsState().value,
         onPlusClick = onPlusClick,
         onScreenClick = onScreenClick
@@ -82,6 +84,7 @@ private val noteCornerRadius = 8.dp
 fun HomeScreenContent(
     pinnedNotes: List<Note2>,
     interestingIdeaNotes: List<NotePreview.InterestingIdea>,
+    buySomethingNotes: List<NotePreview.BuyingSomething>,
     otherNotes: List<List<Note2>>,
     onPlusClick: () -> Unit = {},
     onScreenClick: (screen: BottomBarScreen) -> Unit = {}
@@ -96,7 +99,9 @@ fun HomeScreenContent(
     ) {
         var bottomBarHeight by remember { mutableStateOf(0.dp) }
         val density = LocalDensity.current
-        if (pinnedNotes.isEmpty() && interestingIdeaNotes.isEmpty() && (otherNotes.isEmpty() || otherNotes.all { it.isEmpty() })) {
+        if (pinnedNotes.isEmpty() && interestingIdeaNotes.isEmpty() && buySomethingNotes.isEmpty() &&
+            (otherNotes.isEmpty() || otherNotes.all { it.isEmpty() })
+        ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -137,7 +142,19 @@ fun HomeScreenContent(
                     NoteList(
                         title = stringResource(NoteType.InterestingIdea.title),
                         notes = interestingIdeaNotes,
-                        onViewAllClick = {})
+                        onViewAllClick = {},
+                        shouldShowNoteType = false
+                    )
+                }
+            }
+            if (buySomethingNotes.isNotEmpty()) {
+                item {
+                    NoteList(
+                        title = stringResource(NoteType.InterestingIdea.title),
+                        notes = buySomethingNotes,
+                        onViewAllClick = {},
+                        shouldShowNoteType = false
+                    )
                 }
             }
             items(otherNotes) { noteList ->
@@ -244,7 +261,13 @@ private fun NoteList(
         ) {
             notes.forEach { note ->
                 when (note) {
-                    is NotePreview.BuyingSomething -> TODO()
+                    is NotePreview.BuyingSomething -> BuySomethingNote(
+                        title = note.title,
+                        items = note.items,
+                        color = note.color,
+                        shouldShowNoteType = shouldShowNoteType
+                    )
+
                     is NotePreview.Goals -> TODO()
                     is NotePreview.Guidance -> TODO()
                     is NotePreview.InterestingIdea -> InterestingIdeaNote(
@@ -336,6 +359,7 @@ private fun HomeScreenPreview() {
                 color = noteColors[4]
             )
         ),
+        buySomethingNotes = listOf(),
         otherNotes = listOf()
     )
 }

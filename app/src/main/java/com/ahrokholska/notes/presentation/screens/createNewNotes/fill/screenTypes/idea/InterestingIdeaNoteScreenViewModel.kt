@@ -17,20 +17,15 @@ class InterestingIdeaNoteScreenViewModel @Inject constructor(private val saveNot
     private val _body = MutableStateFlow("")
     val body = _body.asStateFlow()
 
-    private var isSaving = false
-
     fun changeBody(body: String) {
         viewModelScope.launch {
             _body.update { body }
         }
     }
 
-    fun saveNote(title: String, body: String, onSuccess: () -> Unit) {
-        if (isSaving) return
-        isSaving = true
-        viewModelScope.launch {
+    fun saveNote(title: String, body: String, onSuccess: () -> Unit) =
+        saveNote {
             saveNoteUseCase(Note.InterestingIdea(title = title, body = body))
             onSuccess()
         }
-    }
 }

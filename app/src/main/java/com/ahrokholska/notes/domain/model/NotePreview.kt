@@ -11,6 +11,8 @@ sealed class NotePreview {
 
     data class BuyingSomething(
         override val id: Int = 0,
+        val title: String,
+        val items: List<Pair<Boolean, String>>
     ) : NotePreview()
 
     data class Goals(

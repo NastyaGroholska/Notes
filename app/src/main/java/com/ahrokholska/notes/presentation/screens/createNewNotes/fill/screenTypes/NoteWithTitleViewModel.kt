@@ -11,9 +11,19 @@ open class NoteWithTitleViewModel : ViewModel() {
     protected val _title = MutableStateFlow("")
     val title = _title.asStateFlow()
 
+    private var isSaving = false
+
     fun changeTitle(title: String) {
         viewModelScope.launch {
             _title.update { title }
+        }
+    }
+
+    protected fun saveNote(block: suspend () -> Unit) {
+        if (isSaving) return
+        isSaving = true
+        viewModelScope.launch {
+            block()
         }
     }
 }

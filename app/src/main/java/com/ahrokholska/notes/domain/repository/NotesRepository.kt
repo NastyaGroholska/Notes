@@ -10,4 +10,6 @@ interface NotesRepository {
     suspend fun deleteNote(noteId: Int, noteType: KClass<Note>): Result<Unit>
     fun getAllInterestingIdeaNotes(): Flow<List<NotePreview.InterestingIdea>>
     fun getLast10InterestingIdeaNotes(): Flow<List<NotePreview.InterestingIdea>>
+    fun getAllBuySomethingNotes(): Flow<List<NotePreview.BuyingSomething>>
+    fun getLast10BuySomethingNotes(): Flow<List<NotePreview.BuyingSomething>>
 }

@@ -5,8 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.ahrokholska.notes.domain.mapper.toUI
 import com.ahrokholska.notes.domain.model.NoteType
 import com.ahrokholska.notes.domain.useCase.GetAllNoteListsUseCase
-import com.ahrokholska.notes.domain.useCase.GetLast10InterestingIdeaNotesUseCase
 import com.ahrokholska.notes.domain.useCase.GetPinnedNotesUseCase
+import com.ahrokholska.notes.domain.useCase.getLast10Notes.GetLast10BuySomethingNotesUseCase
+import com.ahrokholska.notes.domain.useCase.getLast10Notes.GetLast10InterestingIdeaNotesUseCase
 import com.ahrokholska.notes.presentation.model.Note2
 import com.ahrokholska.notes.presentation.model.NotePreview
 import com.ahrokholska.notes.presentation.theme.noteColors
@@ -19,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     getLast10InterestingIdeaNotesUseCase: GetLast10InterestingIdeaNotesUseCase,
+    getLast10BuySomethingNotesUseCase: GetLast10BuySomethingNotesUseCase,
     getPinnedNotesUseCase: GetPinnedNotesUseCase,
     getAllNoteListsUseCase: GetAllNoteListsUseCase
 ) : ViewModel() {
@@ -40,6 +42,19 @@ class HomeScreenViewModel @Inject constructor(
                     id = item.id,
                     title = item.title,
                     body = item.body,
+                    color = noteColors[index % noteColors.size]
+                )
+            }
+        }
+        .stateIn(viewModelScope, SharingStarted.Lazily, listOf())
+
+    val buySomethingNotes = getLast10BuySomethingNotesUseCase()
+        .map { list ->
+            list.mapIndexed { index, item ->
+                NotePreview.BuyingSomething(
+                    id = item.id,
+                    title = item.title,
+                    items = item.items,
                     color = noteColors[index % noteColors.size]
                 )
             }
