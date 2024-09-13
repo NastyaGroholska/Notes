@@ -1,6 +1,7 @@
 package com.ahrokholska.notes.presentation.model
 
 import androidx.compose.ui.graphics.Color
+import com.ahrokholska.notes.domain.model.Note.Goals.Task
 
 sealed class Note {
     abstract val id: Int
@@ -28,6 +29,8 @@ sealed class Note {
 
     data class Goals(
         override val id: Int = 0,
+        val title: String,
+        val tasks: List<Pair<Task, List<Task>>>,
         override val isFinished: Boolean = false,
         override val isPinned: Boolean = false,
         override val color: Color

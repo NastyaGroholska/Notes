@@ -32,6 +32,9 @@ object AppModule {
     @Provides
     fun provideFinishNoteDao(db: AppDatabase) = db.finishNoteDao()
 
+    @Provides
+    fun provideGoalsNotesDao(db: AppDatabase) = db.goalsNotesDao()
+
     @Module
     @InstallIn(SingletonComponent::class)
     interface AppBindModule {

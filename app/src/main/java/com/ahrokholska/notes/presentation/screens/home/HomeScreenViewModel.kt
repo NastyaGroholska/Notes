@@ -7,6 +7,7 @@ import com.ahrokholska.notes.domain.model.NoteType
 import com.ahrokholska.notes.domain.useCase.GetAllNoteListsUseCase
 import com.ahrokholska.notes.domain.useCase.GetPinnedNotesUseCase
 import com.ahrokholska.notes.domain.useCase.getLast10Notes.GetLast10BuySomethingNotesUseCase
+import com.ahrokholska.notes.domain.useCase.getLast10Notes.GetLast10GoalsNotesUseCase
 import com.ahrokholska.notes.domain.useCase.getLast10Notes.GetLast10InterestingIdeaNotesUseCase
 import com.ahrokholska.notes.presentation.model.Note2
 import com.ahrokholska.notes.presentation.model.NotePreview
@@ -21,6 +22,7 @@ import javax.inject.Inject
 class HomeScreenViewModel @Inject constructor(
     getLast10InterestingIdeaNotesUseCase: GetLast10InterestingIdeaNotesUseCase,
     getLast10BuySomethingNotesUseCase: GetLast10BuySomethingNotesUseCase,
+    getLast10GoalsNotesUseCase: GetLast10GoalsNotesUseCase,
     getPinnedNotesUseCase: GetPinnedNotesUseCase,
     getAllNoteListsUseCase: GetAllNoteListsUseCase
 ) : ViewModel() {
@@ -42,7 +44,7 @@ class HomeScreenViewModel @Inject constructor(
                     id = item.id,
                     title = item.title,
                     body = item.body,
-                    color = noteColors[index % noteColors.size]
+                    color = noteColors[(index + 1) % noteColors.size]
                 )
             }
         }
@@ -55,7 +57,20 @@ class HomeScreenViewModel @Inject constructor(
                     id = item.id,
                     title = item.title,
                     items = item.items,
-                    color = noteColors[index % noteColors.size]
+                    color = noteColors[(index + 2) % noteColors.size]
+                )
+            }
+        }
+        .stateIn(viewModelScope, SharingStarted.Lazily, listOf())
+
+    val goalsNotes = getLast10GoalsNotesUseCase()
+        .map { list ->
+            list.mapIndexed { index, item ->
+                NotePreview.Goals(
+                    id = item.id,
+                    title = item.title,
+                    tasks = item.tasks,
+                    color = noteColors[(index + 3) % noteColors.size]
                 )
             }
         }

@@ -7,7 +7,6 @@ import javax.inject.Inject
 class GetAllNoteListsUseCase @Inject constructor() {
     operator fun invoke() = flowOf(
         listOf(
-            listOf(Note.Goals(), Note.Goals()),
             listOf(Note.Guidance(), Note.Guidance())
         )
     )

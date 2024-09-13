@@ -21,7 +21,7 @@ fun CreateNoteScreen(type: NoteType, onBackClick: () -> Unit, onNoteSaved: () ->
             onNoteSaved = onNoteSaved
         )
 
-        NoteType.Goals -> GoalsNoteScreen(onBackClick = onBackClick)
+        NoteType.Goals -> GoalsNoteScreen(onBackClick = onBackClick, onNoteSaved = onNoteSaved)
         NoteType.Guidance -> GuidanceNoteScreen(onBackClick = onBackClick)
         NoteType.RoutineTasks -> RoutineTasksNoteScreen(onBackClick = onBackClick)
     }

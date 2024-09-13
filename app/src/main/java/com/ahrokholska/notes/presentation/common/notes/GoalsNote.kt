@@ -24,16 +24,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.ahrokholska.notes.domain.model.Note
 import com.ahrokholska.notes.presentation.model.NoteType
 import com.ahrokholska.notes.presentation.theme.BlackAlpha20
 import com.ahrokholska.notes.presentation.theme.noteColors
 
 @Composable
-fun BuySomethingNote(
+fun GoalsNote(
     title: String,
-    items: List<Pair<Boolean, String>>,
+    tasks: List<Pair<Note.Goals.Task, List<Note.Goals.Task>>>,
     color: Color,
-    shouldShowNoteType: Boolean = true
+    shouldShowNoteType: Boolean = false
 ) {
     Column(
         modifier = Modifier
@@ -55,18 +56,16 @@ fun BuySomethingNote(
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(16.dp))
-        items.forEach { item ->
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 0.dp) {
-                    Checkbox(checked = item.first, onCheckedChange = {}, enabled = false)
-                }
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = item.second,
-                    style = MaterialTheme.typography.bodyMedium
+        tasks.forEach { task ->
+            Task(
+                finished = task.first.finished,
+                text = task.first.text
+            )
+            task.second.forEach { subtask ->
+                Task(
+                    modifier = Modifier.padding(start = 25.dp),
+                    finished = subtask.finished,
+                    text = subtask.text
                 )
             }
         }
@@ -80,7 +79,7 @@ fun BuySomethingNote(
                         shape = RoundedCornerShape(0.dp, 0.dp, noteCornerRadius, noteCornerRadius)
                     )
                     .padding(12.dp),
-                text = stringResource(id = NoteType.BuyingSomething.title),
+                text = stringResource(id = NoteType.Goals.title),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.secondary
             )
@@ -88,17 +87,43 @@ fun BuySomethingNote(
     }
 }
 
+@Composable
+private fun Task(modifier: Modifier = Modifier, finished: Boolean, text: String) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 0.dp) {
+            Checkbox(checked = finished, onCheckedChange = {}, enabled = false)
+        }
+        Spacer(modifier = Modifier.width(12.dp))
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = text,
+            style = MaterialTheme.typography.bodyMedium
+        )
+    }
+}
+
 @Preview
 @Composable
-private fun BuySomethingPreview() {
-    BuySomethingNote(
+private fun GoalsNotePreview() {
+    GoalsNote(
         title = "\uD83D\uDED2 Monthly Needs",
-        items = listOf(
-            true to "Create a mobile app UI",
-            false to "Create a mo\n" +
-                    "bile app\n" +
-                    " UI",
-            true to "Create a mobile app UI",
+        tasks = listOf(
+            Note.Goals.Task(false, "Create a mobile app UI") to listOf(
+                Note.Goals.Task(
+                    false,
+                    "Create a mobile app UI"
+                ), Note.Goals.Task(false, "Create")
+            ),
+            Note.Goals.Task(false, "Create a mobile app UI") to listOf(),
+            Note.Goals.Task(false, "Create a mobile app UI") to listOf(
+                Note.Goals.Task(
+                    false,
+                    "Create a mobile app UI"
+                )
+            ),
         ),
         color = noteColors[4]
     )

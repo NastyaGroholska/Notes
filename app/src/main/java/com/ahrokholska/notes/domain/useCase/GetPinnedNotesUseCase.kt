@@ -6,6 +6,6 @@ import javax.inject.Inject
 
 class GetPinnedNotesUseCase @Inject constructor() {
     operator fun invoke() = flowOf(
-        listOf(Note.Goals(), Note.Goals())
+        listOf(Note.Guidance(), Note.Guidance())
     )
 }

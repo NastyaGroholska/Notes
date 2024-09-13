@@ -2,6 +2,7 @@ package com.ahrokholska.notes.data.repository
 
 import com.ahrokholska.notes.data.local.dao.BuySomethingNotesDao
 import com.ahrokholska.notes.data.local.dao.FinishNoteDao
+import com.ahrokholska.notes.data.local.dao.GoalsNotesDao
 import com.ahrokholska.notes.data.local.dao.InterestingIdeaNotesDao
 import com.ahrokholska.notes.data.local.dao.PinNoteDao
 import com.ahrokholska.notes.data.mapper.toDomainPreview
@@ -25,6 +26,7 @@ class NotesRepositoryImpl @Inject constructor(
     private val buySomethingNotesDao: BuySomethingNotesDao,
     private val pinNoteDao: PinNoteDao,
     private val finishNoteDao: FinishNoteDao,
+    private val goalsNotesDao: GoalsNotesDao,
 ) : NotesRepository {
     override suspend fun saveNote(note: Note): Result<Unit> = withContext(Dispatchers.IO) {
         when (note) {
@@ -34,7 +36,7 @@ class NotesRepositoryImpl @Inject constructor(
             is Note.BuyingSomething ->
                 getResult { buySomethingNotesDao.insert(note) }
 
-            is Note.Goals -> TODO()
+            is Note.Goals -> getResult { goalsNotesDao.insert(note) }
             is Note.Guidance -> TODO()
             is Note.RoutineTasks -> TODO()
         }
@@ -82,5 +84,15 @@ class NotesRepositoryImpl @Inject constructor(
     override fun getLast10BuySomethingNotes(): Flow<List<NotePreview.BuyingSomething>> =
         buySomethingNotesDao.getLast10BuySomethingNotes().map { list ->
             list.map { it.toDomainPreview() }
+        }
+
+    override fun getAllGoalsNotes(): Flow<List<NotePreview.Goals>> =
+        goalsNotesDao.getAllGoalsNotes().map { map ->
+            map.map { mapEntry -> mapEntry.toDomainPreview() }
+        }
+
+    override fun getLast10GoalsNotes(): Flow<List<NotePreview.Goals>> =
+        goalsNotesDao.getLast10GoalsNotes().map { map ->
+            map.map { mapEntry -> mapEntry.toDomainPreview() }
         }
 }

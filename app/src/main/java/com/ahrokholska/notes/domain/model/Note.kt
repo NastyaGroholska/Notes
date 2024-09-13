@@ -23,9 +23,13 @@ sealed class Note {
 
     data class Goals(
         override val id: Int = 0,
+        val title: String,
+        val tasks: List<Pair<Task, List<Task>>>,
         override val isFinished: Boolean = false,
         override val isPinned: Boolean = false
-    ) : Note()
+    ) : Note() {
+        data class Task(val finished: Boolean, val text: String)
+    }
 
     data class Guidance(
         override val id: Int = 0,

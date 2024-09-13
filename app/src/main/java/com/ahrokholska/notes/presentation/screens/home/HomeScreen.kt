@@ -52,6 +52,7 @@ import com.ahrokholska.notes.R
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomAppBar
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
 import com.ahrokholska.notes.presentation.common.notes.BuySomethingNote
+import com.ahrokholska.notes.presentation.common.notes.GoalsNote
 import com.ahrokholska.notes.presentation.common.notes.InterestingIdeaNote
 import com.ahrokholska.notes.presentation.model.Note2
 import com.ahrokholska.notes.presentation.model.NotePreview
@@ -70,6 +71,7 @@ fun HomeScreen(
         pinnedNotes = viewModel.pinnedNotes.collectAsState().value,
         interestingIdeaNotes = viewModel.interestingIdeaNotes.collectAsState().value,
         buySomethingNotes = viewModel.buySomethingNotes.collectAsState().value,
+        goalsNotes = viewModel.goalsNotes.collectAsState().value,
         otherNotes = viewModel.allNotes.collectAsState().value,
         onPlusClick = onPlusClick,
         onScreenClick = onScreenClick
@@ -85,6 +87,7 @@ fun HomeScreenContent(
     pinnedNotes: List<Note2>,
     interestingIdeaNotes: List<NotePreview.InterestingIdea>,
     buySomethingNotes: List<NotePreview.BuyingSomething>,
+    goalsNotes: List<NotePreview.Goals>,
     otherNotes: List<List<Note2>>,
     onPlusClick: () -> Unit = {},
     onScreenClick: (screen: BottomBarScreen) -> Unit = {}
@@ -100,6 +103,7 @@ fun HomeScreenContent(
         var bottomBarHeight by remember { mutableStateOf(0.dp) }
         val density = LocalDensity.current
         if (pinnedNotes.isEmpty() && interestingIdeaNotes.isEmpty() && buySomethingNotes.isEmpty() &&
+            goalsNotes.isEmpty() &&
             (otherNotes.isEmpty() || otherNotes.all { it.isEmpty() })
         ) {
             Column(
@@ -142,18 +146,25 @@ fun HomeScreenContent(
                     NoteList(
                         title = stringResource(NoteType.InterestingIdea.title),
                         notes = interestingIdeaNotes,
-                        onViewAllClick = {},
-                        shouldShowNoteType = false
+                        onViewAllClick = {}
                     )
                 }
             }
             if (buySomethingNotes.isNotEmpty()) {
                 item {
                     NoteList(
-                        title = stringResource(NoteType.InterestingIdea.title),
+                        title = stringResource(NoteType.BuyingSomething.title),
                         notes = buySomethingNotes,
-                        onViewAllClick = {},
-                        shouldShowNoteType = false
+                        onViewAllClick = {}
+                    )
+                }
+            }
+            if (goalsNotes.isNotEmpty()) {
+                item {
+                    NoteList(
+                        title = stringResource(NoteType.Goals.title),
+                        notes = goalsNotes,
+                        onViewAllClick = {}
                     )
                 }
             }
@@ -231,7 +242,7 @@ private fun NoteList(
     title: String,
     notes: List<NotePreview>,
     onViewAllClick: () -> Unit,
-    shouldShowNoteType: Boolean = true
+    shouldShowNoteType: Boolean = false
 ) {
     Column(modifier = Modifier.padding(vertical = 24.dp)) {
         Row(
@@ -268,7 +279,13 @@ private fun NoteList(
                         shouldShowNoteType = shouldShowNoteType
                     )
 
-                    is NotePreview.Goals -> TODO()
+                    is NotePreview.Goals -> GoalsNote(
+                        title = note.title,
+                        tasks = note.tasks,
+                        color = note.color,
+                        shouldShowNoteType = shouldShowNoteType
+                    )
+
                     is NotePreview.Guidance -> TODO()
                     is NotePreview.InterestingIdea -> InterestingIdeaNote(
                         title = note.title,
@@ -360,6 +377,7 @@ private fun HomeScreenPreview() {
             )
         ),
         buySomethingNotes = listOf(),
+        goalsNotes = listOf(),
         otherNotes = listOf()
     )
 }
