@@ -1,5 +1,8 @@
 package com.ahrokholska.notes.presentation.screens.createNewNotes.fill.screenTypes.guidance
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
@@ -44,6 +48,12 @@ fun GuidanceNoteScreen(
     viewModel: GuidanceNoteScreenViewModel = hiltViewModel(),
     onBackClick: () -> Unit
 ) {
+    val pickMedia =
+        rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            uri?.let {
+                viewModel.changeImage(uri.toString())
+            }
+        }
     GuidanceNoteScreenContent(
         title = viewModel.title.collectAsState().value,
         body = viewModel.body.collectAsState().value,
@@ -51,9 +61,13 @@ fun GuidanceNoteScreen(
         onTitleChange = viewModel::changeTitle,
         onBodyChange = viewModel::changeBody,
         onBackClick = onBackClick,
-        onChangeImageClick = {/*TODO*/ }
+        onChangeImageClick = {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
     )
 }
+
+private val maxHeight = 260.dp
 
 @Composable
 fun GuidanceNoteScreenContent(
@@ -93,17 +107,21 @@ fun GuidanceNoteScreenContent(
                 innerTextField()
             }
             Spacer(modifier = Modifier.height(16.dp))
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            Box {
                 val imageShape = RoundedCornerShape(12.dp)
                 if (image.isEmpty()) {
                     Image(
-                        modifier = Modifier.clip(imageShape),
+                        modifier = Modifier
+                            .clip(imageShape)
+                            .heightIn(max = maxHeight),
                         painter = painterResource(R.drawable.laptop),
                         contentDescription = null
                     )
                 } else {
                     SubcomposeAsyncImage(
-                        modifier = Modifier.clip(imageShape),
+                        modifier = Modifier
+                            .clip(imageShape)
+                            .heightIn(max = maxHeight),
                         model = image,
                         loading = { CircularProgressIndicator() },
                         error = {

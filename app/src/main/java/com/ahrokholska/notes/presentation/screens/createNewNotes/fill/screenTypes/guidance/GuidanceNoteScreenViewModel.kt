@@ -21,4 +21,11 @@ class GuidanceNoteScreenViewModel @Inject constructor() : NoteWithTitleViewModel
             _body.update { body }
         }
     }
+
+    fun changeImage(uri: String) {
+        viewModelScope.launch {
+            _image.update { uri }
+            //TODO copy image
+        }
+    }
 }
