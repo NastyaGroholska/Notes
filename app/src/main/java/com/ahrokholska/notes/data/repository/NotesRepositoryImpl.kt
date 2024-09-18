@@ -3,6 +3,7 @@ package com.ahrokholska.notes.data.repository
 import com.ahrokholska.notes.data.local.dao.BuySomethingNotesDao
 import com.ahrokholska.notes.data.local.dao.FinishNoteDao
 import com.ahrokholska.notes.data.local.dao.GoalsNotesDao
+import com.ahrokholska.notes.data.local.dao.GuidanceNotesDao
 import com.ahrokholska.notes.data.local.dao.InterestingIdeaNotesDao
 import com.ahrokholska.notes.data.local.dao.PinNoteDao
 import com.ahrokholska.notes.data.mapper.toDomainPreview
@@ -24,9 +25,10 @@ import kotlin.reflect.KClass
 class NotesRepositoryImpl @Inject constructor(
     private val interestingIdeaNotesDao: InterestingIdeaNotesDao,
     private val buySomethingNotesDao: BuySomethingNotesDao,
+    private val goalsNotesDao: GoalsNotesDao,
+    private val guidanceNotesDao: GuidanceNotesDao,
     private val pinNoteDao: PinNoteDao,
     private val finishNoteDao: FinishNoteDao,
-    private val goalsNotesDao: GoalsNotesDao,
 ) : NotesRepository {
     override suspend fun saveNote(note: Note): Result<Unit> = withContext(Dispatchers.IO) {
         when (note) {
@@ -37,7 +39,7 @@ class NotesRepositoryImpl @Inject constructor(
                 getResult { buySomethingNotesDao.insert(note) }
 
             is Note.Goals -> getResult { goalsNotesDao.insert(note) }
-            is Note.Guidance -> TODO()
+            is Note.Guidance -> getResult { guidanceNotesDao.insert(note.toEntity()) }
             is Note.RoutineTasks -> TODO()
         }
     }
@@ -60,7 +62,13 @@ class NotesRepositoryImpl @Inject constructor(
                 }
 
                 Note.Goals::class -> TODO()
-                Note.Guidance::class -> TODO()
+                Note.Guidance::class -> getResult {
+                    guidanceNotesDao.delete(noteId,
+                        { pinNoteDao.unpinNote(noteId, NoteType.Guidance) },
+                        { finishNoteDao.deleteFinishedRecord(noteId, NoteType.Guidance) }
+                    )
+                }
+
                 Note.RoutineTasks::class -> TODO()
                 else -> Result.failure(Throwable("incorrect type"))
             }
@@ -94,5 +102,15 @@ class NotesRepositoryImpl @Inject constructor(
     override fun getLast10GoalsNotes(): Flow<List<NotePreview.Goals>> =
         goalsNotesDao.getLast10GoalsNotes().map { map ->
             map.map { mapEntry -> mapEntry.toDomainPreview() }
+        }
+
+    override fun getAllGuidanceNotes(): Flow<List<NotePreview.Guidance>> =
+        guidanceNotesDao.getAllGuidanceNotes().map { list ->
+            list.map { it.toDomainPreview() }
+        }
+
+    override fun getLast10GuidanceNotes(): Flow<List<NotePreview.Guidance>> =
+        guidanceNotesDao.getLast10GuidanceNotes().map { list ->
+            list.map { it.toDomainPreview() }
         }
 }

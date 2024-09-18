@@ -38,6 +38,9 @@ sealed class Note {
 
     data class Guidance(
         override val id: Int = 0,
+        val title: String,
+        val body: String,
+        val image: String,
         override val isFinished: Boolean = false,
         override val isPinned: Boolean = false,
         override val color: Color

@@ -14,4 +14,6 @@ interface NotesRepository {
     fun getLast10BuySomethingNotes(): Flow<List<NotePreview.BuyingSomething>>
     fun getAllGoalsNotes(): Flow<List<NotePreview.Goals>>
     fun getLast10GoalsNotes(): Flow<List<NotePreview.Goals>>
+    fun getAllGuidanceNotes(): Flow<List<NotePreview.Guidance>>
+    fun getLast10GuidanceNotes(): Flow<List<NotePreview.Guidance>>
 }

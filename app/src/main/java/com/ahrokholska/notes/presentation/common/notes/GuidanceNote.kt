@@ -3,7 +3,6 @@ package com.ahrokholska.notes.presentation.common.notes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,30 +10,28 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.ahrokholska.notes.domain.model.Note
 import com.ahrokholska.notes.presentation.model.NoteType
 import com.ahrokholska.notes.presentation.theme.BlackAlpha20
 import com.ahrokholska.notes.presentation.theme.noteColors
 
 @Composable
-fun GoalsNote(
+fun GuidanceNote(
     title: String,
-    tasks: List<Pair<Note.Goals.Task, List<Note.Goals.Task>>>,
+    body: String,
+    image: String,
     color: Color,
-    shouldShowNoteType: Boolean = false
+    shouldShowNoteType: Boolean = true
 ) {
     Column(
         modifier = Modifier
@@ -59,19 +56,19 @@ fun GoalsNote(
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(16.dp))
-            tasks.forEach { task ->
-                Task(
-                    finished = task.first.finished,
-                    text = task.first.text
-                )
-                task.second.forEach { subtask ->
-                    Task(
-                        modifier = Modifier.padding(start = 25.dp),
-                        finished = subtask.finished,
-                        text = subtask.text
-                    )
-                }
-            }
+            GuidanceImage(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .height(80.dp),
+                image = image
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = body,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.secondary
+            )
         }
         if (shouldShowNoteType) {
             Spacer(modifier = Modifier.weight(1f))
@@ -83,7 +80,7 @@ fun GoalsNote(
                         shape = RoundedCornerShape(0.dp, 0.dp, noteCornerRadius, noteCornerRadius)
                     )
                     .padding(12.dp),
-                text = stringResource(id = NoteType.Goals.title),
+                text = stringResource(id = NoteType.Guidance.title),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.secondary
             )
@@ -91,44 +88,13 @@ fun GoalsNote(
     }
 }
 
-@Composable
-private fun Task(modifier: Modifier = Modifier, finished: Boolean, text: String) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 0.dp) {
-            Checkbox(checked = finished, onCheckedChange = {}, enabled = false)
-        }
-        Spacer(modifier = Modifier.width(12.dp))
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = text,
-            style = MaterialTheme.typography.bodyMedium
-        )
-    }
-}
-
 @Preview
 @Composable
-private fun GoalsNotePreview() {
-    GoalsNote(
-        title = "\uD83D\uDED2 Monthly Needs",
-        tasks = listOf(
-            Note.Goals.Task(false, "Create a mobile app UI") to listOf(
-                Note.Goals.Task(
-                    false,
-                    "Create a mobile app UI"
-                ), Note.Goals.Task(false, "Create")
-            ),
-            Note.Goals.Task(false, "Create a mobile app UI") to listOf(),
-            Note.Goals.Task(false, "Create a mobile app UI") to listOf(
-                Note.Goals.Task(
-                    false,
-                    "Create a mobile app UI"
-                )
-            ),
-        ),
+private fun GuidanceNotePreview() {
+    GuidanceNote(
+        title = "\uD83D\uDCA1 New Product Idea Design",
+        body = "Create a mobile app UI",
+        image = "",
         color = noteColors[4]
     )
 }

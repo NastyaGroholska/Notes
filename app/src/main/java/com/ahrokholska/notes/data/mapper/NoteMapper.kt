@@ -3,6 +3,7 @@ package com.ahrokholska.notes.data.mapper
 import com.ahrokholska.notes.data.local.dao.GoalsNotesDao
 import com.ahrokholska.notes.data.local.entities.BuySomethingNoteEntityWithItems
 import com.ahrokholska.notes.data.local.entities.GoalsNoteEntity
+import com.ahrokholska.notes.data.local.entities.GuidanceNoteEntity
 import com.ahrokholska.notes.data.local.entities.InterestingIdeaNoteEntity
 import com.ahrokholska.notes.domain.model.Note
 import com.ahrokholska.notes.domain.model.NotePreview
@@ -19,6 +20,14 @@ fun Note.InterestingIdea.toEntity() = InterestingIdeaNoteEntity(
     id = id,
     title = title,
     body = body
+)
+
+
+fun Note.Guidance.toEntity() = GuidanceNoteEntity(
+    id = id,
+    title = title,
+    body = body,
+    image = image
 )
 
 fun InterestingIdeaNoteEntity.toDomain(isFinished: Boolean, isPinned: Boolean) =
@@ -76,3 +85,10 @@ fun Map.Entry<GoalsNoteEntity, List<GoalsNotesDao.TaskAndSubtask>>.toDomainPrevi
         tasks = tasks
     )
 }
+
+fun GuidanceNoteEntity.toDomainPreview() = NotePreview.Guidance(
+    id = id,
+    title = title,
+    body = body,
+    image = image
+)

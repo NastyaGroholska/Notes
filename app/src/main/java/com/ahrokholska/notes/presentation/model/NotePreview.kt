@@ -30,6 +30,9 @@ sealed class NotePreview {
 
     data class Guidance(
         override val id: Int = 0,
+        val title: String,
+        val body: String,
+        val image: String,
         override val color: Color
     ) : NotePreview()
 

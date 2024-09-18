@@ -46,28 +46,32 @@ fun BuySomethingNote(
                 color = BlackAlpha20,
                 shape = RoundedCornerShape(noteCornerRadius)
             )
-            .padding(12.dp)
     ) {
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        items.forEach { item ->
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 0.dp) {
-                    Checkbox(checked = item.first, onCheckedChange = {}, enabled = false)
+        Column(
+            modifier = Modifier.padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            items.forEach { item ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 0.dp) {
+                        Checkbox(checked = item.first, onCheckedChange = {}, enabled = false)
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = item.second,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 }
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = item.second,
-                    style = MaterialTheme.typography.bodyMedium
-                )
             }
         }
         if (shouldShowNoteType) {

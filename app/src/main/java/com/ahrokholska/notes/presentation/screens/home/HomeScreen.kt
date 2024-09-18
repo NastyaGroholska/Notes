@@ -2,7 +2,6 @@ package com.ahrokholska.notes.presentation.screens.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -11,18 +10,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material3.Icon
@@ -36,7 +31,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -53,11 +47,10 @@ import com.ahrokholska.notes.presentation.common.bottomBar.BottomAppBar
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
 import com.ahrokholska.notes.presentation.common.notes.BuySomethingNote
 import com.ahrokholska.notes.presentation.common.notes.GoalsNote
+import com.ahrokholska.notes.presentation.common.notes.GuidanceNote
 import com.ahrokholska.notes.presentation.common.notes.InterestingIdeaNote
-import com.ahrokholska.notes.presentation.model.Note2
 import com.ahrokholska.notes.presentation.model.NotePreview
 import com.ahrokholska.notes.presentation.model.NoteType
-import com.ahrokholska.notes.presentation.theme.BlackAlpha20
 import com.ahrokholska.notes.presentation.theme.background
 import com.ahrokholska.notes.presentation.theme.noteColors
 
@@ -72,23 +65,21 @@ fun HomeScreen(
         interestingIdeaNotes = viewModel.interestingIdeaNotes.collectAsState().value,
         buySomethingNotes = viewModel.buySomethingNotes.collectAsState().value,
         goalsNotes = viewModel.goalsNotes.collectAsState().value,
-        otherNotes = viewModel.allNotes.collectAsState().value,
+        guidanceNotes = viewModel.guidanceNotes.collectAsState().value,
         onPlusClick = onPlusClick,
         onScreenClick = onScreenClick
     )
 }
 
 private val contentPadding = 16.dp
-private val noteWidth = 180.dp
-private val noteCornerRadius = 8.dp
 
 @Composable
 fun HomeScreenContent(
-    pinnedNotes: List<Note2>,
+    pinnedNotes: List<NotePreview>,
     interestingIdeaNotes: List<NotePreview.InterestingIdea>,
     buySomethingNotes: List<NotePreview.BuyingSomething>,
     goalsNotes: List<NotePreview.Goals>,
-    otherNotes: List<List<Note2>>,
+    guidanceNotes: List<NotePreview.Guidance>,
     onPlusClick: () -> Unit = {},
     onScreenClick: (screen: BottomBarScreen) -> Unit = {}
 ) {
@@ -103,8 +94,7 @@ fun HomeScreenContent(
         var bottomBarHeight by remember { mutableStateOf(0.dp) }
         val density = LocalDensity.current
         if (pinnedNotes.isEmpty() && interestingIdeaNotes.isEmpty() && buySomethingNotes.isEmpty() &&
-            goalsNotes.isEmpty() &&
-            (otherNotes.isEmpty() || otherNotes.all { it.isEmpty() })
+            goalsNotes.isEmpty() && guidanceNotes.isEmpty()
         ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -135,10 +125,12 @@ fun HomeScreenContent(
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             if (pinnedNotes.isNotEmpty()) {
                 item {
-                    NoteListOld(
+                    NoteList(
                         title = stringResource(R.string.pinned_notes),
                         notes = pinnedNotes,
-                        onViewAllClick = {})
+                        onViewAllClick = {},
+                        shouldShowNoteType = true
+                    )
                 }
             }
             if (interestingIdeaNotes.isNotEmpty()) {
@@ -168,13 +160,13 @@ fun HomeScreenContent(
                     )
                 }
             }
-            items(otherNotes) { noteList ->
-                if (noteList.isNotEmpty()) {
-                    NoteListOld(
-                        title = stringResource(noteList.first().type.title),
-                        notes = noteList,
-                        shouldShowNoteType = false,
-                        onViewAllClick = {})
+            if (guidanceNotes.isNotEmpty()) {
+                item {
+                    NoteList(
+                        title = stringResource(NoteType.Guidance.title),
+                        notes = guidanceNotes,
+                        onViewAllClick = {}
+                    )
                 }
             }
             item {
@@ -189,51 +181,6 @@ fun HomeScreenContent(
             onPlusClick = onPlusClick,
             onScreenClick = onScreenClick
         )
-    }
-}
-
-@Composable
-private fun NoteListOld(
-    title: String,
-    notes: List<Note2>,
-    onViewAllClick: () -> Unit,
-    shouldShowNoteType: Boolean = true
-) {
-    Column(modifier = Modifier.padding(vertical = 24.dp)) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = contentPadding),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Bottom
-        ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                modifier = Modifier.clickable { onViewAllClick() },
-                text = stringResource(R.string.view_all),
-                color = MaterialTheme.colorScheme.primary,
-                style = TextStyle(textDecoration = TextDecoration.Underline)
-            )
-        }
-        Row(
-            modifier = Modifier
-                .padding(top = 12.dp)
-                .horizontalScroll(rememberScrollState())
-                .height(IntrinsicSize.Max)
-        ) {
-            notes.forEach { note ->
-                NoteItem(
-                    title = note.title,
-                    text = note.text,
-                    color = note.color,
-                    type = if (shouldShowNoteType) note.type else null
-                )
-            }
-        }
     }
 }
 
@@ -286,7 +233,14 @@ private fun NoteList(
                         shouldShowNoteType = shouldShowNoteType
                     )
 
-                    is NotePreview.Guidance -> TODO()
+                    is NotePreview.Guidance -> GuidanceNote(
+                        title = note.title,
+                        body = note.body,
+                        image = note.image,
+                        color = note.color,
+                        shouldShowNoteType = shouldShowNoteType
+                    )
+
                     is NotePreview.InterestingIdea -> InterestingIdeaNote(
                         title = note.title,
                         text = note.body,
@@ -301,71 +255,22 @@ private fun NoteList(
     }
 }
 
-@Composable
-private fun NoteItem(title: String, text: String, color: Color, type: NoteType? = null) {
-    Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .padding(horizontal = contentPadding)
-            .width(noteWidth)
-            .background(color = color, shape = RoundedCornerShape(noteCornerRadius))
-            .border(
-                width = 1.dp,
-                color = BlackAlpha20,
-                shape = RoundedCornerShape(noteCornerRadius)
-            )
-    ) {
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            text = text,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.secondary
-        )
-        type?.let {
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        color = BlackAlpha20,
-                        shape = RoundedCornerShape(0.dp, 0.dp, noteCornerRadius, noteCornerRadius)
-                    )
-                    .padding(12.dp),
-                text = stringResource(id = type.title),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.secondary
-            )
-        }
-    }
-}
-
 @Preview
 @Composable
 private fun HomeScreenPreview() {
     HomeScreenContent(
         pinnedNotes = listOf(
-            Note2(
+            NotePreview.Guidance(
                 title = "\uD83D\uDCA1 New Product Idea Design",
-                text = "Create a mobile app UI Kit that provide a basic notes functionality but with some improvement. \n\n" +
+                body = "Create a mobile app UI Kit that provide a basic notes functionality but with some improvement. \n\n" +
                         "There will be a choice to select what kind of notes that user needed, so the experience while taking notes can be unique based on the needs.",
-                type = NoteType.InterestingIdea,
+                image = "",
                 color = noteColors[0]
             ),
-            Note2(
+            NotePreview.Guidance(
                 title = "\uD83D\uDCA1 New Product Idea Design",
-                text = "Create a mobile app UI",
-                type = NoteType.InterestingIdea,
+                body = "Create a mobile app UI",
+                image = "",
                 color = noteColors[3]
             )
         ),
@@ -378,6 +283,6 @@ private fun HomeScreenPreview() {
         ),
         buySomethingNotes = listOf(),
         goalsNotes = listOf(),
-        otherNotes = listOf()
+        guidanceNotes = listOf(),
     )
 }

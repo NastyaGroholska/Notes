@@ -27,13 +27,16 @@ object AppModule {
     fun provideBuySomethingNotesDao(db: AppDatabase) = db.buySomethingNotesDao()
 
     @Provides
+    fun provideGoalsNotesDao(db: AppDatabase) = db.goalsNotesDao()
+
+    @Provides
+    fun provideGuidanceNotesDao(db: AppDatabase) = db.guidanceNotesDao()
+
+    @Provides
     fun providePinNoteDao(db: AppDatabase) = db.pinNoteDao()
 
     @Provides
     fun provideFinishNoteDao(db: AppDatabase) = db.finishNoteDao()
-
-    @Provides
-    fun provideGoalsNotesDao(db: AppDatabase) = db.goalsNotesDao()
 
     @Module
     @InstallIn(SingletonComponent::class)

@@ -3,7 +3,6 @@ package com.ahrokholska.notes.presentation.screens.createNewNotes.fill.screenTyp
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -21,9 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -33,20 +30,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.SubcomposeAsyncImage
 import com.ahrokholska.notes.R
+import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarSave
+import com.ahrokholska.notes.presentation.common.notes.GuidanceImage
 import com.ahrokholska.notes.presentation.common.topBar.TopBar
 import com.ahrokholska.notes.presentation.theme.background
 
 @Composable
 fun GuidanceNoteScreen(
     viewModel: GuidanceNoteScreenViewModel = hiltViewModel(),
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onNoteSaved: () -> Unit
 ) {
     val pickMedia =
         rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -63,11 +61,12 @@ fun GuidanceNoteScreen(
         onBackClick = onBackClick,
         onChangeImageClick = {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        },
+        onSaveClick = { title, body, image ->
+            viewModel.saveNote(title, body, image, onNoteSaved)
         }
     )
 }
-
-private val maxHeight = 260.dp
 
 @Composable
 fun GuidanceNoteScreenContent(
@@ -78,7 +77,10 @@ fun GuidanceNoteScreenContent(
     onTitleChange: (String) -> Unit = {},
     onBodyChange: (String) -> Unit = {},
     onChangeImageClick: () -> Unit = {},
+    onSaveClick: (title: String, body: String, image: String) -> Unit = { _, _, _ -> },
 ) {
+    val adjustedTitle = title.ifEmpty { stringResource(R.string.guidance_title) }
+    val adjustedBody = body.ifEmpty { stringResource(R.string.your_guidance) }
     Scaffold(
         containerColor = background,
         topBar = {
@@ -86,7 +88,8 @@ fun GuidanceNoteScreenContent(
                 modifier = Modifier.statusBarsPadding(),
                 onBackClick = onBackClick
             )
-        }
+        },
+        bottomBar = { BottomBarSave { onSaveClick(adjustedTitle, adjustedBody, image) } }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -99,7 +102,7 @@ fun GuidanceNoteScreenContent(
         ) {
             BasicTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = title.ifEmpty { stringResource(R.string.guidance_title) },
+                value = adjustedTitle,
                 onValueChange = onTitleChange,
                 textStyle = MaterialTheme.typography.displaySmall
             )
@@ -108,31 +111,12 @@ fun GuidanceNoteScreenContent(
             }
             Spacer(modifier = Modifier.height(16.dp))
             Box {
-                val imageShape = RoundedCornerShape(12.dp)
-                if (image.isEmpty()) {
-                    Image(
-                        modifier = Modifier
-                            .clip(imageShape)
-                            .heightIn(max = maxHeight),
-                        painter = painterResource(R.drawable.laptop),
-                        contentDescription = null
-                    )
-                } else {
-                    SubcomposeAsyncImage(
-                        modifier = Modifier
-                            .clip(imageShape)
-                            .heightIn(max = maxHeight),
-                        model = image,
-                        loading = { CircularProgressIndicator() },
-                        error = {
-                            Icon(
-                                painter = rememberVectorPainter(image = Icons.Filled.Error),
-                                contentDescription = null
-                            )
-                        },
-                        contentDescription = null,
-                    )
-                }
+                GuidanceImage(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .heightIn(max = 260.dp),
+                    image = image
+                )
                 Icon(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
@@ -149,7 +133,7 @@ fun GuidanceNoteScreenContent(
             Spacer(modifier = Modifier.height(16.dp))
             BasicTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = body.ifEmpty { stringResource(R.string.your_guidance) },
+                value = adjustedBody,
                 onValueChange = onBodyChange,
                 textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.secondary)
             )
