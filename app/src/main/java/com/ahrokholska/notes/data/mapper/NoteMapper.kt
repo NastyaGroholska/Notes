@@ -5,6 +5,7 @@ import com.ahrokholska.notes.data.local.entities.BuySomethingNoteEntityWithItems
 import com.ahrokholska.notes.data.local.entities.GoalsNoteEntity
 import com.ahrokholska.notes.data.local.entities.GuidanceNoteEntity
 import com.ahrokholska.notes.data.local.entities.InterestingIdeaNoteEntity
+import com.ahrokholska.notes.data.local.entities.RoutineTasksNoteEntityWithSubNotes
 import com.ahrokholska.notes.domain.model.Note
 import com.ahrokholska.notes.domain.model.NotePreview
 
@@ -21,7 +22,6 @@ fun Note.InterestingIdea.toEntity() = InterestingIdeaNoteEntity(
     title = title,
     body = body
 )
-
 
 fun Note.Guidance.toEntity() = GuidanceNoteEntity(
     id = id,
@@ -92,3 +92,24 @@ fun GuidanceNoteEntity.toDomainPreview() = NotePreview.Guidance(
     body = body,
     image = image
 )
+
+fun RoutineTasksNoteEntityWithSubNotes.toDomainPreview(): NotePreview.RoutineTasks {
+    val active = mutableListOf<Note.RoutineTasks.SubNote>()
+    val completed = mutableListOf<Note.RoutineTasks.SubNote>()
+    subNotes.forEach {
+        val item = Note.RoutineTasks.SubNote(
+            title = it.title,
+            text = it.text
+        )
+        if (it.completed) {
+            completed.add(item)
+        } else {
+            active.add(item)
+        }
+    }
+    return NotePreview.RoutineTasks(
+        id = note.id,
+        active = active,
+        completed = completed
+    )
+}

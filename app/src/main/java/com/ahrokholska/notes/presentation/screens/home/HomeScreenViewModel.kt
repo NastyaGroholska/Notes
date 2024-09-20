@@ -7,6 +7,7 @@ import com.ahrokholska.notes.domain.useCase.getLast10Notes.GetLast10BuySomething
 import com.ahrokholska.notes.domain.useCase.getLast10Notes.GetLast10GoalsNotesUseCase
 import com.ahrokholska.notes.domain.useCase.getLast10Notes.GetLast10GuidanceNotesUseCase
 import com.ahrokholska.notes.domain.useCase.getLast10Notes.GetLast10InterestingIdeaNotesUseCase
+import com.ahrokholska.notes.domain.useCase.getLast10Notes.GetLast10RoutineTasksNotesUseCase
 import com.ahrokholska.notes.presentation.model.NotePreview
 import com.ahrokholska.notes.presentation.theme.noteColors
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +22,7 @@ class HomeScreenViewModel @Inject constructor(
     getLast10BuySomethingNotesUseCase: GetLast10BuySomethingNotesUseCase,
     getLast10GoalsNotesUseCase: GetLast10GoalsNotesUseCase,
     getLast10GuidanceNotesUseCase: GetLast10GuidanceNotesUseCase,
+    getLast10RoutineTasksNotesUseCase: GetLast10RoutineTasksNotesUseCase,
     getPinnedNotesUseCase: GetPinnedNotesUseCase,
 ) : ViewModel() {
     val pinnedNotes = getPinnedNotesUseCase().map { list ->
@@ -82,6 +84,19 @@ class HomeScreenViewModel @Inject constructor(
                     body = item.body,
                     image = item.image,
                     color = noteColors[(index + 4) % noteColors.size]
+                )
+            }
+        }
+        .stateIn(viewModelScope, SharingStarted.Lazily, listOf())
+
+    val routineTasksNotes = getLast10RoutineTasksNotesUseCase()
+        .map { list ->
+            list.mapIndexed { index, item ->
+                NotePreview.RoutineTasks(
+                    id = item.id,
+                    active = item.active,
+                    completed = item.completed,
+                    color = noteColors[(index + 5) % noteColors.size]
                 )
             }
         }

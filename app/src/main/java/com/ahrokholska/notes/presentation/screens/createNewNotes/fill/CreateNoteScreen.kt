@@ -27,6 +27,9 @@ fun CreateNoteScreen(type: NoteType, onBackClick: () -> Unit, onNoteSaved: () ->
             onNoteSaved = onNoteSaved
         )
 
-        NoteType.RoutineTasks -> RoutineTasksNoteScreen(onBackClick = onBackClick)
+        NoteType.RoutineTasks -> RoutineTasksNoteScreen(
+            onBackClick = onBackClick,
+            onNoteSaved = onNoteSaved
+        )
     }
 }

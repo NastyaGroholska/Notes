@@ -14,6 +14,19 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class GoalsNotesDao {
+    @Transaction
+    open fun delete(
+        noteId: Int, unpinNote: () -> Unit,
+        deleteFinishedRecord: () -> Unit
+    ) {
+        deleteGoalsOnly(noteId)
+        unpinNote()
+        deleteFinishedRecord()
+    }
+
+    @Query("DELETE FROM goals_note WHERE id = :noteId")
+    protected abstract fun deleteGoalsOnly(noteId: Int)
+
     @Insert
     protected abstract fun insertGoalsNoteEntity(note: GoalsNoteEntity): Long
 

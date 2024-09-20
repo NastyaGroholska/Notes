@@ -46,7 +46,7 @@ fun GuidanceNote(
             )
     ) {
         Column(
-            modifier = Modifier.padding(12.dp),
+            modifier = Modifier.padding(12.dp).weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -71,7 +71,6 @@ fun GuidanceNote(
             )
         }
         if (shouldShowNoteType) {
-            Spacer(modifier = Modifier.weight(1f))
             Text(
                 modifier = Modifier
                     .fillMaxWidth()

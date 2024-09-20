@@ -49,6 +49,7 @@ import com.ahrokholska.notes.presentation.common.notes.BuySomethingNote
 import com.ahrokholska.notes.presentation.common.notes.GoalsNote
 import com.ahrokholska.notes.presentation.common.notes.GuidanceNote
 import com.ahrokholska.notes.presentation.common.notes.InterestingIdeaNote
+import com.ahrokholska.notes.presentation.common.notes.RoutineTasksNote
 import com.ahrokholska.notes.presentation.model.NotePreview
 import com.ahrokholska.notes.presentation.model.NoteType
 import com.ahrokholska.notes.presentation.theme.background
@@ -66,6 +67,7 @@ fun HomeScreen(
         buySomethingNotes = viewModel.buySomethingNotes.collectAsState().value,
         goalsNotes = viewModel.goalsNotes.collectAsState().value,
         guidanceNotes = viewModel.guidanceNotes.collectAsState().value,
+        routineTasksNotes = viewModel.routineTasksNotes.collectAsState().value,
         onPlusClick = onPlusClick,
         onScreenClick = onScreenClick
     )
@@ -80,6 +82,7 @@ fun HomeScreenContent(
     buySomethingNotes: List<NotePreview.BuyingSomething>,
     goalsNotes: List<NotePreview.Goals>,
     guidanceNotes: List<NotePreview.Guidance>,
+    routineTasksNotes: List<NotePreview.RoutineTasks>,
     onPlusClick: () -> Unit = {},
     onScreenClick: (screen: BottomBarScreen) -> Unit = {}
 ) {
@@ -94,7 +97,7 @@ fun HomeScreenContent(
         var bottomBarHeight by remember { mutableStateOf(0.dp) }
         val density = LocalDensity.current
         if (pinnedNotes.isEmpty() && interestingIdeaNotes.isEmpty() && buySomethingNotes.isEmpty() &&
-            goalsNotes.isEmpty() && guidanceNotes.isEmpty()
+            goalsNotes.isEmpty() && guidanceNotes.isEmpty() && routineTasksNotes.isEmpty()
         ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -121,56 +124,66 @@ fun HomeScreenContent(
                 Icon(imageVector = Icons.Filled.ArrowDownward, contentDescription = null)
                 Spacer(modifier = Modifier.weight(0.5f))
             }
-        }
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
-            if (pinnedNotes.isNotEmpty()) {
-                item {
-                    NoteList(
-                        title = stringResource(R.string.pinned_notes),
-                        notes = pinnedNotes,
-                        onViewAllClick = {},
-                        shouldShowNoteType = true
-                    )
+        } else {
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                if (pinnedNotes.isNotEmpty()) {
+                    item {
+                        NoteList(
+                            title = stringResource(R.string.pinned_notes),
+                            notes = pinnedNotes,
+                            onViewAllClick = {},
+                            shouldShowNoteType = true
+                        )
+                    }
                 }
-            }
-            if (interestingIdeaNotes.isNotEmpty()) {
-                item {
-                    NoteList(
-                        title = stringResource(NoteType.InterestingIdea.title),
-                        notes = interestingIdeaNotes,
-                        onViewAllClick = {}
-                    )
+                if (interestingIdeaNotes.isNotEmpty()) {
+                    item {
+                        NoteList(
+                            title = stringResource(NoteType.InterestingIdea.title),
+                            notes = interestingIdeaNotes,
+                            onViewAllClick = {}
+                        )
+                    }
                 }
-            }
-            if (buySomethingNotes.isNotEmpty()) {
-                item {
-                    NoteList(
-                        title = stringResource(NoteType.BuyingSomething.title),
-                        notes = buySomethingNotes,
-                        onViewAllClick = {}
-                    )
+                if (buySomethingNotes.isNotEmpty()) {
+                    item {
+                        NoteList(
+                            title = stringResource(NoteType.BuyingSomething.title),
+                            notes = buySomethingNotes,
+                            onViewAllClick = {}
+                        )
+                    }
                 }
-            }
-            if (goalsNotes.isNotEmpty()) {
-                item {
-                    NoteList(
-                        title = stringResource(NoteType.Goals.title),
-                        notes = goalsNotes,
-                        onViewAllClick = {}
-                    )
+                if (goalsNotes.isNotEmpty()) {
+                    item {
+                        NoteList(
+                            title = stringResource(NoteType.Goals.title),
+                            notes = goalsNotes,
+                            onViewAllClick = {}
+                        )
+                    }
                 }
-            }
-            if (guidanceNotes.isNotEmpty()) {
-                item {
-                    NoteList(
-                        title = stringResource(NoteType.Guidance.title),
-                        notes = guidanceNotes,
-                        onViewAllClick = {}
-                    )
+                if (guidanceNotes.isNotEmpty()) {
+                    item {
+                        NoteList(
+                            title = stringResource(NoteType.Guidance.title),
+                            notes = guidanceNotes,
+                            onViewAllClick = {}
+                        )
+                    }
                 }
-            }
-            item {
-                Spacer(modifier = Modifier.height(bottomBarHeight))
+                if (routineTasksNotes.isNotEmpty()) {
+                    item {
+                        NoteList(
+                            title = stringResource(NoteType.RoutineTasks.title),
+                            notes = routineTasksNotes,
+                            onViewAllClick = {}
+                        )
+                    }
+                }
+                item {
+                    Spacer(modifier = Modifier.height(bottomBarHeight))
+                }
             }
         }
         BottomAppBar(
@@ -248,7 +261,12 @@ private fun NoteList(
                         shouldShowNoteType = shouldShowNoteType
                     )
 
-                    is NotePreview.RoutineTasks -> TODO()
+                    is NotePreview.RoutineTasks -> RoutineTasksNote(
+                        active = note.active,
+                        completed = note.completed,
+                        color = note.color,
+                        shouldShowNoteType = shouldShowNoteType
+                    )
                 }
             }
         }
@@ -284,5 +302,6 @@ private fun HomeScreenPreview() {
         buySomethingNotes = listOf(),
         goalsNotes = listOf(),
         guidanceNotes = listOf(),
+        routineTasksNotes = listOf(),
     )
 }

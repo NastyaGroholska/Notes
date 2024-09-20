@@ -34,7 +34,7 @@ fun GoalsNote(
     title: String,
     tasks: List<Pair<Note.Goals.Task, List<Note.Goals.Task>>>,
     color: Color,
-    shouldShowNoteType: Boolean = false
+    shouldShowNoteType: Boolean = true
 ) {
     Column(
         modifier = Modifier
@@ -49,7 +49,7 @@ fun GoalsNote(
             )
     ) {
         Column(
-            modifier = Modifier.padding(12.dp),
+            modifier = Modifier.padding(12.dp).weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -74,7 +74,6 @@ fun GoalsNote(
             }
         }
         if (shouldShowNoteType) {
-            Spacer(modifier = Modifier.weight(1f))
             Text(
                 modifier = Modifier
                     .fillMaxWidth()

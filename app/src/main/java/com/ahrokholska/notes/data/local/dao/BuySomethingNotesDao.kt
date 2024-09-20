@@ -18,13 +18,13 @@ abstract class BuySomethingNotesDao {
         noteId: Int, unpinNote: () -> Unit,
         deleteFinishedRecord: () -> Unit
     ) {
-        deleteInterestingIdeaNoteOnly(noteId)
+        deleteBuySomethingNoteOnly(noteId)
         unpinNote()
         deleteFinishedRecord()
     }
 
     @Query("DELETE FROM buy_something_note WHERE id = :noteId")
-    protected abstract fun deleteInterestingIdeaNoteOnly(noteId: Int)
+    protected abstract fun deleteBuySomethingNoteOnly(noteId: Int)
 
     @Insert
     protected abstract fun insertBuySomethingNoteEntity(note: BuySomethingNoteEntity): Long

@@ -1,6 +1,7 @@
 package com.ahrokholska.notes.domain.model
 
 import com.ahrokholska.notes.domain.model.Note.Goals.Task
+import com.ahrokholska.notes.domain.model.Note.RoutineTasks.SubNote
 
 sealed class NotePreview {
     abstract val id: Int
@@ -32,5 +33,7 @@ sealed class NotePreview {
 
     data class RoutineTasks(
         override val id: Int = 0,
+        val active: List<SubNote>,
+        val completed: List<SubNote>,
     ) : NotePreview()
 }

@@ -6,6 +6,7 @@ import com.ahrokholska.notes.data.local.dao.GoalsNotesDao
 import com.ahrokholska.notes.data.local.dao.GuidanceNotesDao
 import com.ahrokholska.notes.data.local.dao.InterestingIdeaNotesDao
 import com.ahrokholska.notes.data.local.dao.PinNoteDao
+import com.ahrokholska.notes.data.local.dao.RoutineTasksNotesDao
 import com.ahrokholska.notes.data.mapper.toDomainPreview
 import com.ahrokholska.notes.data.mapper.toEntity
 import com.ahrokholska.notes.domain.model.Note
@@ -27,6 +28,7 @@ class NotesRepositoryImpl @Inject constructor(
     private val buySomethingNotesDao: BuySomethingNotesDao,
     private val goalsNotesDao: GoalsNotesDao,
     private val guidanceNotesDao: GuidanceNotesDao,
+    private val routineTasksNotesDao: RoutineTasksNotesDao,
     private val pinNoteDao: PinNoteDao,
     private val finishNoteDao: FinishNoteDao,
 ) : NotesRepository {
@@ -40,7 +42,7 @@ class NotesRepositoryImpl @Inject constructor(
 
             is Note.Goals -> getResult { goalsNotesDao.insert(note) }
             is Note.Guidance -> getResult { guidanceNotesDao.insert(note.toEntity()) }
-            is Note.RoutineTasks -> TODO()
+            is Note.RoutineTasks -> getResult { routineTasksNotesDao.insert(note) }
         }
     }
 
@@ -61,7 +63,13 @@ class NotesRepositoryImpl @Inject constructor(
                     )
                 }
 
-                Note.Goals::class -> TODO()
+                Note.Goals::class -> getResult {
+                    goalsNotesDao.delete(noteId,
+                        { pinNoteDao.unpinNote(noteId, NoteType.Goals) },
+                        { finishNoteDao.deleteFinishedRecord(noteId, NoteType.Goals) }
+                    )
+                }
+
                 Note.Guidance::class -> getResult {
                     guidanceNotesDao.delete(noteId,
                         { pinNoteDao.unpinNote(noteId, NoteType.Guidance) },
@@ -69,7 +77,13 @@ class NotesRepositoryImpl @Inject constructor(
                     )
                 }
 
-                Note.RoutineTasks::class -> TODO()
+                Note.RoutineTasks::class -> getResult {
+                    routineTasksNotesDao.delete(noteId,
+                        { pinNoteDao.unpinNote(noteId, NoteType.RoutineTasks) },
+                        { finishNoteDao.deleteFinishedRecord(noteId, NoteType.RoutineTasks) }
+                    )
+                }
+
                 else -> Result.failure(Throwable("incorrect type"))
             }
         }
@@ -111,6 +125,16 @@ class NotesRepositoryImpl @Inject constructor(
 
     override fun getLast10GuidanceNotes(): Flow<List<NotePreview.Guidance>> =
         guidanceNotesDao.getLast10GuidanceNotes().map { list ->
+            list.map { it.toDomainPreview() }
+        }
+
+    override fun getAllRoutineTasksNotes(): Flow<List<NotePreview.RoutineTasks>> =
+        routineTasksNotesDao.getAllRoutineTasksNotes().map { list ->
+            list.map { it.toDomainPreview() }
+        }
+
+    override fun getLast10RoutineTasksNotes(): Flow<List<NotePreview.RoutineTasks>> =
+        routineTasksNotesDao.getLast10RoutineTasksNotes().map { list ->
             list.map { it.toDomainPreview() }
         }
 }

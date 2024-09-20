@@ -42,25 +42,26 @@ fun InterestingIdeaNote(
                 shape = RoundedCornerShape(noteCornerRadius)
             )
     ) {
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            text = text,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.secondary
-        )
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
+                text = text,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.secondary
+            )
+        }
         if (shouldShowNoteType) {
-            Spacer(modifier = Modifier.weight(1f))
             Text(
                 modifier = Modifier
                     .fillMaxWidth()

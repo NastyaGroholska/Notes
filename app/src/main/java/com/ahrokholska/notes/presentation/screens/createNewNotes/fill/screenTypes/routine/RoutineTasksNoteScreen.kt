@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ahrokholska.notes.R
+import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarSave
 import com.ahrokholska.notes.presentation.common.topBar.TopBar
 import com.ahrokholska.notes.presentation.theme.background
 import com.ahrokholska.notes.presentation.theme.noteColors
@@ -38,14 +39,16 @@ import com.ahrokholska.notes.presentation.theme.noteColors
 @Composable
 fun RoutineTasksNoteScreen(
     viewModel: RoutineTasksNoteScreenViewModel = hiltViewModel(),
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onNoteSaved: () -> Unit
 ) {
     RoutineTasksNoteScreenContent(
         items = viewModel.items.collectAsState().value,
         onAddItemClick = viewModel::addItem,
         onItemTitleChange = viewModel::changeItemTitle,
         onItemBodyChange = viewModel::changeItemBody,
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
+        onSaveClick = { viewModel.saveNote(it, onNoteSaved) }
     )
 }
 
@@ -56,6 +59,7 @@ fun RoutineTasksNoteScreenContent(
     onAddItemClick: () -> Unit = {},
     onItemTitleChange: (String, Int) -> Unit = { _, _ -> },
     onItemBodyChange: (String, Int) -> Unit = { _, _ -> },
+    onSaveClick: (List<Pair<String, String>>) -> Unit = { },
 ) {
     Scaffold(
         containerColor = background,
@@ -64,7 +68,8 @@ fun RoutineTasksNoteScreenContent(
                 modifier = Modifier.statusBarsPadding(),
                 onBackClick = onBackClick
             )
-        }
+        },
+        bottomBar = { BottomBarSave { onSaveClick(items) } }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier

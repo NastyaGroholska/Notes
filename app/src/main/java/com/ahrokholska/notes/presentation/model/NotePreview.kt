@@ -2,6 +2,7 @@ package com.ahrokholska.notes.presentation.model
 
 import androidx.compose.ui.graphics.Color
 import com.ahrokholska.notes.domain.model.Note.Goals.Task
+import com.ahrokholska.notes.domain.model.Note.RoutineTasks.SubNote
 
 sealed class NotePreview {
     abstract val id: Int
@@ -38,6 +39,8 @@ sealed class NotePreview {
 
     data class RoutineTasks(
         override val id: Int = 0,
+        val active: List<SubNote>,
+        val completed: List<SubNote>,
         override val color: Color
     ) : NotePreview()
 }

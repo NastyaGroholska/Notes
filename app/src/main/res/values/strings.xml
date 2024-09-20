@@ -52,7 +52,9 @@
     <string name="guidance_title">📋 Guidance</string>
     <string name="your_guidance">Your guidance</string>
 
-    <!--GuidanceNoteScreen-->
+    <!--RoutineTasksScreen-->
     <string name="title">Title</string>
     <string name="add_sub_notes">+ Add Sub Notes</string>
+    <string name="active_sub_notes">ACTIVE SUB NOTES</string>
+    <string name="completed_sub_notes">COMPLETED SUB NOTES</string>
 </resources>

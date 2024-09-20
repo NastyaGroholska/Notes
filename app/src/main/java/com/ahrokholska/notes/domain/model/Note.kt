@@ -42,7 +42,11 @@ sealed class Note {
 
     data class RoutineTasks(
         override val id: Int = 0,
+        val active: List<SubNote>,
+        val completed: List<SubNote>,
         override val isFinished: Boolean = false,
         override val isPinned: Boolean = false
-    ) : Note()
+    ) : Note() {
+        data class SubNote(val title: String, val text: String)
+    }
 }

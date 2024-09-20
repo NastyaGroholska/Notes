@@ -33,6 +33,9 @@ object AppModule {
     fun provideGuidanceNotesDao(db: AppDatabase) = db.guidanceNotesDao()
 
     @Provides
+    fun provideRoutineTasksNotesDao(db: AppDatabase) = db.routineTasksNotesDao()
+
+    @Provides
     fun providePinNoteDao(db: AppDatabase) = db.pinNoteDao()
 
     @Provides
