@@ -10,6 +10,7 @@ import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
 import com.ahrokholska.notes.presentation.screens.createNewNotes.fill.CreateNoteScreen
 import com.ahrokholska.notes.presentation.screens.createNewNotes.type.SelectNoteTypeScreen
 import com.ahrokholska.notes.presentation.screens.home.HomeScreen
+import com.ahrokholska.notes.presentation.screens.noteDetails.NoteDetailsScreen
 
 @Composable
 fun Navigation() {
@@ -25,8 +26,21 @@ fun Navigation() {
                         BottomBarScreen.SEARCH -> TODO()
                         BottomBarScreen.SETTINGS -> TODO()
                     }
-                })
+                },
+                onNoteClick = { id, type ->
+                    navController.navigate(Screen.NoteDetails(id, type))
+                }
+            )
         }
+
+        composable<Screen.NoteDetails> {
+            val args = it.toRoute<Screen.NoteDetails>()
+            NoteDetailsScreen(
+                type = args.type,
+                onBackClick = navController::navigateUp
+            )
+        }
+
         navigation<Screen.CreateNewNotesGraph>(startDestination = Screen.CreateNewNotesGraph.SelectNoteType) {
             composable<Screen.CreateNewNotesGraph.SelectNoteType> {
                 SelectNoteTypeScreen(

@@ -59,7 +59,8 @@ import com.ahrokholska.notes.presentation.theme.noteColors
 fun HomeScreen(
     viewModel: HomeScreenViewModel = hiltViewModel(),
     onPlusClick: () -> Unit,
-    onScreenClick: (screen: BottomBarScreen) -> Unit
+    onScreenClick: (screen: BottomBarScreen) -> Unit,
+    onNoteClick: (Int, NoteType) -> Unit
 ) {
     HomeScreenContent(
         pinnedNotes = viewModel.pinnedNotes.collectAsState().value,
@@ -69,7 +70,8 @@ fun HomeScreen(
         guidanceNotes = viewModel.guidanceNotes.collectAsState().value,
         routineTasksNotes = viewModel.routineTasksNotes.collectAsState().value,
         onPlusClick = onPlusClick,
-        onScreenClick = onScreenClick
+        onScreenClick = onScreenClick,
+        onNoteClick = onNoteClick
     )
 }
 
@@ -84,7 +86,8 @@ fun HomeScreenContent(
     guidanceNotes: List<NotePreview.Guidance>,
     routineTasksNotes: List<NotePreview.RoutineTasks>,
     onPlusClick: () -> Unit = {},
-    onScreenClick: (screen: BottomBarScreen) -> Unit = {}
+    onScreenClick: (screen: BottomBarScreen) -> Unit = {},
+    onNoteClick: (Int, NoteType) -> Unit = { _, _ -> }
 ) {
     Box(
         modifier = Modifier
@@ -131,6 +134,7 @@ fun HomeScreenContent(
                         NoteList(
                             title = stringResource(R.string.pinned_notes),
                             notes = pinnedNotes,
+                            onNoteClick = onNoteClick,
                             onViewAllClick = {},
                             shouldShowNoteType = true
                         )
@@ -141,6 +145,7 @@ fun HomeScreenContent(
                         NoteList(
                             title = stringResource(NoteType.InterestingIdea.title),
                             notes = interestingIdeaNotes,
+                            onNoteClick = onNoteClick,
                             onViewAllClick = {}
                         )
                     }
@@ -150,6 +155,7 @@ fun HomeScreenContent(
                         NoteList(
                             title = stringResource(NoteType.BuyingSomething.title),
                             notes = buySomethingNotes,
+                            onNoteClick = onNoteClick,
                             onViewAllClick = {}
                         )
                     }
@@ -159,6 +165,7 @@ fun HomeScreenContent(
                         NoteList(
                             title = stringResource(NoteType.Goals.title),
                             notes = goalsNotes,
+                            onNoteClick = onNoteClick,
                             onViewAllClick = {}
                         )
                     }
@@ -168,6 +175,7 @@ fun HomeScreenContent(
                         NoteList(
                             title = stringResource(NoteType.Guidance.title),
                             notes = guidanceNotes,
+                            onNoteClick = onNoteClick,
                             onViewAllClick = {}
                         )
                     }
@@ -177,6 +185,7 @@ fun HomeScreenContent(
                         NoteList(
                             title = stringResource(NoteType.RoutineTasks.title),
                             notes = routineTasksNotes,
+                            onNoteClick = onNoteClick,
                             onViewAllClick = {}
                         )
                     }
@@ -201,6 +210,7 @@ fun HomeScreenContent(
 private fun NoteList(
     title: String,
     notes: List<NotePreview>,
+    onNoteClick: (Int, NoteType) -> Unit,
     onViewAllClick: () -> Unit,
     shouldShowNoteType: Boolean = false
 ) {
@@ -258,6 +268,7 @@ private fun NoteList(
                         title = note.title,
                         text = note.body,
                         color = note.color,
+                        onNoteClick = { onNoteClick(note.id, NoteType.InterestingIdea) },
                         shouldShowNoteType = shouldShowNoteType
                     )
 

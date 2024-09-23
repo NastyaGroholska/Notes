@@ -9,6 +9,7 @@ import com.ahrokholska.notes.data.local.dao.PinNoteDao
 import com.ahrokholska.notes.data.local.dao.RoutineTasksNotesDao
 import com.ahrokholska.notes.data.mapper.toDomainPreview
 import com.ahrokholska.notes.data.mapper.toEntity
+import com.ahrokholska.notes.data.mapper.toNote
 import com.ahrokholska.notes.domain.model.Note
 import com.ahrokholska.notes.domain.model.NotePreview
 import com.ahrokholska.notes.domain.model.NoteType
@@ -137,4 +138,8 @@ class NotesRepositoryImpl @Inject constructor(
         routineTasksNotesDao.getLast10RoutineTasksNotes().map { list ->
             list.map { it.toDomainPreview() }
         }
+
+    override fun getInterestingIdeaNoteDetails(noteId: Int): Flow<Note.InterestingIdea> =
+        interestingIdeaNotesDao.getInterestingIdeaNoteDetails(noteId).map { it.toNote() }
+
 }

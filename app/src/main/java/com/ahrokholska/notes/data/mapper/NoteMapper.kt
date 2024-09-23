@@ -4,6 +4,7 @@ import com.ahrokholska.notes.data.local.dao.GoalsNotesDao
 import com.ahrokholska.notes.data.local.entities.BuySomethingNoteEntityWithItems
 import com.ahrokholska.notes.data.local.entities.GoalsNoteEntity
 import com.ahrokholska.notes.data.local.entities.GuidanceNoteEntity
+import com.ahrokholska.notes.data.local.entities.InterestingIdeaNoteDetails
 import com.ahrokholska.notes.data.local.entities.InterestingIdeaNoteEntity
 import com.ahrokholska.notes.data.local.entities.RoutineTasksNoteEntityWithSubNotes
 import com.ahrokholska.notes.domain.model.Note
@@ -113,3 +114,11 @@ fun RoutineTasksNoteEntityWithSubNotes.toDomainPreview(): NotePreview.RoutineTas
         completed = completed
     )
 }
+
+fun InterestingIdeaNoteDetails.toNote() = Note.InterestingIdea(
+    id = note.id,
+    title = note.title,
+    body = note.body,
+    isFinished = isFinished,
+    isPinned = isPinned
+)
