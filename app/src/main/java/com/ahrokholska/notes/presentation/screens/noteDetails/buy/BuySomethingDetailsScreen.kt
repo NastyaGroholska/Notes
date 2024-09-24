@@ -1,15 +1,17 @@
-package com.ahrokholska.notes.presentation.screens.noteDetails.idea
+package com.ahrokholska.notes.presentation.screens.noteDetails.buy
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -28,18 +30,23 @@ import com.ahrokholska.notes.presentation.theme.background
 import com.ahrokholska.notes.presentation.theme.noteColors
 
 @Composable
-fun InterestingIdeaDetailsScreen(
-    viewModel: InterestingIdeaDetailsScreenViewModel = hiltViewModel(),
+fun BuyingSomethingDetailsScreen(
+    viewModel: BuySomethingDetailsScreenViewModel = hiltViewModel(),
     onBackClick: () -> Unit
 ) {
-    InterestingIdeaDetailsScreenContent(
+    BuyingSomethingDetailsScreenContent(
         viewModel.note.collectAsState().value,
+        onItemCheckboxClick = viewModel::changeItemCheck,
         onBackClick = onBackClick
     )
 }
 
 @Composable
-fun InterestingIdeaDetailsScreenContent(note: Note.InterestingIdea?, onBackClick: () -> Unit = {}) {
+fun BuyingSomethingDetailsScreenContent(
+    note: Note.BuyingSomething?,
+    onItemCheckboxClick: (Int, Boolean) -> Unit = { _, _ -> },
+    onBackClick: () -> Unit = {}
+) {
     Scaffold(
         containerColor = background,
         topBar = {
@@ -61,22 +68,28 @@ fun InterestingIdeaDetailsScreenContent(note: Note.InterestingIdea?, onBackClick
                 CircularProgressIndicator()
             }
         } else {
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
                     .background(color = note.color)
                     .padding(top = 24.dp)
                     .padding(horizontal = 16.dp)
-                    .verticalScroll(rememberScrollState())
             ) {
-                Text(text = note.title, style = MaterialTheme.typography.displaySmall)
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = note.body,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.secondary
-                )
+                item {
+                    Text(text = note.title, style = MaterialTheme.typography.displaySmall)
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+                itemsIndexed(note.items) { index, item ->
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Checkbox(
+                            checked = item.first,
+                            onCheckedChange = { onItemCheckboxClick(index, it) }
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(text = item.second, style = MaterialTheme.typography.bodyLarge)
+                    }
+                }
             }
         }
     }
@@ -85,12 +98,14 @@ fun InterestingIdeaDetailsScreenContent(note: Note.InterestingIdea?, onBackClick
 @Preview
 @Composable
 private fun InterestingIdeaDetailsScreenPreview() {
-    InterestingIdeaDetailsScreenContent(
-        Note.InterestingIdea(
+    BuyingSomethingDetailsScreenContent(
+        Note.BuyingSomething(
             title = "\uD83D\uDCA1 New Product Ideas",
-            body = "Create a mobile app UI Kit that provide a basic notes functionality but with some improvement. \n" +
-                    "\n" +
-                    "There will be a choice to select what kind of notes that user needed, so the experience while taking notes can be unique based on the needs.",
+            items = listOf(
+                true to "A box of instant noodles",
+                false to "3 boxes of coffee",
+                false to "1"
+            ),
             color = noteColors[0]
         )
     )

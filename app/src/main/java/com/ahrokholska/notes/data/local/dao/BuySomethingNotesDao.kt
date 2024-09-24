@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import com.ahrokholska.notes.data.local.entities.BuySomethingNoteDetails
 import com.ahrokholska.notes.data.local.entities.BuySomethingNoteEntity
 import com.ahrokholska.notes.data.local.entities.BuySomethingNoteEntityWithItems
 import com.ahrokholska.notes.data.local.entities.BuySomethingNoteItem
@@ -73,4 +74,19 @@ abstract class BuySomethingNotesDao {
     protected abstract fun getLast10BuySomethingNotesGen(type: NoteType = NoteType.BuyingSomething): Flow<List<BuySomethingNoteEntityWithItems>>
 
     fun getLast10BuySomethingNotes() = getLast10BuySomethingNotesGen()
+
+    @Query(
+        "SELECT buy_something_note.*, NOT finished_notes.note_id is NULL as isFinished,NOT pinned_notes.note_id is NULL as isPinned " +
+                "FROM (SELECT buy_something_note.* FROM buy_something_note WHERE buy_something_note.id = :id) buy_something_note " +
+                "LEFT JOIN finished_notes ON finished_notes.note_id = :id AND finished_notes.note_type = :type " +
+                "LEFT JOIN pinned_notes ON pinned_notes.note_id = :id AND pinned_notes.note_type = :type"
+    )
+    protected abstract fun getBuySomethingNoteDetailsGen(
+        id: Int, type: NoteType = NoteType.BuyingSomething
+    ): Flow<BuySomethingNoteDetails>
+
+    fun getBuySomethingNoteDetails(id: Int) = getBuySomethingNoteDetailsGen(id)
+
+    @Query("UPDATE buy_something_note_item SET checked = :checked WHERE note_id = :id AND item_index = :index")
+    abstract fun changeCheck(id: Int, index: Int, checked: Boolean)
 }

@@ -1,6 +1,7 @@
 package com.ahrokholska.notes.data.mapper
 
 import com.ahrokholska.notes.data.local.dao.GoalsNotesDao
+import com.ahrokholska.notes.data.local.entities.BuySomethingNoteDetails
 import com.ahrokholska.notes.data.local.entities.BuySomethingNoteEntityWithItems
 import com.ahrokholska.notes.data.local.entities.GoalsNoteEntity
 import com.ahrokholska.notes.data.local.entities.GuidanceNoteEntity
@@ -119,6 +120,14 @@ fun InterestingIdeaNoteDetails.toNote() = Note.InterestingIdea(
     id = note.id,
     title = note.title,
     body = note.body,
+    isFinished = isFinished,
+    isPinned = isPinned
+)
+
+fun BuySomethingNoteDetails.toNote() = Note.BuyingSomething(
+    id = noteWithItems.note.id,
+    title = noteWithItems.note.title,
+    items = noteWithItems.items.map { it.checked to it.text },
     isFinished = isFinished,
     isPinned = isPinned
 )

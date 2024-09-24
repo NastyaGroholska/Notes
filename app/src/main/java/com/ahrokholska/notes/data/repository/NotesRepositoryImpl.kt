@@ -142,4 +142,12 @@ class NotesRepositoryImpl @Inject constructor(
     override fun getInterestingIdeaNoteDetails(noteId: Int): Flow<Note.InterestingIdea> =
         interestingIdeaNotesDao.getInterestingIdeaNoteDetails(noteId).map { it.toNote() }
 
+    override fun getBuySomethingNoteDetails(noteId: Int): Flow<Note.BuyingSomething> =
+        buySomethingNotesDao.getBuySomethingNoteDetails(noteId).map { it.toNote() }
+
+    override suspend fun changeBuySomethingItemCheck(
+        noteId: Int, index: Int, checked: Boolean
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        getResult { buySomethingNotesDao.changeCheck(noteId, index, checked) }
+    }
 }

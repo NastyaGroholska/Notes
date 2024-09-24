@@ -2,6 +2,7 @@ package com.ahrokholska.notes.presentation.common.notes
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,6 +34,7 @@ fun BuySomethingNote(
     title: String,
     items: List<Pair<Boolean, String>>,
     color: Color,
+    onNoteClick: () -> Unit = {},
     shouldShowNoteType: Boolean = true
 ) {
     Column(
@@ -40,6 +42,7 @@ fun BuySomethingNote(
             .fillMaxHeight()
             .padding(horizontal = contentPadding)
             .width(noteWidth)
+            .clickable { onNoteClick() }
             .background(color = color, shape = RoundedCornerShape(noteCornerRadius))
             .border(
                 width = 1.dp,
@@ -48,7 +51,9 @@ fun BuySomethingNote(
             )
     ) {
         Column(
-            modifier = Modifier.padding(12.dp).weight(1f),
+            modifier = Modifier
+                .padding(12.dp)
+                .weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(

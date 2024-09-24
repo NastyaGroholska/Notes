@@ -246,6 +246,7 @@ private fun NoteList(
                         title = note.title,
                         items = note.items,
                         color = note.color,
+                        onNoteClick = { onNoteClick(note.id, NoteType.BuyingSomething) },
                         shouldShowNoteType = shouldShowNoteType
                     )
 
