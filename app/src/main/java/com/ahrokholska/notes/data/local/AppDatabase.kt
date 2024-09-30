@@ -13,7 +13,7 @@ import com.ahrokholska.notes.data.local.dao.InterestingIdeaNotesDao
 import com.ahrokholska.notes.data.local.dao.PinNoteDao
 import com.ahrokholska.notes.data.local.dao.RoutineTasksNotesDao
 import com.ahrokholska.notes.data.local.entities.BuySomethingNoteEntity
-import com.ahrokholska.notes.data.local.entities.BuySomethingNoteItem
+import com.ahrokholska.notes.data.local.entities.BuySomethingNoteItemEntity
 import com.ahrokholska.notes.data.local.entities.FinishedNoteEntity
 import com.ahrokholska.notes.data.local.entities.GoalsNoteEntity
 import com.ahrokholska.notes.data.local.entities.GoalsNoteSubtaskEntity
@@ -26,7 +26,7 @@ import com.ahrokholska.notes.data.local.entities.RoutineTasksNoteSubNoteEntity
 
 @Database(
     entities = [InterestingIdeaNoteEntity::class, FinishedNoteEntity::class, PinnedNoteEntity::class,
-        BuySomethingNoteEntity::class, BuySomethingNoteItem::class,
+        BuySomethingNoteEntity::class, BuySomethingNoteItemEntity::class,
         GoalsNoteEntity::class, GoalsNoteTaskEntity::class, GoalsNoteSubtaskEntity::class,
         GuidanceNoteEntity::class,
         RoutineTasksNoteEntity::class, RoutineTasksNoteSubNoteEntity::class],

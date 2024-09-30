@@ -14,7 +14,7 @@ import androidx.room.ForeignKey
         onDelete = ForeignKey.CASCADE
     )]
 )
-data class BuySomethingNoteItem(
+data class BuySomethingNoteItemEntity(
     @ColumnInfo(name = "note_id") val noteId: Int,
     @ColumnInfo(name = "item_index") val itemIndex: Int,
     val checked: Boolean,

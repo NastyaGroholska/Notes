@@ -4,10 +4,10 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
-import com.ahrokholska.notes.data.local.entities.BuySomethingNoteDetails
+import com.ahrokholska.notes.data.local.intermediate.BuySomethingNoteDetails
 import com.ahrokholska.notes.data.local.entities.BuySomethingNoteEntity
-import com.ahrokholska.notes.data.local.entities.BuySomethingNoteEntityWithItems
-import com.ahrokholska.notes.data.local.entities.BuySomethingNoteItem
+import com.ahrokholska.notes.data.local.intermediate.BuySomethingNoteEntityWithItems
+import com.ahrokholska.notes.data.local.entities.BuySomethingNoteItemEntity
 import com.ahrokholska.notes.domain.model.Note
 import com.ahrokholska.notes.domain.model.NoteType
 import kotlinx.coroutines.flow.Flow
@@ -31,7 +31,7 @@ abstract class BuySomethingNotesDao {
     protected abstract fun insertBuySomethingNoteEntity(note: BuySomethingNoteEntity): Long
 
     @Insert
-    protected abstract fun insertBuySomethingNoteItem(item: BuySomethingNoteItem)
+    protected abstract fun insertBuySomethingNoteItem(item: BuySomethingNoteItemEntity)
 
     @Query("SELECT * FROM buy_something_note WHERE rowid=:rowId")
     protected abstract fun getBuySomethingNoteByRowId(rowId: Long): BuySomethingNoteEntity
@@ -42,7 +42,7 @@ abstract class BuySomethingNotesDao {
         val buyNote = getBuySomethingNoteByRowId(rowId)
         note.items.forEachIndexed { index, item ->
             insertBuySomethingNoteItem(
-                BuySomethingNoteItem(
+                BuySomethingNoteItemEntity(
                     noteId = buyNote.id,
                     itemIndex = index,
                     checked = item.first,

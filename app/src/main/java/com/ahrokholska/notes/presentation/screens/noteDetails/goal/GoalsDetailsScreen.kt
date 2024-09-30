@@ -1,4 +1,4 @@
-package com.ahrokholska.notes.presentation.screens.noteDetails.buy
+package com.ahrokholska.notes.presentation.screens.noteDetails.goal
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ahrokholska.notes.domain.model.Note.Goals.Task
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarNoteDetails
 import com.ahrokholska.notes.presentation.common.topBar.TopBar
 import com.ahrokholska.notes.presentation.model.Note
@@ -30,21 +31,23 @@ import com.ahrokholska.notes.presentation.theme.background
 import com.ahrokholska.notes.presentation.theme.noteColors
 
 @Composable
-fun BuyingSomethingDetailsScreen(
-    viewModel: BuySomethingDetailsScreenViewModel = hiltViewModel(),
+fun GoalsDetailsScreen(
+    viewModel: GoalsDetailsScreenViewModel = hiltViewModel(),
     onBackClick: () -> Unit
 ) {
-    BuyingSomethingDetailsScreenContent(
-        viewModel.note.collectAsState().value,
-        onItemCheckboxClick = viewModel::changeItemCheck,
+    GoalsDetailsScreenContent(
+        note = viewModel.note.collectAsState().value,
+        onTaskCheckboxClick = viewModel::changeTaskCheck,
+        onSubTaskCheckboxClick = viewModel::changeSubtaskCheck,
         onBackClick = onBackClick
     )
 }
 
 @Composable
-fun BuyingSomethingDetailsScreenContent(
-    note: Note.BuyingSomething?,
-    onItemCheckboxClick: (Int, Boolean) -> Unit = { _, _ -> },
+fun GoalsDetailsScreenContent(
+    note: Note.Goals?,
+    onTaskCheckboxClick: (Boolean, Int) -> Unit = { _, _ -> },
+    onSubTaskCheckboxClick: (Boolean, Int, Int) -> Unit = { _, _, _ -> },
     onBackClick: () -> Unit = {}
 ) {
     Scaffold(
@@ -80,14 +83,21 @@ fun BuyingSomethingDetailsScreenContent(
                     Text(text = note.title, style = MaterialTheme.typography.displaySmall)
                     Spacer(modifier = Modifier.height(16.dp))
                 }
-                itemsIndexed(note.items) { index, item ->
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(
-                            checked = item.first,
-                            onCheckedChange = { onItemCheckboxClick(index, it) }
+                note.tasks.forEachIndexed { index1, pair ->
+                    item {
+                        TaskUI(
+                            checked = pair.first.finished,
+                            onCheckedChange = { onTaskCheckboxClick(it, index1) },
+                            text = pair.first.text
                         )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Text(text = item.second, style = MaterialTheme.typography.bodyLarge)
+                    }
+                    itemsIndexed(pair.second) { index2, subtask ->
+                        TaskUI(
+                            modifier = Modifier.padding(start = 36.dp),
+                            checked = subtask.finished,
+                            onCheckedChange = { onSubTaskCheckboxClick(it, index1, index2) },
+                            text = subtask.text
+                        )
                     }
                 }
             }
@@ -95,16 +105,39 @@ fun BuyingSomethingDetailsScreenContent(
     }
 }
 
+@Composable
+private fun TaskUI(
+    modifier: Modifier = Modifier,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    text: String
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(
+            checked = checked,
+            onCheckedChange = onCheckedChange
+        )
+        Spacer(modifier = Modifier.width(12.dp))
+        Text(text = text, style = MaterialTheme.typography.bodyLarge)
+    }
+}
+
 @Preview
 @Composable
-private fun BuyingSomethingDetailsScreenPreview() {
-    BuyingSomethingDetailsScreenContent(
-        Note.BuyingSomething(
+private fun GoalsDetailsScreenPreview() {
+    GoalsDetailsScreenContent(
+        Note.Goals(
             title = "\uD83D\uDCA1 New Product Ideas",
-            items = listOf(
-                true to "A box of instant noodles",
-                false to "3 boxes of coffee",
-                false to "1"
+            tasks = listOf(
+                Task(false, "A box of instant noodles") to listOf(
+                    Task(true, "A box of instant noodles"),
+                    Task(false, "A box of instant noodles")
+                ),
+                Task(true, "A box of instant noodles") to listOf(Task(false, "3 boxes of coffee")),
+                Task(false, "A box of instant noodles") to listOf(Task(false, "1"))
             ),
             color = noteColors[0]
         )

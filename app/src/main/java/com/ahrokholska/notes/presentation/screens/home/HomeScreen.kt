@@ -254,6 +254,7 @@ private fun NoteList(
                         title = note.title,
                         tasks = note.tasks,
                         color = note.color,
+                        onNoteClick = { onNoteClick(note.id, NoteType.Goals) },
                         shouldShowNoteType = shouldShowNoteType
                     )
 

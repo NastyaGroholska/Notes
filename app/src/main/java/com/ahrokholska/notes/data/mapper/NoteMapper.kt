@@ -1,13 +1,14 @@
 package com.ahrokholska.notes.data.mapper
 
-import com.ahrokholska.notes.data.local.dao.GoalsNotesDao
-import com.ahrokholska.notes.data.local.entities.BuySomethingNoteDetails
-import com.ahrokholska.notes.data.local.entities.BuySomethingNoteEntityWithItems
 import com.ahrokholska.notes.data.local.entities.GoalsNoteEntity
 import com.ahrokholska.notes.data.local.entities.GuidanceNoteEntity
-import com.ahrokholska.notes.data.local.entities.InterestingIdeaNoteDetails
 import com.ahrokholska.notes.data.local.entities.InterestingIdeaNoteEntity
-import com.ahrokholska.notes.data.local.entities.RoutineTasksNoteEntityWithSubNotes
+import com.ahrokholska.notes.data.local.intermediate.BuySomethingNoteDetails
+import com.ahrokholska.notes.data.local.intermediate.BuySomethingNoteEntityWithItems
+import com.ahrokholska.notes.data.local.intermediate.GoalsNoteDetails
+import com.ahrokholska.notes.data.local.intermediate.InterestingIdeaNoteDetails
+import com.ahrokholska.notes.data.local.intermediate.RoutineTasksNoteEntityWithSubNotes
+import com.ahrokholska.notes.data.local.intermediate.TaskAndSubtask
 import com.ahrokholska.notes.domain.model.Note
 import com.ahrokholska.notes.domain.model.NotePreview
 
@@ -54,15 +55,23 @@ fun BuySomethingNoteEntityWithItems.toDomainPreview() = NotePreview.BuyingSometh
     items = items.map { it.checked to it.text }
 )
 
-fun Map.Entry<GoalsNoteEntity, List<GoalsNotesDao.TaskAndSubtask>>.toDomainPreview(): NotePreview.Goals {
+fun Map.Entry<GoalsNoteEntity, List<TaskAndSubtask>>.toDomainPreview(): NotePreview.Goals =
+    NotePreview.Goals(
+        id = key.id,
+        title = key.title,
+        tasks = value.toDomain()
+    )
+
+private fun List<TaskAndSubtask>.toDomain(): List<Pair<Note.Goals.Task, List<Note.Goals.Task>>> {
+    if (isEmpty()) return listOf()
     val tasks = mutableListOf<Pair<Note.Goals.Task, List<Note.Goals.Task>>>()
     var currentTaskIndex = 0
     var currentTask = Note.Goals.Task(
-        finished = value.first().taskChecked,
-        text = value.first().taskText
+        finished = first().taskChecked,
+        text = first().taskText
     )
     var subtasks = mutableListOf<Note.Goals.Task>()
-    value.forEach { pair ->
+    forEach { pair ->
         if (pair.taskIndex != currentTaskIndex) {
             tasks.add(currentTask to subtasks)
             currentTaskIndex = pair.taskIndex
@@ -81,11 +90,7 @@ fun Map.Entry<GoalsNoteEntity, List<GoalsNotesDao.TaskAndSubtask>>.toDomainPrevi
             )
     }
     tasks.add(currentTask to subtasks)
-    return NotePreview.Goals(
-        id = key.id,
-        title = key.title,
-        tasks = tasks
-    )
+    return tasks
 }
 
 fun GuidanceNoteEntity.toDomainPreview() = NotePreview.Guidance(
@@ -131,3 +136,12 @@ fun BuySomethingNoteDetails.toNote() = Note.BuyingSomething(
     isFinished = isFinished,
     isPinned = isPinned
 )
+
+fun GoalsNoteDetails.toNote(tasks: List<TaskAndSubtask>): Note.Goals =
+    Note.Goals(
+        id = note.id,
+        title = note.title,
+        tasks = tasks.toDomain(),
+        isFinished = isFinished,
+        isPinned = isPinned
+    )

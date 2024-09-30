@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
@@ -22,7 +23,7 @@ import com.ahrokholska.notes.R
 
 @Composable
 fun BottomBarSave(onClick: () -> Unit = {}) {
-    Column(horizontalAlignment = Alignment.End) {
+    Column(modifier = Modifier.navigationBarsPadding(), horizontalAlignment = Alignment.End) {
         HorizontalDivider()
         Row(
             modifier = Modifier

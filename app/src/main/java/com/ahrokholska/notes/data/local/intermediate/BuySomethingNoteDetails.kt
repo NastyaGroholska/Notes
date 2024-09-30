@@ -1,4 +1,4 @@
-package com.ahrokholska.notes.data.local.entities
+package com.ahrokholska.notes.data.local.intermediate
 
 import androidx.room.Embedded
 

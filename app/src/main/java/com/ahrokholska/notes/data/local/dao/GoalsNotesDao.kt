@@ -1,6 +1,5 @@
 package com.ahrokholska.notes.data.local.dao
 
-import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -8,6 +7,8 @@ import androidx.room.Transaction
 import com.ahrokholska.notes.data.local.entities.GoalsNoteEntity
 import com.ahrokholska.notes.data.local.entities.GoalsNoteSubtaskEntity
 import com.ahrokholska.notes.data.local.entities.GoalsNoteTaskEntity
+import com.ahrokholska.notes.data.local.intermediate.GoalsNoteDetails
+import com.ahrokholska.notes.data.local.intermediate.TaskAndSubtask
 import com.ahrokholska.notes.domain.model.Note
 import com.ahrokholska.notes.domain.model.NoteType
 import kotlinx.coroutines.flow.Flow
@@ -99,11 +100,32 @@ abstract class GoalsNotesDao {
 
     fun getLast10GoalsNotes() = getLast10GoalsNotesGen()
 
-    data class TaskAndSubtask(
-        @ColumnInfo(name = "task_index") val taskIndex: Int,
-        @ColumnInfo(name = "task_checked") val taskChecked: Boolean,
-        @ColumnInfo(name = "task_text") val taskText: String,
-        @ColumnInfo(name = "subtask_checked") val subtaskChecked: Boolean?,
-        @ColumnInfo(name = "subtask_text") val subtaskText: String?,
+    @Query(
+        "SELECT goals_note_task.task_index, goals_note_task.checked as task_checked, goals_note_task.text as task_text," +
+                "goals_note_subtask.checked as subtask_checked, goals_note_subtask.text as subtask_text " +
+                "FROM goals_note_task " +
+                "LEFT JOIN goals_note_subtask ON goals_note_task.note_id = goals_note_subtask.note_id " +
+                "AND goals_note_task.task_index = goals_note_subtask.task_index " +
+                "WHERE goals_note_task.note_id = :id "
     )
+    abstract fun getGoalsNoteTasks(id: Int): Flow<List<TaskAndSubtask>>
+
+    @Query(
+        "SELECT goals_note.*, NOT finished_notes.note_id is NULL as isFinished,NOT pinned_notes.note_id is NULL as isPinned " +
+                "FROM goals_note " +
+                "LEFT JOIN finished_notes ON finished_notes.note_id = :id AND finished_notes.note_type = :type " +
+                "LEFT JOIN pinned_notes ON pinned_notes.note_id = :id AND pinned_notes.note_type = :type " +
+                "WHERE goals_note.id = :id"
+    )
+    protected abstract fun getGoalsNoteDetailsGen(
+        id: Int, type: NoteType = NoteType.Goals
+    ): Flow<GoalsNoteDetails>
+
+    fun getGoalsNoteDetails(id: Int) = getGoalsNoteDetailsGen(id)
+
+    @Query("UPDATE goals_note_task SET checked = :checked WHERE note_id = :id AND task_index = :index")
+    abstract fun changeTaskCheck(id: Int, index: Int, checked: Boolean)
+
+    @Query("UPDATE goals_note_subtask SET checked = :checked WHERE note_id = :id AND task_index = :taskIndex AND subtask_index = :subtaskIndex")
+    abstract fun changeSubtaskCheck(id: Int, taskIndex: Int, subtaskIndex: Int, checked: Boolean)
 }

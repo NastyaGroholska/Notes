@@ -20,5 +20,10 @@ interface NotesRepository {
     fun getLast10RoutineTasksNotes(): Flow<List<NotePreview.RoutineTasks>>
     fun getInterestingIdeaNoteDetails(noteId: Int): Flow<Note.InterestingIdea>
     fun getBuySomethingNoteDetails(noteId: Int): Flow<Note.BuyingSomething>
+    fun getGoalsNoteDetails(noteId: Int): Flow<Note.Goals>
     suspend fun changeBuySomethingItemCheck(noteId: Int, index: Int, checked: Boolean): Result<Unit>
+    suspend fun changeGoalsTaskCheck(noteId: Int, index: Int, checked: Boolean): Result<Unit>
+    suspend fun changeGoalsSubtaskCheck(
+        noteId: Int, taskIndex: Int, subtaskIndex: Int, checked: Boolean
+    ): Result<Unit>
 }

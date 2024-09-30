@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import com.ahrokholska.notes.data.local.entities.RoutineTasksNoteEntity
-import com.ahrokholska.notes.data.local.entities.RoutineTasksNoteEntityWithSubNotes
+import com.ahrokholska.notes.data.local.intermediate.RoutineTasksNoteEntityWithSubNotes
 import com.ahrokholska.notes.data.local.entities.RoutineTasksNoteSubNoteEntity
 import com.ahrokholska.notes.domain.model.Note
 import com.ahrokholska.notes.domain.model.NoteType

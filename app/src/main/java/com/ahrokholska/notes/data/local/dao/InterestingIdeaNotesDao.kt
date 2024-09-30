@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
-import com.ahrokholska.notes.data.local.entities.InterestingIdeaNoteDetails
+import com.ahrokholska.notes.data.local.intermediate.InterestingIdeaNoteDetails
 import com.ahrokholska.notes.data.local.entities.InterestingIdeaNoteEntity
 import com.ahrokholska.notes.domain.model.NoteType
 import kotlinx.coroutines.flow.Flow

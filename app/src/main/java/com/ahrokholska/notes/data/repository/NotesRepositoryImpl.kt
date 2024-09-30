@@ -17,6 +17,7 @@ import com.ahrokholska.notes.domain.repository.NotesRepository
 import com.ahrokholska.notes.utils.ResultUtils.getResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -145,9 +146,27 @@ class NotesRepositoryImpl @Inject constructor(
     override fun getBuySomethingNoteDetails(noteId: Int): Flow<Note.BuyingSomething> =
         buySomethingNotesDao.getBuySomethingNoteDetails(noteId).map { it.toNote() }
 
+    override fun getGoalsNoteDetails(noteId: Int): Flow<Note.Goals> =
+        goalsNotesDao.getGoalsNoteDetails(noteId)
+            .combine(goalsNotesDao.getGoalsNoteTasks(noteId)) { detail, tasks ->
+                detail.toNote(tasks)
+            }
+
     override suspend fun changeBuySomethingItemCheck(
         noteId: Int, index: Int, checked: Boolean
     ): Result<Unit> = withContext(Dispatchers.IO) {
         getResult { buySomethingNotesDao.changeCheck(noteId, index, checked) }
+    }
+
+    override suspend fun changeGoalsTaskCheck(
+        noteId: Int, index: Int, checked: Boolean
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        getResult { goalsNotesDao.changeTaskCheck(noteId, index, checked) }
+    }
+
+    override suspend fun changeGoalsSubtaskCheck(
+        noteId: Int, taskIndex: Int, subtaskIndex: Int, checked: Boolean
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        getResult { goalsNotesDao.changeSubtaskCheck(noteId, taskIndex, subtaskIndex, checked) }
     }
 }
