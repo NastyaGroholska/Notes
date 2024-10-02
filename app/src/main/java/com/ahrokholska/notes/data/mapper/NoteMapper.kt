@@ -6,6 +6,7 @@ import com.ahrokholska.notes.data.local.entities.InterestingIdeaNoteEntity
 import com.ahrokholska.notes.data.local.intermediate.BuySomethingNoteDetails
 import com.ahrokholska.notes.data.local.intermediate.BuySomethingNoteEntityWithItems
 import com.ahrokholska.notes.data.local.intermediate.GoalsNoteDetails
+import com.ahrokholska.notes.data.local.intermediate.GuidanceNoteDetails
 import com.ahrokholska.notes.data.local.intermediate.InterestingIdeaNoteDetails
 import com.ahrokholska.notes.data.local.intermediate.RoutineTasksNoteEntityWithSubNotes
 import com.ahrokholska.notes.data.local.intermediate.TaskAndSubtask
@@ -145,3 +146,12 @@ fun GoalsNoteDetails.toNote(tasks: List<TaskAndSubtask>): Note.Goals =
         isFinished = isFinished,
         isPinned = isPinned
     )
+
+fun GuidanceNoteDetails.toNote(): Note.Guidance = Note.Guidance(
+    id = note.id,
+    title = note.title,
+    body = note.body,
+    image = note.image,
+    isFinished = isFinished,
+    isPinned = isPinned
+)

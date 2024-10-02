@@ -21,6 +21,7 @@ interface NotesRepository {
     fun getInterestingIdeaNoteDetails(noteId: Int): Flow<Note.InterestingIdea>
     fun getBuySomethingNoteDetails(noteId: Int): Flow<Note.BuyingSomething>
     fun getGoalsNoteDetails(noteId: Int): Flow<Note.Goals>
+    fun getGuidanceNoteDetails(noteId: Int): Flow<Note.Guidance>
     suspend fun changeBuySomethingItemCheck(noteId: Int, index: Int, checked: Boolean): Result<Unit>
     suspend fun changeGoalsTaskCheck(noteId: Int, index: Int, checked: Boolean): Result<Unit>
     suspend fun changeGoalsSubtaskCheck(

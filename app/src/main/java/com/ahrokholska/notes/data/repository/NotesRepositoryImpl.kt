@@ -152,6 +152,9 @@ class NotesRepositoryImpl @Inject constructor(
                 detail.toNote(tasks)
             }
 
+    override fun getGuidanceNoteDetails(noteId: Int): Flow<Note.Guidance> =
+        guidanceNotesDao.getGuidanceNoteDetails(noteId).map { it.toNote() }
+
     override suspend fun changeBuySomethingItemCheck(
         noteId: Int, index: Int, checked: Boolean
     ): Result<Unit> = withContext(Dispatchers.IO) {

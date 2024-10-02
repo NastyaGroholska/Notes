@@ -263,6 +263,7 @@ private fun NoteList(
                         body = note.body,
                         image = note.image,
                         color = note.color,
+                        onNoteClick = { onNoteClick(note.id, NoteType.Guidance) },
                         shouldShowNoteType = shouldShowNoteType
                     )
 

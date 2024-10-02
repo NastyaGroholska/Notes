@@ -2,6 +2,7 @@ package com.ahrokholska.notes.presentation.common.notes
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -31,6 +32,7 @@ fun GuidanceNote(
     body: String,
     image: String,
     color: Color,
+    onNoteClick: () -> Unit = {},
     shouldShowNoteType: Boolean = true
 ) {
     Column(
@@ -38,6 +40,8 @@ fun GuidanceNote(
             .fillMaxHeight()
             .padding(horizontal = contentPadding)
             .width(noteWidth)
+            .clip(RoundedCornerShape(noteCornerRadius))
+            .clickable { onNoteClick() }
             .background(color = color, shape = RoundedCornerShape(noteCornerRadius))
             .border(
                 width = 1.dp,
