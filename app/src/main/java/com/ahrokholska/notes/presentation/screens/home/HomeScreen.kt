@@ -279,6 +279,7 @@ private fun NoteList(
                         active = note.active,
                         completed = note.completed,
                         color = note.color,
+                        onNoteClick = { onNoteClick(note.id, NoteType.RoutineTasks) },
                         shouldShowNoteType = shouldShowNoteType
                     )
                 }

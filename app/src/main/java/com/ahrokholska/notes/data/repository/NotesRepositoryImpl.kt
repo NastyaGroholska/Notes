@@ -155,6 +155,9 @@ class NotesRepositoryImpl @Inject constructor(
     override fun getGuidanceNoteDetails(noteId: Int): Flow<Note.Guidance> =
         guidanceNotesDao.getGuidanceNoteDetails(noteId).map { it.toNote() }
 
+    override fun getRoutineTasksNoteDetails(noteId: Int): Flow<Note.RoutineTasks> =
+        routineTasksNotesDao.getRoutineTasksNoteDetails(noteId).map { it.toNote() }
+
     override suspend fun changeBuySomethingItemCheck(
         noteId: Int, index: Int, checked: Boolean
     ): Result<Unit> = withContext(Dispatchers.IO) {
@@ -171,5 +174,11 @@ class NotesRepositoryImpl @Inject constructor(
         noteId: Int, taskIndex: Int, subtaskIndex: Int, checked: Boolean
     ): Result<Unit> = withContext(Dispatchers.IO) {
         getResult { goalsNotesDao.changeSubtaskCheck(noteId, taskIndex, subtaskIndex, checked) }
+    }
+
+    override suspend fun changeRoutineTasksSubNoteCheck(
+        noteId: Int, index: Int, finished: Boolean
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        getResult { routineTasksNotesDao.changeRoutineTasksSubNoteCheck(noteId, index, finished) }
     }
 }

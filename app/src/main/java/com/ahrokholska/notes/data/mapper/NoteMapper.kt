@@ -3,11 +3,13 @@ package com.ahrokholska.notes.data.mapper
 import com.ahrokholska.notes.data.local.entities.GoalsNoteEntity
 import com.ahrokholska.notes.data.local.entities.GuidanceNoteEntity
 import com.ahrokholska.notes.data.local.entities.InterestingIdeaNoteEntity
+import com.ahrokholska.notes.data.local.entities.RoutineTasksNoteSubNoteEntity
 import com.ahrokholska.notes.data.local.intermediate.BuySomethingNoteDetails
 import com.ahrokholska.notes.data.local.intermediate.BuySomethingNoteEntityWithItems
 import com.ahrokholska.notes.data.local.intermediate.GoalsNoteDetails
 import com.ahrokholska.notes.data.local.intermediate.GuidanceNoteDetails
 import com.ahrokholska.notes.data.local.intermediate.InterestingIdeaNoteDetails
+import com.ahrokholska.notes.data.local.intermediate.RoutineTasksNoteDetails
 import com.ahrokholska.notes.data.local.intermediate.RoutineTasksNoteEntityWithSubNotes
 import com.ahrokholska.notes.data.local.intermediate.TaskAndSubtask
 import com.ahrokholska.notes.domain.model.Note
@@ -102,10 +104,20 @@ fun GuidanceNoteEntity.toDomainPreview() = NotePreview.Guidance(
 )
 
 fun RoutineTasksNoteEntityWithSubNotes.toDomainPreview(): NotePreview.RoutineTasks {
+    val pair = subNotes.toActiveAndCompleted()
+    return NotePreview.RoutineTasks(
+        id = note.id,
+        active = pair.first,
+        completed = pair.second
+    )
+}
+
+private fun List<RoutineTasksNoteSubNoteEntity>.toActiveAndCompleted(): Pair<List<Note.RoutineTasks.SubNote>, List<Note.RoutineTasks.SubNote>> {
     val active = mutableListOf<Note.RoutineTasks.SubNote>()
     val completed = mutableListOf<Note.RoutineTasks.SubNote>()
-    subNotes.forEach {
+    forEach {
         val item = Note.RoutineTasks.SubNote(
+            id = it.itemIndex,
             title = it.title,
             text = it.text
         )
@@ -115,11 +127,7 @@ fun RoutineTasksNoteEntityWithSubNotes.toDomainPreview(): NotePreview.RoutineTas
             active.add(item)
         }
     }
-    return NotePreview.RoutineTasks(
-        id = note.id,
-        active = active,
-        completed = completed
-    )
+    return active to completed
 }
 
 fun InterestingIdeaNoteDetails.toNote() = Note.InterestingIdea(
@@ -155,3 +163,14 @@ fun GuidanceNoteDetails.toNote(): Note.Guidance = Note.Guidance(
     isFinished = isFinished,
     isPinned = isPinned
 )
+
+fun RoutineTasksNoteDetails.toNote(): Note.RoutineTasks {
+    val pair = note.subNotes.toActiveAndCompleted()
+    return Note.RoutineTasks(
+        id = note.note.id,
+        active = pair.first,
+        completed = pair.second,
+        isFinished = isFinished,
+        isPinned = isPinned
+    )
+}

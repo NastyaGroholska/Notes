@@ -6,6 +6,7 @@ import com.ahrokholska.notes.presentation.screens.noteDetails.buy.BuyingSomethin
 import com.ahrokholska.notes.presentation.screens.noteDetails.goal.GoalsDetailsScreen
 import com.ahrokholska.notes.presentation.screens.noteDetails.guidance.GuidanceDetailsScreen
 import com.ahrokholska.notes.presentation.screens.noteDetails.idea.InterestingIdeaDetailsScreen
+import com.ahrokholska.notes.presentation.screens.noteDetails.routine.RoutineTasksDetailsScreen
 
 @Composable
 fun NoteDetailsScreen(type: NoteType, onBackClick: () -> Unit = {}) {
@@ -14,6 +15,6 @@ fun NoteDetailsScreen(type: NoteType, onBackClick: () -> Unit = {}) {
         NoteType.BuyingSomething -> BuyingSomethingDetailsScreen(onBackClick = onBackClick)
         NoteType.Goals -> GoalsDetailsScreen(onBackClick = onBackClick)
         NoteType.Guidance -> GuidanceDetailsScreen(onBackClick = onBackClick)
-        NoteType.RoutineTasks -> TODO()
+        NoteType.RoutineTasks -> RoutineTasksDetailsScreen(onBackClick = onBackClick)
     }
 }

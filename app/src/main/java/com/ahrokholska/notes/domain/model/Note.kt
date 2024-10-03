@@ -47,6 +47,6 @@ sealed class Note {
         override val isFinished: Boolean = false,
         override val isPinned: Boolean = false
     ) : Note() {
-        data class SubNote(val title: String, val text: String)
+        data class SubNote(val id: Int = 0, val title: String, val text: String)
     }
 }

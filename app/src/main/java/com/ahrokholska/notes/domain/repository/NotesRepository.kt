@@ -22,9 +22,14 @@ interface NotesRepository {
     fun getBuySomethingNoteDetails(noteId: Int): Flow<Note.BuyingSomething>
     fun getGoalsNoteDetails(noteId: Int): Flow<Note.Goals>
     fun getGuidanceNoteDetails(noteId: Int): Flow<Note.Guidance>
+    fun getRoutineTasksNoteDetails(noteId: Int): Flow<Note.RoutineTasks>
     suspend fun changeBuySomethingItemCheck(noteId: Int, index: Int, checked: Boolean): Result<Unit>
     suspend fun changeGoalsTaskCheck(noteId: Int, index: Int, checked: Boolean): Result<Unit>
     suspend fun changeGoalsSubtaskCheck(
         noteId: Int, taskIndex: Int, subtaskIndex: Int, checked: Boolean
+    ): Result<Unit>
+
+    suspend fun changeRoutineTasksSubNoteCheck(
+        noteId: Int, index: Int, finished: Boolean
     ): Result<Unit>
 }
