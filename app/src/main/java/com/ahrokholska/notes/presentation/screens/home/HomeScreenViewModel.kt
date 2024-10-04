@@ -34,7 +34,7 @@ class HomeScreenViewModel @Inject constructor(
                 color = noteColors[index % noteColors.size]
             )
         }
-    }.stateIn(viewModelScope, SharingStarted.Lazily, listOf())
+    }.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     val interestingIdeaNotes = getLast10InterestingIdeaNotesUseCase()
         .map { list ->
@@ -46,8 +46,7 @@ class HomeScreenViewModel @Inject constructor(
                     color = noteColors[(index + 1) % noteColors.size]
                 )
             }
-        }
-        .stateIn(viewModelScope, SharingStarted.Lazily, listOf())
+        }.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     val buySomethingNotes = getLast10BuySomethingNotesUseCase()
         .map { list ->
@@ -59,8 +58,7 @@ class HomeScreenViewModel @Inject constructor(
                     color = noteColors[(index + 2) % noteColors.size]
                 )
             }
-        }
-        .stateIn(viewModelScope, SharingStarted.Lazily, listOf())
+        }.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     val goalsNotes = getLast10GoalsNotesUseCase()
         .map { list ->
@@ -72,8 +70,7 @@ class HomeScreenViewModel @Inject constructor(
                     color = noteColors[(index + 3) % noteColors.size]
                 )
             }
-        }
-        .stateIn(viewModelScope, SharingStarted.Lazily, listOf())
+        }.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     val guidanceNotes = getLast10GuidanceNotesUseCase()
         .map { list ->
@@ -86,8 +83,7 @@ class HomeScreenViewModel @Inject constructor(
                     color = noteColors[(index + 4) % noteColors.size]
                 )
             }
-        }
-        .stateIn(viewModelScope, SharingStarted.Lazily, listOf())
+        }.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     val routineTasksNotes = getLast10RoutineTasksNotesUseCase()
         .map { list ->
@@ -99,6 +95,5 @@ class HomeScreenViewModel @Inject constructor(
                     color = noteColors[(index + 5) % noteColors.size]
                 )
             }
-        }
-        .stateIn(viewModelScope, SharingStarted.Lazily, listOf())
+        }.stateIn(viewModelScope, SharingStarted.Lazily, null)
 }

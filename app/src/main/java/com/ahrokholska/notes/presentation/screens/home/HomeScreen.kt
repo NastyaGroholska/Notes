@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -79,12 +80,12 @@ private val contentPadding = 16.dp
 
 @Composable
 fun HomeScreenContent(
-    pinnedNotes: List<NotePreview>,
-    interestingIdeaNotes: List<NotePreview.InterestingIdea>,
-    buySomethingNotes: List<NotePreview.BuyingSomething>,
-    goalsNotes: List<NotePreview.Goals>,
-    guidanceNotes: List<NotePreview.Guidance>,
-    routineTasksNotes: List<NotePreview.RoutineTasks>,
+    pinnedNotes: List<NotePreview>?,
+    interestingIdeaNotes: List<NotePreview.InterestingIdea>?,
+    buySomethingNotes: List<NotePreview.BuyingSomething>?,
+    goalsNotes: List<NotePreview.Goals>?,
+    guidanceNotes: List<NotePreview.Guidance>?,
+    routineTasksNotes: List<NotePreview.RoutineTasks>?,
     onPlusClick: () -> Unit = {},
     onScreenClick: (screen: BottomBarScreen) -> Unit = {},
     onNoteClick: (Int, NoteType) -> Unit = { _, _ -> }
@@ -99,37 +100,21 @@ fun HomeScreenContent(
     ) {
         var bottomBarHeight by remember { mutableStateOf(0.dp) }
         val density = LocalDensity.current
-        if (pinnedNotes.isEmpty() && interestingIdeaNotes.isEmpty() && buySomethingNotes.isEmpty() &&
-            goalsNotes.isEmpty() && guidanceNotes.isEmpty() && routineTasksNotes.isEmpty()
+        if (pinnedNotes?.isEmpty() == true && interestingIdeaNotes?.isEmpty() == true &&
+            buySomethingNotes?.isEmpty() == true && goalsNotes?.isEmpty() == true &&
+            guidanceNotes?.isEmpty() == true && routineTasksNotes?.isEmpty() == true
         ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Spacer(modifier = Modifier.weight(0.3f))
-                Image(
-                    painter = painterResource(R.drawable.illustration_go),
-                    contentDescription = null
-                )
-                Spacer(modifier = Modifier.height(24.dp))
-                Text(
-                    text = stringResource(R.string.start_your_journey),
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = stringResource(R.string.notes_your_first_idea_and_start),
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.secondary
-                )
-                Spacer(modifier = Modifier.height(21.dp))
-                Icon(imageVector = Icons.Filled.ArrowDownward, contentDescription = null)
-                Spacer(modifier = Modifier.weight(0.5f))
+            NoData()
+        } else if (pinnedNotes.isNullOrEmpty() && interestingIdeaNotes.isNullOrEmpty() &&
+            buySomethingNotes.isNullOrEmpty() && goalsNotes.isNullOrEmpty() &&
+            guidanceNotes.isNullOrEmpty() && routineTasksNotes.isNullOrEmpty()
+        ) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
             }
         } else {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
-                if (pinnedNotes.isNotEmpty()) {
+                if (pinnedNotes?.isNotEmpty() == true) {
                     item {
                         NoteList(
                             title = stringResource(R.string.pinned_notes),
@@ -140,7 +125,7 @@ fun HomeScreenContent(
                         )
                     }
                 }
-                if (interestingIdeaNotes.isNotEmpty()) {
+                if (interestingIdeaNotes?.isNotEmpty() == true) {
                     item {
                         NoteList(
                             title = stringResource(NoteType.InterestingIdea.title),
@@ -150,7 +135,7 @@ fun HomeScreenContent(
                         )
                     }
                 }
-                if (buySomethingNotes.isNotEmpty()) {
+                if (buySomethingNotes?.isNotEmpty() == true) {
                     item {
                         NoteList(
                             title = stringResource(NoteType.BuyingSomething.title),
@@ -160,7 +145,7 @@ fun HomeScreenContent(
                         )
                     }
                 }
-                if (goalsNotes.isNotEmpty()) {
+                if (goalsNotes?.isNotEmpty() == true) {
                     item {
                         NoteList(
                             title = stringResource(NoteType.Goals.title),
@@ -170,7 +155,7 @@ fun HomeScreenContent(
                         )
                     }
                 }
-                if (guidanceNotes.isNotEmpty()) {
+                if (guidanceNotes?.isNotEmpty() == true) {
                     item {
                         NoteList(
                             title = stringResource(NoteType.Guidance.title),
@@ -180,7 +165,7 @@ fun HomeScreenContent(
                         )
                     }
                 }
-                if (routineTasksNotes.isNotEmpty()) {
+                if (routineTasksNotes?.isNotEmpty() == true) {
                     item {
                         NoteList(
                             title = stringResource(NoteType.RoutineTasks.title),
@@ -203,6 +188,35 @@ fun HomeScreenContent(
             onPlusClick = onPlusClick,
             onScreenClick = onScreenClick
         )
+    }
+}
+
+@Composable
+private fun NoData() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Spacer(modifier = Modifier.weight(0.3f))
+        Image(
+            painter = painterResource(R.drawable.illustration_go),
+            contentDescription = null
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            text = stringResource(R.string.start_your_journey),
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = stringResource(R.string.notes_your_first_idea_and_start),
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.secondary
+        )
+        Spacer(modifier = Modifier.height(21.dp))
+        Icon(imageVector = Icons.Filled.ArrowDownward, contentDescription = null)
+        Spacer(modifier = Modifier.weight(0.5f))
     }
 }
 
