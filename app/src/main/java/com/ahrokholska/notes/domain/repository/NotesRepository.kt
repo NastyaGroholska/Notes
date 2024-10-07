@@ -2,6 +2,7 @@ package com.ahrokholska.notes.domain.repository
 
 import com.ahrokholska.notes.domain.model.Note
 import com.ahrokholska.notes.domain.model.NotePreview
+import com.ahrokholska.notes.domain.model.NoteType
 import kotlinx.coroutines.flow.Flow
 import kotlin.reflect.KClass
 
@@ -32,4 +33,8 @@ interface NotesRepository {
     suspend fun changeRoutineTasksSubNoteCheck(
         noteId: Int, index: Int, finished: Boolean
     ): Result<Unit>
+
+    fun getLast10PinnedNotes(): Flow<List<NotePreview>>
+    suspend fun pinNote(noteId: Int, noteType: NoteType, time: Long)
+    suspend fun unpinNote(noteId: Int, noteType: NoteType)
 }

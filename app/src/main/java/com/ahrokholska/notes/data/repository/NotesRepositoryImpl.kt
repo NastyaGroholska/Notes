@@ -7,6 +7,7 @@ import com.ahrokholska.notes.data.local.dao.GuidanceNotesDao
 import com.ahrokholska.notes.data.local.dao.InterestingIdeaNotesDao
 import com.ahrokholska.notes.data.local.dao.PinNoteDao
 import com.ahrokholska.notes.data.local.dao.RoutineTasksNotesDao
+import com.ahrokholska.notes.data.local.entities.PinnedNoteEntity
 import com.ahrokholska.notes.data.mapper.toDomainPreview
 import com.ahrokholska.notes.data.mapper.toEntity
 import com.ahrokholska.notes.data.mapper.toNote
@@ -16,15 +17,16 @@ import com.ahrokholska.notes.domain.model.NoteType
 import com.ahrokholska.notes.domain.repository.NotesRepository
 import com.ahrokholska.notes.utils.ResultUtils.getResult
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import javax.inject.Singleton
 import kotlin.reflect.KClass
 
-@Singleton
 class NotesRepositoryImpl @Inject constructor(
     private val interestingIdeaNotesDao: InterestingIdeaNotesDao,
     private val buySomethingNotesDao: BuySomethingNotesDao,
@@ -180,5 +182,43 @@ class NotesRepositoryImpl @Inject constructor(
         noteId: Int, index: Int, finished: Boolean
     ): Result<Unit> = withContext(Dispatchers.IO) {
         getResult { routineTasksNotesDao.changeRoutineTasksSubNoteCheck(noteId, index, finished) }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getLast10PinnedNotes(): Flow<List<NotePreview>> =
+        pinNoteDao.getLast10PinnedNotes().flatMapLatest { list ->
+            if (list.isEmpty()) return@flatMapLatest flowOf(listOf<NotePreview>())
+            combine(list.map { note ->
+                when (note.noteType) {
+                    NoteType.InterestingIdea ->
+                        interestingIdeaNotesDao.getInterestingIdeaNote(note.noteId)
+                            .map { it.toDomainPreview() }
+
+                    NoteType.BuyingSomething ->
+                        buySomethingNotesDao.getBuySomethingNote(note.noteId)
+                            .map { it.toDomainPreview() }
+
+                    NoteType.Goals ->
+                        goalsNotesDao.getGoalsNote(note.noteId)
+                            .map { map ->
+                                map.entries.first().toDomainPreview()
+                            }
+
+                    NoteType.Guidance -> guidanceNotesDao.getGuidanceNote(note.noteId)
+                        .map { it.toDomainPreview() }
+
+                    NoteType.RoutineTasks -> routineTasksNotesDao.getRoutineTasksNote(note.noteId)
+                        .map { it.toDomainPreview() }
+                }
+            }) { it.asList() }
+        }
+
+    override suspend fun pinNote(noteId: Int, noteType: NoteType, time: Long) =
+        withContext(Dispatchers.IO) {
+            pinNoteDao.pinNote(PinnedNoteEntity(noteId, noteType, time))
+        }
+
+    override suspend fun unpinNote(noteId: Int, noteType: NoteType) = withContext(Dispatchers.IO) {
+        pinNoteDao.unpinNote(noteId, noteType)
     }
 }

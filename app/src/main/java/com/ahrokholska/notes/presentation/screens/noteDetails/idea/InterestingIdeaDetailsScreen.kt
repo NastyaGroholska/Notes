@@ -27,16 +27,21 @@ fun InterestingIdeaDetailsScreen(
 ) {
     InterestingIdeaDetailsScreenContent(
         viewModel.note.collectAsState().value,
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
+        onPinClick = viewModel::pinStatusChangeNote
     )
 }
 
 @Composable
-fun InterestingIdeaDetailsScreenContent(note: Note.InterestingIdea?, onBackClick: () -> Unit = {}) {
+fun InterestingIdeaDetailsScreenContent(
+    note: Note.InterestingIdea?,
+    onBackClick: () -> Unit = {},
+    onPinClick: (Boolean) -> Unit = {}
+) {
     DetailsScreenGeneric(
         note = note,
         onBackClick = onBackClick,
-        onPinClick = { TODO() },
+        onPinClick = onPinClick,
         onMoreClick = { TODO() },
     ) { innerPadding, noteNotNull ->
         Column(

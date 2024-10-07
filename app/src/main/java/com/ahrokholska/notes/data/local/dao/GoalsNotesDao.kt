@@ -128,4 +128,15 @@ abstract class GoalsNotesDao {
 
     @Query("UPDATE goals_note_subtask SET checked = :checked WHERE note_id = :id AND task_index = :taskIndex AND subtask_index = :subtaskIndex")
     abstract fun changeSubtaskCheck(id: Int, taskIndex: Int, subtaskIndex: Int, checked: Boolean)
+
+    @Query(
+        "SELECT goals_note.*, goals_note_task.task_index, goals_note_task.checked as task_checked, goals_note_task.text as task_text," +
+                "goals_note_subtask.checked as subtask_checked, goals_note_subtask.text as subtask_text " +
+                "FROM goals_note " +
+                "JOIN goals_note_task ON goals_note.id = goals_note_task.note_id " +
+                "LEFT JOIN goals_note_subtask ON goals_note_task.note_id = goals_note_subtask.note_id " +
+                "AND goals_note_task.task_index = goals_note_subtask.task_index " +
+                "WHERE goals_note.id = :id"
+    )
+    abstract fun getGoalsNote(id: Int): Flow<Map<GoalsNoteEntity, List<TaskAndSubtask>>>
 }

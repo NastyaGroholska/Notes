@@ -11,40 +11,50 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
     @Provides
+    @Singleton
     fun provideRoomDb(@ApplicationContext context: Context) = Room.databaseBuilder(
         context, AppDatabase::class.java, "app_database"
     ).build()
 
     @Provides
+    @Singleton
     fun provideInterestingIdeaNotesDao(db: AppDatabase) = db.interestingIdeaDao()
 
     @Provides
+    @Singleton
     fun provideBuySomethingNotesDao(db: AppDatabase) = db.buySomethingNotesDao()
 
     @Provides
+    @Singleton
     fun provideGoalsNotesDao(db: AppDatabase) = db.goalsNotesDao()
 
     @Provides
+    @Singleton
     fun provideGuidanceNotesDao(db: AppDatabase) = db.guidanceNotesDao()
 
     @Provides
+    @Singleton
     fun provideRoutineTasksNotesDao(db: AppDatabase) = db.routineTasksNotesDao()
 
     @Provides
+    @Singleton
     fun providePinNoteDao(db: AppDatabase) = db.pinNoteDao()
 
     @Provides
+    @Singleton
     fun provideFinishNoteDao(db: AppDatabase) = db.finishNoteDao()
 
     @Module
     @InstallIn(SingletonComponent::class)
     interface AppBindModule {
         @Binds
+        @Singleton
         fun bindNotesRepository(notesRepository: NotesRepositoryImpl): NotesRepository
     }
 }

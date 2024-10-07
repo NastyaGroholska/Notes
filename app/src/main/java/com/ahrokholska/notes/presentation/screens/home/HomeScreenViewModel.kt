@@ -8,8 +8,7 @@ import com.ahrokholska.notes.domain.useCase.getLast10Notes.GetLast10GoalsNotesUs
 import com.ahrokholska.notes.domain.useCase.getLast10Notes.GetLast10GuidanceNotesUseCase
 import com.ahrokholska.notes.domain.useCase.getLast10Notes.GetLast10InterestingIdeaNotesUseCase
 import com.ahrokholska.notes.domain.useCase.getLast10Notes.GetLast10RoutineTasksNotesUseCase
-import com.ahrokholska.notes.presentation.model.NotePreview
-import com.ahrokholska.notes.presentation.theme.noteColors
+import com.ahrokholska.notes.presentation.mapper.toUI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -27,73 +26,38 @@ class HomeScreenViewModel @Inject constructor(
 ) : ViewModel() {
     val pinnedNotes = getPinnedNotesUseCase().map { list ->
         list.mapIndexed { index, item ->
-            NotePreview.Guidance(
-                title = item.title,
-                body = item.body,
-                image = item.image,
-                color = noteColors[index % noteColors.size]
-            )
+            when (item) {
+                is com.ahrokholska.notes.domain.model.NotePreview.BuyingSomething -> item.toUI(index)
+                is com.ahrokholska.notes.domain.model.NotePreview.Goals -> item.toUI(index)
+                is com.ahrokholska.notes.domain.model.NotePreview.Guidance -> item.toUI(index)
+                is com.ahrokholska.notes.domain.model.NotePreview.InterestingIdea -> item.toUI(index)
+                is com.ahrokholska.notes.domain.model.NotePreview.RoutineTasks -> item.toUI(index)
+            }
         }
     }.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     val interestingIdeaNotes = getLast10InterestingIdeaNotesUseCase()
         .map { list ->
-            list.mapIndexed { index, item ->
-                NotePreview.InterestingIdea(
-                    id = item.id,
-                    title = item.title,
-                    body = item.body,
-                    color = noteColors[(index + 1) % noteColors.size]
-                )
-            }
+            list.mapIndexed { index, item -> item.toUI(index) }
         }.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     val buySomethingNotes = getLast10BuySomethingNotesUseCase()
         .map { list ->
-            list.mapIndexed { index, item ->
-                NotePreview.BuyingSomething(
-                    id = item.id,
-                    title = item.title,
-                    items = item.items,
-                    color = noteColors[(index + 2) % noteColors.size]
-                )
-            }
+            list.mapIndexed { index, item -> item.toUI(index) }
         }.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     val goalsNotes = getLast10GoalsNotesUseCase()
         .map { list ->
-            list.mapIndexed { index, item ->
-                NotePreview.Goals(
-                    id = item.id,
-                    title = item.title,
-                    tasks = item.tasks,
-                    color = noteColors[(index + 3) % noteColors.size]
-                )
-            }
+            list.mapIndexed { index, item -> item.toUI(index) }
         }.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     val guidanceNotes = getLast10GuidanceNotesUseCase()
         .map { list ->
-            list.mapIndexed { index, item ->
-                NotePreview.Guidance(
-                    id = item.id,
-                    title = item.title,
-                    body = item.body,
-                    image = item.image,
-                    color = noteColors[(index + 4) % noteColors.size]
-                )
-            }
+            list.mapIndexed { index, item -> item.toUI(index) }
         }.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     val routineTasksNotes = getLast10RoutineTasksNotesUseCase()
         .map { list ->
-            list.mapIndexed { index, item ->
-                NotePreview.RoutineTasks(
-                    id = item.id,
-                    active = item.active,
-                    completed = item.completed,
-                    color = noteColors[(index + 5) % noteColors.size]
-                )
-            }
+            list.mapIndexed { index, item -> item.toUI(index) }
         }.stateIn(viewModelScope, SharingStarted.Lazily, null)
 }

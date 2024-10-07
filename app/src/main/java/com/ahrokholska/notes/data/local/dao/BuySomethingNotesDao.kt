@@ -4,10 +4,10 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
-import com.ahrokholska.notes.data.local.intermediate.BuySomethingNoteDetails
 import com.ahrokholska.notes.data.local.entities.BuySomethingNoteEntity
-import com.ahrokholska.notes.data.local.intermediate.BuySomethingNoteEntityWithItems
 import com.ahrokholska.notes.data.local.entities.BuySomethingNoteItemEntity
+import com.ahrokholska.notes.data.local.intermediate.BuySomethingNoteDetails
+import com.ahrokholska.notes.data.local.intermediate.BuySomethingNoteEntityWithItems
 import com.ahrokholska.notes.domain.model.Note
 import com.ahrokholska.notes.domain.model.NoteType
 import kotlinx.coroutines.flow.Flow
@@ -89,4 +89,7 @@ abstract class BuySomethingNotesDao {
 
     @Query("UPDATE buy_something_note_item SET checked = :checked WHERE note_id = :id AND item_index = :index")
     abstract fun changeCheck(id: Int, index: Int, checked: Boolean)
+
+    @Query("SELECT * FROM buy_something_note WHERE buy_something_note.id = :id")
+    abstract fun getBuySomethingNote(id: Int): Flow<BuySomethingNoteEntityWithItems>
 }

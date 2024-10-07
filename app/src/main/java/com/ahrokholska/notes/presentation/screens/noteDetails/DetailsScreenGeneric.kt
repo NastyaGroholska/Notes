@@ -18,7 +18,7 @@ import com.ahrokholska.notes.presentation.theme.background
 fun <T : Note> DetailsScreenGeneric(
     note: T?,
     onBackClick: () -> Unit = {},
-    onPinClick: () -> Unit = {},
+    onPinClick: (Boolean) -> Unit = {},
     onMoreClick: () -> Unit = {},
     content: @Composable (PaddingValues, T) -> Unit
 ) {
@@ -33,7 +33,7 @@ fun <T : Note> DetailsScreenGeneric(
         bottomBar = {
             BottomBarNoteDetails(
                 isPinned = note?.isPinned ?: false,
-                onPinClick = if (note == null) ({}) else onPinClick,
+                onPinClick = if (note == null) ({}) else ({ onPinClick(note.isPinned) }),
                 onMoreClick = if (note == null) ({}) else onMoreClick
             )
         }

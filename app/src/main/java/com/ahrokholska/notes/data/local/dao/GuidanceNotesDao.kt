@@ -63,4 +63,7 @@ abstract class GuidanceNotesDao {
     ): Flow<GuidanceNoteDetails>
 
     fun getGuidanceNoteDetails(id: Int) = getGuidanceNoteDetailsGen(id)
+
+    @Query("SELECT * FROM guidance_note WHERE guidance_note.id = :id")
+    abstract fun getGuidanceNote(id: Int): Flow<GuidanceNoteEntity>
 }

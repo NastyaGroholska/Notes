@@ -4,8 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
-import com.ahrokholska.notes.data.local.intermediate.InterestingIdeaNoteDetails
 import com.ahrokholska.notes.data.local.entities.InterestingIdeaNoteEntity
+import com.ahrokholska.notes.data.local.intermediate.InterestingIdeaNoteDetails
 import com.ahrokholska.notes.domain.model.NoteType
 import kotlinx.coroutines.flow.Flow
 
@@ -62,4 +62,7 @@ abstract class InterestingIdeaNotesDao {
     ): Flow<InterestingIdeaNoteDetails>
 
     fun getInterestingIdeaNoteDetails(id: Int) = getInterestingIdeaNoteDetailsGen(id)
+
+    @Query("SELECT * FROM interesting_idea_note WHERE interesting_idea_note.id = :id")
+    abstract fun getInterestingIdeaNote(id: Int): Flow<InterestingIdeaNoteEntity>
 }

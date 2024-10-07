@@ -90,4 +90,7 @@ abstract class RoutineTasksNotesDao {
 
     @Query("UPDATE routine_tasks_note_sub_note SET completed = :finished WHERE note_id = :id AND item_index = :index")
     abstract fun changeRoutineTasksSubNoteCheck(id: Int, index: Int, finished: Boolean)
+
+    @Query("SELECT * FROM routine_tasks_note WHERE routine_tasks_note.id = :id")
+    abstract fun getRoutineTasksNote(id: Int): Flow<RoutineTasksNoteEntityWithSubNotes>
 }
