@@ -1,11 +1,14 @@
 package com.ahrokholska.notes.presentation.screens.noteDetails.routine
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ahrokholska.notes.domain.model.NoteType
 import com.ahrokholska.notes.domain.useCase.ChangeRoutineTasksSubNoteCheckUseCase
+import com.ahrokholska.notes.domain.useCase.PinNoteUseCase
+import com.ahrokholska.notes.domain.useCase.UnPinNoteUseCase
 import com.ahrokholska.notes.domain.useCase.getNoteDetails.GetRoutineTasksNoteDetailsUseCase
 import com.ahrokholska.notes.presentation.model.Note
+import com.ahrokholska.notes.presentation.screens.noteDetails.NoteDetailsViewModel
 import com.ahrokholska.notes.presentation.theme.noteColors
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,10 +20,11 @@ import javax.inject.Inject
 @HiltViewModel
 class RoutineTasksDetailsScreenViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    pinNoteUseCase: PinNoteUseCase,
+    unPinNoteUseCase: UnPinNoteUseCase,
     getRoutineTasksNoteDetailsUseCase: GetRoutineTasksNoteDetailsUseCase,
     private val changeRoutineTasksSubNoteCheckUseCase: ChangeRoutineTasksSubNoteCheckUseCase
-) : ViewModel() {
-    private val id = savedStateHandle.get<Int>("id") ?: 0
+) : NoteDetailsViewModel(savedStateHandle, pinNoteUseCase, unPinNoteUseCase) {
     val note = getRoutineTasksNoteDetailsUseCase(id)
         .map {
             Note.RoutineTasks(
@@ -45,4 +49,7 @@ class RoutineTasksDetailsScreenViewModel @Inject constructor(
             changeRoutineTasksSubNoteCheckUseCase(id, subNoteId, false)
         }
     }
+
+    fun pinStatusChangeNote(isPinned: Boolean) =
+        pinStatusChangeNote(isPinned, NoteType.RoutineTasks)
 }

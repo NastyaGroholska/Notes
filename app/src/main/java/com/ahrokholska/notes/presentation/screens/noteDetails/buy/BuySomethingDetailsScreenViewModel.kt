@@ -1,11 +1,14 @@
 package com.ahrokholska.notes.presentation.screens.noteDetails.buy
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ahrokholska.notes.domain.model.NoteType
 import com.ahrokholska.notes.domain.useCase.ChangeBuySomethingItemCheckUseCase
+import com.ahrokholska.notes.domain.useCase.PinNoteUseCase
+import com.ahrokholska.notes.domain.useCase.UnPinNoteUseCase
 import com.ahrokholska.notes.domain.useCase.getNoteDetails.GetBuySomethingNoteDetailsUseCase
 import com.ahrokholska.notes.presentation.model.Note
+import com.ahrokholska.notes.presentation.screens.noteDetails.NoteDetailsViewModel
 import com.ahrokholska.notes.presentation.theme.noteColors
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,10 +20,11 @@ import javax.inject.Inject
 @HiltViewModel
 class BuySomethingDetailsScreenViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    pinNoteUseCase: PinNoteUseCase,
+    unPinNoteUseCase: UnPinNoteUseCase,
     getBuySomethingNoteDetailsUseCase: GetBuySomethingNoteDetailsUseCase,
     private val changeBuySomethingItemCheckUseCase: ChangeBuySomethingItemCheckUseCase
-) : ViewModel() {
-    private val id = savedStateHandle.get<Int>("id") ?: 0
+) : NoteDetailsViewModel(savedStateHandle, pinNoteUseCase, unPinNoteUseCase) {
     val note = getBuySomethingNoteDetailsUseCase(id)
         .map {
             Note.BuyingSomething(
@@ -39,4 +43,7 @@ class BuySomethingDetailsScreenViewModel @Inject constructor(
             changeBuySomethingItemCheckUseCase(id, index, checked)
         }
     }
+
+    fun pinStatusChangeNote(isPinned: Boolean) =
+        pinStatusChangeNote(isPinned, NoteType.BuyingSomething)
 }
