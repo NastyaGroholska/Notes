@@ -31,7 +31,8 @@ fun BuyingSomethingDetailsScreen(
     BuyingSomethingDetailsScreenContent(
         viewModel.note.collectAsState().value,
         onItemCheckboxClick = viewModel::changeItemCheck,
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
+        onPinClick = viewModel::pinStatusChangeNote
     )
 }
 
@@ -39,12 +40,13 @@ fun BuyingSomethingDetailsScreen(
 fun BuyingSomethingDetailsScreenContent(
     note: Note.BuyingSomething?,
     onItemCheckboxClick: (Int, Boolean) -> Unit = { _, _ -> },
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onPinClick: (Boolean) -> Unit = {}
 ) {
     DetailsScreenGeneric(
         note = note,
         onBackClick = onBackClick,
-        onPinClick = { TODO() },
+        onPinClick = onPinClick,
         onMoreClick = { TODO() },
     ) { innerPadding, noteNotNull ->
         LazyColumn(

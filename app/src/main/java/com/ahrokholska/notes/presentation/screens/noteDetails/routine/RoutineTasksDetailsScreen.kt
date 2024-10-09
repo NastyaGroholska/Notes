@@ -31,7 +31,8 @@ fun RoutineTasksDetailsScreen(
         note = viewModel.note.collectAsState().value,
         onBackClick = onBackClick,
         onSubNoteFinish = viewModel::finishSubNote,
-        onSubNoteUnFinish = viewModel::unFinishSubNote
+        onSubNoteUnFinish = viewModel::unFinishSubNote,
+        onPinClick = viewModel::pinStatusChangeNote
     )
 }
 
@@ -40,12 +41,13 @@ fun RoutineTasksDetailsScreenContent(
     note: Note.RoutineTasks?,
     onBackClick: () -> Unit = {},
     onSubNoteFinish: (Int) -> Unit = {},
-    onSubNoteUnFinish: (Int) -> Unit = {}
+    onSubNoteUnFinish: (Int) -> Unit = {},
+    onPinClick: (Boolean) -> Unit = {}
 ) {
     DetailsScreenGeneric(
         note = note,
         onBackClick = onBackClick,
-        onPinClick = { TODO() },
+        onPinClick = onPinClick,
         onMoreClick = { TODO() },
     ) { innerPadding, noteNotNull ->
         LazyColumn(

@@ -32,16 +32,21 @@ fun GuidanceDetailsScreen(
 ) {
     GuidanceDetailsScreenContent(
         viewModel.note.collectAsState().value,
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
+        onPinClick = viewModel::pinStatusChangeNote
     )
 }
 
 @Composable
-fun GuidanceDetailsScreenContent(note: Note.Guidance?, onBackClick: () -> Unit = {}) {
+fun GuidanceDetailsScreenContent(
+    note: Note.Guidance?,
+    onBackClick: () -> Unit = {},
+    onPinClick: (Boolean) -> Unit = {}
+) {
     DetailsScreenGeneric(
         note = note,
         onBackClick = onBackClick,
-        onPinClick = { TODO() },
+        onPinClick = onPinClick,
         onMoreClick = { TODO() },
     ) { innerPadding, noteNotNull ->
         Column(
