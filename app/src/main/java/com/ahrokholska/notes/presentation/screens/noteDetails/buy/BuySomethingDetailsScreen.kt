@@ -47,7 +47,8 @@ fun BuyingSomethingDetailsScreenContent(
         note = note,
         onBackClick = onBackClick,
         onPinClick = onPinClick,
-        onMoreClick = { TODO() },
+        onFinishClick = { TODO() },
+        onDeleteClick = { TODO() },
     ) { innerPadding, noteNotNull ->
         LazyColumn(
             modifier = Modifier

@@ -57,4 +57,8 @@
     <string name="add_sub_notes">+ Add Sub Notes</string>
     <string name="active_sub_notes">ACTIVE SUB NOTES</string>
     <string name="completed_sub_notes">COMPLETED SUB NOTES</string>
+
+    <!--NoteDetailsScreen-->
+    <string name="mark_as_finished">Mark as Finished</string>
+    <string name="delete_note">Delete Note</string>
 </resources>

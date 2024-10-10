@@ -47,7 +47,8 @@ fun GuidanceDetailsScreenContent(
         note = note,
         onBackClick = onBackClick,
         onPinClick = onPinClick,
-        onMoreClick = { TODO() },
+        onFinishClick = { TODO() },
+        onDeleteClick = { TODO() },
     ) { innerPadding, noteNotNull ->
         Column(
             modifier = Modifier
