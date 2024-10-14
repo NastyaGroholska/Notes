@@ -39,6 +39,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ahrokholska.notes.R
+import com.ahrokholska.notes.presentation.common.CancelConfirmDialog
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarNoteDetails
 import com.ahrokholska.notes.presentation.common.topBar.TopBar
 import com.ahrokholska.notes.presentation.model.Note
@@ -58,6 +59,7 @@ fun <T : Note> DetailsScreenGeneric(
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
     Scaffold(
         containerColor = background,
         topBar = {
@@ -125,7 +127,7 @@ fun <T : Note> DetailsScreenGeneric(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { onDeleteClick() }
+                            .clickable { showDeleteDialog = true }
                             .padding(vertical = 16.dp, horizontal = 8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -139,6 +141,15 @@ fun <T : Note> DetailsScreenGeneric(
                     }
                 }
             }
+        }
+
+        if (showDeleteDialog) {
+            CancelConfirmDialog(
+                title = stringResource(R.string.delete_note),
+                text = stringResource(R.string.are_you_sure_you_want_to_delete_this_note),
+                onCancel = { showDeleteDialog = false },
+                onConfirm = onDeleteClick
+            )
         }
     }
 }
