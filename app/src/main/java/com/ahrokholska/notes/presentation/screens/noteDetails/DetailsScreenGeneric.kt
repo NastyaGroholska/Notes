@@ -60,6 +60,7 @@ fun <T : Note> DetailsScreenGeneric(
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
+    var showFinishDialog by remember { mutableStateOf(false) }
     Scaffold(
         containerColor = background,
         topBar = {
@@ -115,7 +116,7 @@ fun <T : Note> DetailsScreenGeneric(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { onFinishClick() }
+                            .clickable { showFinishDialog = true }
                             .padding(vertical = 16.dp, horizontal = 8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -149,6 +150,15 @@ fun <T : Note> DetailsScreenGeneric(
                 text = stringResource(R.string.are_you_sure_you_want_to_delete_this_note),
                 onCancel = { showDeleteDialog = false },
                 onConfirm = onDeleteClick
+            )
+        }
+
+        if (showFinishDialog) {
+            CancelConfirmDialog(
+                title = stringResource(R.string.mark_as_finished),
+                text = stringResource(R.string.are_you_sure_you_want_to_mark_this_note_as_finished),
+                onCancel = { showFinishDialog = false },
+                onConfirm = onFinishClick
             )
         }
     }
