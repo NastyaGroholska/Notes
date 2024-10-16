@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetGoalsNoteDetailsUseCase @Inject constructor(private val notesRepository: NotesRepository) {
-    operator fun invoke(id: Int): Flow<Note.Goals> = notesRepository.getGoalsNoteDetails(id)
+    operator fun invoke(id: Int): Flow<Note.Goals?> = notesRepository.getGoalsNoteDetails(id)
 }

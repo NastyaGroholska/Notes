@@ -60,7 +60,7 @@ abstract class GuidanceNotesDao {
     )
     protected abstract fun getGuidanceNoteDetailsGen(
         id: Int, type: NoteType = NoteType.Guidance
-    ): Flow<GuidanceNoteDetails>
+    ): Flow<GuidanceNoteDetails?>
 
     fun getGuidanceNoteDetails(id: Int) = getGuidanceNoteDetailsGen(id)
 

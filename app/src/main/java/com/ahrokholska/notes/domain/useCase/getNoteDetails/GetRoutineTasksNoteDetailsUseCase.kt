@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetRoutineTasksNoteDetailsUseCase @Inject constructor(private val notesRepository: NotesRepository) {
-    operator fun invoke(id: Int): Flow<Note.RoutineTasks> =
+    operator fun invoke(id: Int): Flow<Note.RoutineTasks?> =
         notesRepository.getRoutineTasksNoteDetails(id)
 }

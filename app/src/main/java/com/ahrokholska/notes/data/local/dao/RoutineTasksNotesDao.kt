@@ -84,7 +84,7 @@ abstract class RoutineTasksNotesDao {
     )
     protected abstract fun getRoutineTasksNoteDetailsGen(
         id: Int, type: NoteType = NoteType.RoutineTasks
-    ): Flow<RoutineTasksNoteDetails>
+    ): Flow<RoutineTasksNoteDetails?>
 
     fun getRoutineTasksNoteDetails(id: Int) = getRoutineTasksNoteDetailsGen(id)
 

@@ -1,5 +1,6 @@
 package com.ahrokholska.notes.presentation.screens.noteDetails.idea
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,9 +14,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ahrokholska.notes.R
 import com.ahrokholska.notes.presentation.model.Note
 import com.ahrokholska.notes.presentation.screens.noteDetails.DetailsScreenGeneric
 import com.ahrokholska.notes.presentation.theme.noteColors
@@ -25,10 +28,19 @@ fun InterestingIdeaDetailsScreen(
     viewModel: InterestingIdeaDetailsScreenViewModel = hiltViewModel(),
     onBackClick: () -> Unit
 ) {
+    val context = LocalContext.current.applicationContext
     InterestingIdeaDetailsScreenContent(
         viewModel.note.collectAsState().value,
         onBackClick = onBackClick,
-        onPinClick = viewModel::pinStatusChangeNote
+        onPinClick = viewModel::pinStatusChangeNote,
+        onDelete = {
+            viewModel.deleteNote {
+                Toast.makeText(
+                    context, context.getString(R.string.note_was_deleted), Toast.LENGTH_SHORT
+                ).show()
+                onBackClick()
+            }
+        }
     )
 }
 
@@ -36,14 +48,15 @@ fun InterestingIdeaDetailsScreen(
 fun InterestingIdeaDetailsScreenContent(
     note: Note.InterestingIdea?,
     onBackClick: () -> Unit = {},
-    onPinClick: (Boolean) -> Unit = {}
+    onPinClick: (Boolean) -> Unit = {},
+    onDelete: () -> Unit = {},
 ) {
     DetailsScreenGeneric(
         note = note,
         onBackClick = onBackClick,
         onPinClick = onPinClick,
         onFinishClick = { TODO() },
-        onDeleteClick = { TODO() },
+        onDeleteClick = onDelete,
     ) { innerPadding, noteNotNull ->
         Column(
             modifier = Modifier

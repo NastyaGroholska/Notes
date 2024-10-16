@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.ahrokholska.notes.domain.model.NoteType
 import com.ahrokholska.notes.domain.useCase.ChangeRoutineTasksSubNoteCheckUseCase
+import com.ahrokholska.notes.domain.useCase.DeleteNoteUseCase
 import com.ahrokholska.notes.domain.useCase.PinNoteUseCase
 import com.ahrokholska.notes.domain.useCase.UnPinNoteUseCase
 import com.ahrokholska.notes.domain.useCase.getNoteDetails.GetRoutineTasksNoteDetailsUseCase
@@ -23,33 +24,37 @@ class RoutineTasksDetailsScreenViewModel @Inject constructor(
     pinNoteUseCase: PinNoteUseCase,
     unPinNoteUseCase: UnPinNoteUseCase,
     getRoutineTasksNoteDetailsUseCase: GetRoutineTasksNoteDetailsUseCase,
+    deleteNoteUseCase: DeleteNoteUseCase,
     private val changeRoutineTasksSubNoteCheckUseCase: ChangeRoutineTasksSubNoteCheckUseCase
-) : NoteDetailsViewModel(savedStateHandle, pinNoteUseCase, unPinNoteUseCase) {
+) : NoteDetailsViewModel(
+    savedStateHandle, NoteType.RoutineTasks, pinNoteUseCase, unPinNoteUseCase, deleteNoteUseCase
+) {
     val note = getRoutineTasksNoteDetailsUseCase(id)
         .map {
-            Note.RoutineTasks(
-                id = it.id,
-                active = it.active,
-                completed = it.completed,
-                isFinished = it.isFinished,
-                isPinned = it.isPinned,
-                color = noteColors[0]
-            )
+            it?.let {
+                Note.RoutineTasks(
+                    id = it.id,
+                    active = it.active,
+                    completed = it.completed,
+                    isFinished = it.isFinished,
+                    isPinned = it.isPinned,
+                    color = noteColors[0]
+                )
+            }
         }
         .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     fun finishSubNote(subNoteId: Int) {
+        if (isDeleting) return
         viewModelScope.launch {
             changeRoutineTasksSubNoteCheckUseCase(id, subNoteId, true)
         }
     }
 
     fun unFinishSubNote(subNoteId: Int) {
+        if (isDeleting) return
         viewModelScope.launch {
             changeRoutineTasksSubNoteCheckUseCase(id, subNoteId, false)
         }
     }
-
-    fun pinStatusChangeNote(isPinned: Boolean) =
-        pinStatusChangeNote(isPinned, NoteType.RoutineTasks)
 }

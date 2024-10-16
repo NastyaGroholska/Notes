@@ -3,6 +3,7 @@ package com.ahrokholska.notes.presentation.screens.noteDetails.idea
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.ahrokholska.notes.domain.model.NoteType
+import com.ahrokholska.notes.domain.useCase.DeleteNoteUseCase
 import com.ahrokholska.notes.domain.useCase.PinNoteUseCase
 import com.ahrokholska.notes.domain.useCase.UnPinNoteUseCase
 import com.ahrokholska.notes.domain.useCase.getNoteDetails.GetInterestingIdeaNoteDetailsUseCase
@@ -21,20 +22,22 @@ class InterestingIdeaDetailsScreenViewModel @Inject constructor(
     pinNoteUseCase: PinNoteUseCase,
     unPinNoteUseCase: UnPinNoteUseCase,
     getInterestingIdeaNoteDetailsUseCase: GetInterestingIdeaNoteDetailsUseCase,
-) : NoteDetailsViewModel(savedStateHandle, pinNoteUseCase, unPinNoteUseCase) {
+    deleteNoteUseCase: DeleteNoteUseCase,
+) : NoteDetailsViewModel(
+    savedStateHandle, NoteType.InterestingIdea, pinNoteUseCase, unPinNoteUseCase, deleteNoteUseCase
+) {
     val note = getInterestingIdeaNoteDetailsUseCase(id)
         .map {
-            Note.InterestingIdea(
-                id = it.id,
-                title = it.title,
-                body = it.body,
-                isFinished = it.isFinished,
-                isPinned = it.isPinned,
-                color = noteColors[0]
-            )
+            it?.let {
+                Note.InterestingIdea(
+                    id = it.id,
+                    title = it.title,
+                    body = it.body,
+                    isFinished = it.isFinished,
+                    isPinned = it.isPinned,
+                    color = noteColors[0]
+                )
+            }
         }
         .stateIn(viewModelScope, SharingStarted.Lazily, null)
-
-    fun pinStatusChangeNote(isPinned: Boolean) =
-        pinStatusChangeNote(isPinned, NoteType.InterestingIdea)
 }

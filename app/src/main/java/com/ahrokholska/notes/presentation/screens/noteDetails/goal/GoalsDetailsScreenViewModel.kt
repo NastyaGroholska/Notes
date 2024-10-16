@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.ahrokholska.notes.domain.model.NoteType
 import com.ahrokholska.notes.domain.useCase.ChangeGoalsSubtaskCheckUseCase
 import com.ahrokholska.notes.domain.useCase.ChangeGoalsTaskCheckUseCase
+import com.ahrokholska.notes.domain.useCase.DeleteNoteUseCase
 import com.ahrokholska.notes.domain.useCase.PinNoteUseCase
 import com.ahrokholska.notes.domain.useCase.UnPinNoteUseCase
 import com.ahrokholska.notes.domain.useCase.getNoteDetails.GetGoalsNoteDetailsUseCase
@@ -24,33 +25,38 @@ class GoalsDetailsScreenViewModel @Inject constructor(
     pinNoteUseCase: PinNoteUseCase,
     unPinNoteUseCase: UnPinNoteUseCase,
     getGoalsNoteDetailsUseCase: GetGoalsNoteDetailsUseCase,
+    deleteNoteUseCase: DeleteNoteUseCase,
     private val changeGoalsTaskCheckUseCase: ChangeGoalsTaskCheckUseCase,
     private val changeGoalsSubtaskCheckUseCase: ChangeGoalsSubtaskCheckUseCase
-) : NoteDetailsViewModel(savedStateHandle, pinNoteUseCase, unPinNoteUseCase) {
+) : NoteDetailsViewModel(
+    savedStateHandle, NoteType.Goals, pinNoteUseCase, unPinNoteUseCase, deleteNoteUseCase
+) {
     val note = getGoalsNoteDetailsUseCase(id)
         .map {
-            Note.Goals(
-                id = it.id,
-                title = it.title,
-                tasks = it.tasks,
-                isFinished = it.isFinished,
-                isPinned = it.isPinned,
-                color = noteColors[0]
-            )
+            it?.let {
+                Note.Goals(
+                    id = it.id,
+                    title = it.title,
+                    tasks = it.tasks,
+                    isFinished = it.isFinished,
+                    isPinned = it.isPinned,
+                    color = noteColors[0]
+                )
+            }
         }
         .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     fun changeTaskCheck(checked: Boolean, index: Int) {
+        if (isDeleting) return
         viewModelScope.launch {
             changeGoalsTaskCheckUseCase(id, index, checked)
         }
     }
 
     fun changeSubtaskCheck(checked: Boolean, taskIndex: Int, subtaskIndex: Int) {
+        if (isDeleting) return
         viewModelScope.launch {
             changeGoalsSubtaskCheckUseCase(id, taskIndex, subtaskIndex, checked)
         }
     }
-
-    fun pinStatusChangeNote(isPinned: Boolean) = pinStatusChangeNote(isPinned, NoteType.Goals)
 }

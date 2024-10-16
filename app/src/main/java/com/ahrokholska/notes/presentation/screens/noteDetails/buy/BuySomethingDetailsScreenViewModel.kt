@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.ahrokholska.notes.domain.model.NoteType
 import com.ahrokholska.notes.domain.useCase.ChangeBuySomethingItemCheckUseCase
+import com.ahrokholska.notes.domain.useCase.DeleteNoteUseCase
 import com.ahrokholska.notes.domain.useCase.PinNoteUseCase
 import com.ahrokholska.notes.domain.useCase.UnPinNoteUseCase
 import com.ahrokholska.notes.domain.useCase.getNoteDetails.GetBuySomethingNoteDetailsUseCase
@@ -23,27 +24,30 @@ class BuySomethingDetailsScreenViewModel @Inject constructor(
     pinNoteUseCase: PinNoteUseCase,
     unPinNoteUseCase: UnPinNoteUseCase,
     getBuySomethingNoteDetailsUseCase: GetBuySomethingNoteDetailsUseCase,
+    deleteNoteUseCase: DeleteNoteUseCase,
     private val changeBuySomethingItemCheckUseCase: ChangeBuySomethingItemCheckUseCase
-) : NoteDetailsViewModel(savedStateHandle, pinNoteUseCase, unPinNoteUseCase) {
+) : NoteDetailsViewModel(
+    savedStateHandle, NoteType.BuyingSomething, pinNoteUseCase, unPinNoteUseCase, deleteNoteUseCase
+) {
     val note = getBuySomethingNoteDetailsUseCase(id)
         .map {
-            Note.BuyingSomething(
-                id = it.id,
-                title = it.title,
-                items = it.items,
-                isFinished = it.isFinished,
-                isPinned = it.isPinned,
-                color = noteColors[0]
-            )
+            it?.let {
+                Note.BuyingSomething(
+                    id = it.id,
+                    title = it.title,
+                    items = it.items,
+                    isFinished = it.isFinished,
+                    isPinned = it.isPinned,
+                    color = noteColors[0]
+                )
+            }
         }
         .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     fun changeItemCheck(index: Int, checked: Boolean) {
+        if (isDeleting) return
         viewModelScope.launch {
             changeBuySomethingItemCheckUseCase(id, index, checked)
         }
     }
-
-    fun pinStatusChangeNote(isPinned: Boolean) =
-        pinStatusChangeNote(isPinned, NoteType.BuyingSomething)
 }

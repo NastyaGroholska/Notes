@@ -83,7 +83,7 @@ abstract class BuySomethingNotesDao {
     )
     protected abstract fun getBuySomethingNoteDetailsGen(
         id: Int, type: NoteType = NoteType.BuyingSomething
-    ): Flow<BuySomethingNoteDetails>
+    ): Flow<BuySomethingNoteDetails?>
 
     fun getBuySomethingNoteDetails(id: Int) = getBuySomethingNoteDetailsGen(id)
 

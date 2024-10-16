@@ -119,7 +119,7 @@ abstract class GoalsNotesDao {
     )
     protected abstract fun getGoalsNoteDetailsGen(
         id: Int, type: NoteType = NoteType.Goals
-    ): Flow<GoalsNoteDetails>
+    ): Flow<GoalsNoteDetails?>
 
     fun getGoalsNoteDetails(id: Int) = getGoalsNoteDetailsGen(id)
 

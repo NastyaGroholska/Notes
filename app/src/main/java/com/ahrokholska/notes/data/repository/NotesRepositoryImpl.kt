@@ -25,7 +25,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import kotlin.reflect.KClass
 
 class NotesRepositoryImpl @Inject constructor(
     private val interestingIdeaNotesDao: InterestingIdeaNotesDao,
@@ -50,45 +49,30 @@ class NotesRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteNote(noteId: Int, noteType: KClass<Note>): Result<Unit> =
+    override suspend fun deleteNote(noteId: Int, noteType: NoteType): Result<Unit> =
         withContext(Dispatchers.IO) {
+            val unpinNote = { pinNoteDao.unpinNote(noteId, noteType) }
+            val deleteFinishedRecord = { finishNoteDao.deleteFinishedRecord(noteId, noteType) }
             when (noteType) {
-                Note.InterestingIdea::class -> getResult {
-                    interestingIdeaNotesDao.delete(noteId,
-                        { pinNoteDao.unpinNote(noteId, NoteType.InterestingIdea) },
-                        { finishNoteDao.deleteFinishedRecord(noteId, NoteType.InterestingIdea) }
-                    )
+                NoteType.InterestingIdea -> getResult {
+                    interestingIdeaNotesDao.delete(noteId, unpinNote, deleteFinishedRecord)
                 }
 
-                Note.BuyingSomething::class -> getResult {
-                    buySomethingNotesDao.delete(noteId,
-                        { pinNoteDao.unpinNote(noteId, NoteType.BuyingSomething) },
-                        { finishNoteDao.deleteFinishedRecord(noteId, NoteType.BuyingSomething) }
-                    )
+                NoteType.BuyingSomething -> getResult {
+                    buySomethingNotesDao.delete(noteId, unpinNote, deleteFinishedRecord)
                 }
 
-                Note.Goals::class -> getResult {
-                    goalsNotesDao.delete(noteId,
-                        { pinNoteDao.unpinNote(noteId, NoteType.Goals) },
-                        { finishNoteDao.deleteFinishedRecord(noteId, NoteType.Goals) }
-                    )
+                NoteType.Goals -> getResult {
+                    goalsNotesDao.delete(noteId, unpinNote, deleteFinishedRecord)
                 }
 
-                Note.Guidance::class -> getResult {
-                    guidanceNotesDao.delete(noteId,
-                        { pinNoteDao.unpinNote(noteId, NoteType.Guidance) },
-                        { finishNoteDao.deleteFinishedRecord(noteId, NoteType.Guidance) }
-                    )
+                NoteType.Guidance -> getResult {
+                    guidanceNotesDao.delete(noteId, unpinNote, deleteFinishedRecord)
                 }
 
-                Note.RoutineTasks::class -> getResult {
-                    routineTasksNotesDao.delete(noteId,
-                        { pinNoteDao.unpinNote(noteId, NoteType.RoutineTasks) },
-                        { finishNoteDao.deleteFinishedRecord(noteId, NoteType.RoutineTasks) }
-                    )
+                NoteType.RoutineTasks -> getResult {
+                    routineTasksNotesDao.delete(noteId, unpinNote, deleteFinishedRecord)
                 }
-
-                else -> Result.failure(Throwable("incorrect type"))
             }
         }
 
@@ -142,23 +126,23 @@ class NotesRepositoryImpl @Inject constructor(
             list.map { it.toDomainPreview() }
         }
 
-    override fun getInterestingIdeaNoteDetails(noteId: Int): Flow<Note.InterestingIdea> =
-        interestingIdeaNotesDao.getInterestingIdeaNoteDetails(noteId).map { it.toNote() }
+    override fun getInterestingIdeaNoteDetails(noteId: Int): Flow<Note.InterestingIdea?> =
+        interestingIdeaNotesDao.getInterestingIdeaNoteDetails(noteId).map { it?.toNote() }
 
-    override fun getBuySomethingNoteDetails(noteId: Int): Flow<Note.BuyingSomething> =
-        buySomethingNotesDao.getBuySomethingNoteDetails(noteId).map { it.toNote() }
+    override fun getBuySomethingNoteDetails(noteId: Int): Flow<Note.BuyingSomething?> =
+        buySomethingNotesDao.getBuySomethingNoteDetails(noteId).map { it?.toNote() }
 
-    override fun getGoalsNoteDetails(noteId: Int): Flow<Note.Goals> =
+    override fun getGoalsNoteDetails(noteId: Int): Flow<Note.Goals?> =
         goalsNotesDao.getGoalsNoteDetails(noteId)
             .combine(goalsNotesDao.getGoalsNoteTasks(noteId)) { detail, tasks ->
-                detail.toNote(tasks)
+                detail?.toNote(tasks)
             }
 
-    override fun getGuidanceNoteDetails(noteId: Int): Flow<Note.Guidance> =
-        guidanceNotesDao.getGuidanceNoteDetails(noteId).map { it.toNote() }
+    override fun getGuidanceNoteDetails(noteId: Int): Flow<Note.Guidance?> =
+        guidanceNotesDao.getGuidanceNoteDetails(noteId).map { it?.toNote() }
 
-    override fun getRoutineTasksNoteDetails(noteId: Int): Flow<Note.RoutineTasks> =
-        routineTasksNotesDao.getRoutineTasksNoteDetails(noteId).map { it.toNote() }
+    override fun getRoutineTasksNoteDetails(noteId: Int): Flow<Note.RoutineTasks?> =
+        routineTasksNotesDao.getRoutineTasksNoteDetails(noteId).map { it?.toNote() }
 
     override suspend fun changeBuySomethingItemCheck(
         noteId: Int, index: Int, checked: Boolean

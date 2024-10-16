@@ -59,7 +59,7 @@ abstract class InterestingIdeaNotesDao {
     )
     protected abstract fun getInterestingIdeaNoteDetailsGen(
         id: Int, type: NoteType = NoteType.InterestingIdea
-    ): Flow<InterestingIdeaNoteDetails>
+    ): Flow<InterestingIdeaNoteDetails?>
 
     fun getInterestingIdeaNoteDetails(id: Int) = getInterestingIdeaNoteDetailsGen(id)
 
