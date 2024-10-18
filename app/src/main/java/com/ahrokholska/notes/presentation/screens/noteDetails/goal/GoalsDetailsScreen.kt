@@ -34,7 +34,8 @@ fun GoalsDetailsScreen(
         onTaskCheckboxClick = viewModel::changeTaskCheck,
         onSubTaskCheckboxClick = viewModel::changeSubtaskCheck,
         onBackClick = onBackClick,
-        onPinClick = viewModel::pinStatusChangeNote
+        onPinClick = viewModel::pinStatusChangeNote,
+        onDelete = viewModel::deleteNote
     )
 }
 
@@ -44,14 +45,15 @@ fun GoalsDetailsScreenContent(
     onTaskCheckboxClick: (Boolean, Int) -> Unit = { _, _ -> },
     onSubTaskCheckboxClick: (Boolean, Int, Int) -> Unit = { _, _, _ -> },
     onBackClick: () -> Unit = {},
-    onPinClick: (Boolean) -> Unit = {}
+    onPinClick: (Boolean) -> Unit = {},
+    onDelete: (onSuccess: () -> Unit) -> Unit = {},
 ) {
     DetailsScreenGeneric(
         note = note,
         onBackClick = onBackClick,
         onPinClick = onPinClick,
         onFinishClick = { TODO() },
-        onDeleteClick = { TODO() },
+        onDeleteClick = onDelete,
     ) { innerPadding, noteNotNull ->
         LazyColumn(
             modifier = Modifier

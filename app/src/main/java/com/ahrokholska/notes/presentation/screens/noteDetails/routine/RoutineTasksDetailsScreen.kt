@@ -32,7 +32,8 @@ fun RoutineTasksDetailsScreen(
         onBackClick = onBackClick,
         onSubNoteFinish = viewModel::finishSubNote,
         onSubNoteUnFinish = viewModel::unFinishSubNote,
-        onPinClick = viewModel::pinStatusChangeNote
+        onPinClick = viewModel::pinStatusChangeNote,
+        onDelete = viewModel::deleteNote
     )
 }
 
@@ -42,14 +43,15 @@ fun RoutineTasksDetailsScreenContent(
     onBackClick: () -> Unit = {},
     onSubNoteFinish: (Int) -> Unit = {},
     onSubNoteUnFinish: (Int) -> Unit = {},
-    onPinClick: (Boolean) -> Unit = {}
+    onPinClick: (Boolean) -> Unit = {},
+    onDelete: (onSuccess: () -> Unit) -> Unit = {},
 ) {
     DetailsScreenGeneric(
         note = note,
         onBackClick = onBackClick,
         onPinClick = onPinClick,
         onFinishClick = { TODO() },
-        onDeleteClick = { TODO() },
+        onDeleteClick = onDelete,
     ) { innerPadding, noteNotNull ->
         LazyColumn(
             modifier = Modifier
