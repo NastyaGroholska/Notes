@@ -12,5 +12,6 @@ import com.ahrokholska.notes.domain.model.NoteType
 )
 data class FinishedNoteEntity(
     @ColumnInfo(name = "note_id") val noteId: Int,
-    @ColumnInfo(name = "note_type") val noteType: NoteType
+    @ColumnInfo(name = "note_type") val noteType: NoteType,
+    @ColumnInfo(defaultValue = "0") val time: Long
 )

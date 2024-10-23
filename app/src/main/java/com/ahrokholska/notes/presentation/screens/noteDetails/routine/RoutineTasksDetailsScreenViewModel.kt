@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.ahrokholska.notes.domain.model.NoteType
 import com.ahrokholska.notes.domain.useCase.ChangeRoutineTasksSubNoteCheckUseCase
 import com.ahrokholska.notes.domain.useCase.DeleteNoteUseCase
+import com.ahrokholska.notes.domain.useCase.FinishNoteUseCase
 import com.ahrokholska.notes.domain.useCase.PinNoteUseCase
 import com.ahrokholska.notes.domain.useCase.UnPinNoteUseCase
 import com.ahrokholska.notes.domain.useCase.getNoteDetails.GetRoutineTasksNoteDetailsUseCase
@@ -25,9 +26,11 @@ class RoutineTasksDetailsScreenViewModel @Inject constructor(
     unPinNoteUseCase: UnPinNoteUseCase,
     getRoutineTasksNoteDetailsUseCase: GetRoutineTasksNoteDetailsUseCase,
     deleteNoteUseCase: DeleteNoteUseCase,
+    finishNoteUseCase: FinishNoteUseCase,
     private val changeRoutineTasksSubNoteCheckUseCase: ChangeRoutineTasksSubNoteCheckUseCase
 ) : NoteDetailsViewModel(
-    savedStateHandle, NoteType.RoutineTasks, pinNoteUseCase, unPinNoteUseCase, deleteNoteUseCase
+    savedStateHandle, NoteType.RoutineTasks, pinNoteUseCase, unPinNoteUseCase, deleteNoteUseCase,
+    finishNoteUseCase
 ) {
     val note = getRoutineTasksNoteDetailsUseCase(id)
         .map {

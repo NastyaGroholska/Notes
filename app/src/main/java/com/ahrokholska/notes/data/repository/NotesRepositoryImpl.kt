@@ -205,4 +205,11 @@ class NotesRepositoryImpl @Inject constructor(
     override suspend fun unpinNote(noteId: Int, noteType: NoteType) = withContext(Dispatchers.IO) {
         pinNoteDao.unpinNote(noteId, noteType)
     }
+
+    override suspend fun finishNote(noteId: Int, noteType: NoteType, time: Long) =
+        withContext(Dispatchers.IO) {
+            finishNoteDao.finishNote(noteId, noteType, time) {
+                pinNoteDao.unpinNote(noteId, noteType)
+            }
+        }
 }

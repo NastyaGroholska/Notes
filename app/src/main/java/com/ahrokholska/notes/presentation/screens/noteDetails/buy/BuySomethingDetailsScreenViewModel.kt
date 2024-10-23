@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.ahrokholska.notes.domain.model.NoteType
 import com.ahrokholska.notes.domain.useCase.ChangeBuySomethingItemCheckUseCase
 import com.ahrokholska.notes.domain.useCase.DeleteNoteUseCase
+import com.ahrokholska.notes.domain.useCase.FinishNoteUseCase
 import com.ahrokholska.notes.domain.useCase.PinNoteUseCase
 import com.ahrokholska.notes.domain.useCase.UnPinNoteUseCase
 import com.ahrokholska.notes.domain.useCase.getNoteDetails.GetBuySomethingNoteDetailsUseCase
@@ -25,9 +26,11 @@ class BuySomethingDetailsScreenViewModel @Inject constructor(
     unPinNoteUseCase: UnPinNoteUseCase,
     getBuySomethingNoteDetailsUseCase: GetBuySomethingNoteDetailsUseCase,
     deleteNoteUseCase: DeleteNoteUseCase,
+    finishNoteUseCase: FinishNoteUseCase,
     private val changeBuySomethingItemCheckUseCase: ChangeBuySomethingItemCheckUseCase
 ) : NoteDetailsViewModel(
-    savedStateHandle, NoteType.BuyingSomething, pinNoteUseCase, unPinNoteUseCase, deleteNoteUseCase
+    savedStateHandle, NoteType.BuyingSomething, pinNoteUseCase, unPinNoteUseCase, deleteNoteUseCase,
+    finishNoteUseCase
 ) {
     val note = getBuySomethingNoteDetailsUseCase(id)
         .map {

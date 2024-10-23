@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.ahrokholska.notes.domain.model.NoteType
 import com.ahrokholska.notes.domain.useCase.DeleteNoteUseCase
+import com.ahrokholska.notes.domain.useCase.FinishNoteUseCase
 import com.ahrokholska.notes.domain.useCase.PinNoteUseCase
 import com.ahrokholska.notes.domain.useCase.UnPinNoteUseCase
 import com.ahrokholska.notes.domain.useCase.getNoteDetails.GetGuidanceNoteDetailsUseCase
@@ -23,8 +24,10 @@ class GuidanceDetailsScreenViewModel @Inject constructor(
     unPinNoteUseCase: UnPinNoteUseCase,
     getGuidanceNoteDetailsUseCase: GetGuidanceNoteDetailsUseCase,
     deleteNoteUseCase: DeleteNoteUseCase,
+    finishNoteUseCase: FinishNoteUseCase,
 ) : NoteDetailsViewModel(
-    savedStateHandle, NoteType.Guidance, pinNoteUseCase, unPinNoteUseCase, deleteNoteUseCase
+    savedStateHandle, NoteType.Guidance, pinNoteUseCase, unPinNoteUseCase, deleteNoteUseCase,
+    finishNoteUseCase
 ) {
     val note = getGuidanceNoteDetailsUseCase(id)
         .map {

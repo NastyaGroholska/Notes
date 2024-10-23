@@ -75,6 +75,7 @@ fun <T : Note> DetailsScreenGeneric(
         bottomBar = {
             BottomBarNoteDetails(
                 isPinned = note?.isPinned ?: false,
+                isFinished = note?.isFinished ?: false,
                 onPinClick = if (note == null) ({}) else ({ onPinClick(note.isPinned) }),
                 onMoreClick = if (note == null) ({}) else ({ showBottomSheet = true })
             )
@@ -116,16 +117,18 @@ fun <T : Note> DetailsScreenGeneric(
                         imageVector = Icons.Filled.Close,
                         contentDescription = null
                     )
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { showFinishDialog = true }
-                            .padding(vertical = 16.dp, horizontal = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(imageVector = Icons.Filled.Check, contentDescription = null)
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Text(text = stringResource(R.string.mark_as_finished))
+                    if (note?.isFinished != true) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { showFinishDialog = true }
+                                .padding(vertical = 16.dp, horizontal = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(imageVector = Icons.Filled.Check, contentDescription = null)
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(text = stringResource(R.string.mark_as_finished))
+                        }
                     }
                     HorizontalDivider()
                     Row(
@@ -170,7 +173,10 @@ fun <T : Note> DetailsScreenGeneric(
                 title = stringResource(R.string.mark_as_finished),
                 text = stringResource(R.string.are_you_sure_you_want_to_mark_this_note_as_finished),
                 onCancel = { showFinishDialog = false },
-                onConfirm = onFinishClick
+                onConfirm = {
+                    showFinishDialog = false
+                    onFinishClick()
+                }
             )
         }
     }

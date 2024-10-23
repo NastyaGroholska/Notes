@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun BottomBarNoteDetails(
     isPinned: Boolean,
+    isFinished: Boolean,
     onPinClick: () -> Unit = {},
     onMoreClick: () -> Unit = {}
 ) {
@@ -34,7 +35,7 @@ fun BottomBarNoteDetails(
         ) {
             Icon(
                 modifier = Modifier
-                    .clickable { onPinClick() }
+                    .clickable(enabled = !isFinished) { onPinClick() }
                     .padding(16.dp),
                 imageVector = if (isPinned) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
                 contentDescription = null,
@@ -57,5 +58,5 @@ fun BottomBarNoteDetails(
 @Preview
 @Composable
 private fun BottomBarNoteDetailsPreview() {
-    BottomBarNoteDetails(isPinned = false)
+    BottomBarNoteDetails(isPinned = false, isFinished = false)
 }

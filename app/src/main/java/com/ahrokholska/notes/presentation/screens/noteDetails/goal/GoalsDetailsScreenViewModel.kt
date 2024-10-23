@@ -6,6 +6,7 @@ import com.ahrokholska.notes.domain.model.NoteType
 import com.ahrokholska.notes.domain.useCase.ChangeGoalsSubtaskCheckUseCase
 import com.ahrokholska.notes.domain.useCase.ChangeGoalsTaskCheckUseCase
 import com.ahrokholska.notes.domain.useCase.DeleteNoteUseCase
+import com.ahrokholska.notes.domain.useCase.FinishNoteUseCase
 import com.ahrokholska.notes.domain.useCase.PinNoteUseCase
 import com.ahrokholska.notes.domain.useCase.UnPinNoteUseCase
 import com.ahrokholska.notes.domain.useCase.getNoteDetails.GetGoalsNoteDetailsUseCase
@@ -26,10 +27,12 @@ class GoalsDetailsScreenViewModel @Inject constructor(
     unPinNoteUseCase: UnPinNoteUseCase,
     getGoalsNoteDetailsUseCase: GetGoalsNoteDetailsUseCase,
     deleteNoteUseCase: DeleteNoteUseCase,
+    finishNoteUseCase: FinishNoteUseCase,
     private val changeGoalsTaskCheckUseCase: ChangeGoalsTaskCheckUseCase,
     private val changeGoalsSubtaskCheckUseCase: ChangeGoalsSubtaskCheckUseCase
 ) : NoteDetailsViewModel(
-    savedStateHandle, NoteType.Goals, pinNoteUseCase, unPinNoteUseCase, deleteNoteUseCase
+    savedStateHandle, NoteType.Goals, pinNoteUseCase, unPinNoteUseCase, deleteNoteUseCase,
+    finishNoteUseCase
 ) {
     val note = getGoalsNoteDetailsUseCase(id)
         .map {
