@@ -34,6 +34,7 @@ fun GuidanceDetailsScreen(
         viewModel.note.collectAsState().value,
         onBackClick = onBackClick,
         onPinClick = viewModel::pinStatusChangeNote,
+        onFinishClick = viewModel::finishNote,
         onDelete = viewModel::deleteNote
     )
 }
@@ -43,13 +44,14 @@ fun GuidanceDetailsScreenContent(
     note: Note.Guidance?,
     onBackClick: () -> Unit = {},
     onPinClick: (Boolean) -> Unit = {},
+    onFinishClick: () -> Unit = {},
     onDelete: (onSuccess: () -> Unit) -> Unit = {},
 ) {
     DetailsScreenGeneric(
         note = note,
         onBackClick = onBackClick,
         onPinClick = onPinClick,
-        onFinishClick = { TODO() },
+        onFinishClick = onFinishClick,
         onDeleteClick = onDelete,
     ) { innerPadding, noteNotNull ->
         Column(

@@ -33,6 +33,7 @@ fun BuyingSomethingDetailsScreen(
         onItemCheckboxClick = viewModel::changeItemCheck,
         onBackClick = onBackClick,
         onPinClick = viewModel::pinStatusChangeNote,
+        onFinishClick = viewModel::finishNote,
         onDelete = viewModel::deleteNote
     )
 }
@@ -43,13 +44,14 @@ fun BuyingSomethingDetailsScreenContent(
     onItemCheckboxClick: (Int, Boolean) -> Unit = { _, _ -> },
     onBackClick: () -> Unit = {},
     onPinClick: (Boolean) -> Unit = {},
+    onFinishClick: () -> Unit = {},
     onDelete: (onSuccess: () -> Unit) -> Unit = {},
 ) {
     DetailsScreenGeneric(
         note = note,
         onBackClick = onBackClick,
         onPinClick = onPinClick,
-        onFinishClick = { TODO() },
+        onFinishClick = onFinishClick,
         onDeleteClick = onDelete,
     ) { innerPadding, noteNotNull ->
         LazyColumn(
