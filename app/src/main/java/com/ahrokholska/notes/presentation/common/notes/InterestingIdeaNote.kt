@@ -27,6 +27,7 @@ import com.ahrokholska.notes.presentation.theme.noteColors
 
 @Composable
 fun InterestingIdeaNote(
+    modifier: Modifier = Modifier,
     title: String,
     text: String,
     color: Color,
@@ -34,10 +35,7 @@ fun InterestingIdeaNote(
     shouldShowNoteType: Boolean = true
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .padding(horizontal = contentPadding)
-            .width(noteWidth)
+        modifier = modifier
             .clip(RoundedCornerShape(noteCornerRadius))
             .clickable { onNoteClick() }
             .background(color = color, shape = RoundedCornerShape(noteCornerRadius))
@@ -47,7 +45,7 @@ fun InterestingIdeaNote(
                 shape = RoundedCornerShape(noteCornerRadius)
             )
     ) {
-        Column(modifier = Modifier.weight(1f)) {
+        Column(modifier = if (shouldShowNoteType) Modifier.weight(1f) else Modifier) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -87,6 +85,10 @@ fun InterestingIdeaNote(
 @Composable
 private fun InterestingIdeaNotePreview() {
     InterestingIdeaNote(
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(horizontal = contentPadding)
+            .width(noteWidth),
         title = "\uD83D\uDCA1 New Product Idea Design",
         text = "Create a mobile app UI",
         color = noteColors[4]

@@ -32,6 +32,7 @@ import com.ahrokholska.notes.presentation.theme.noteColors
 
 @Composable
 fun BuySomethingNote(
+    modifier: Modifier = Modifier,
     title: String,
     items: List<Pair<Boolean, String>>,
     color: Color,
@@ -39,10 +40,7 @@ fun BuySomethingNote(
     shouldShowNoteType: Boolean = true
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .padding(horizontal = contentPadding)
-            .width(noteWidth)
+        modifier = modifier
             .clip(RoundedCornerShape(noteCornerRadius))
             .clickable { onNoteClick() }
             .background(color = color, shape = RoundedCornerShape(noteCornerRadius))
@@ -53,9 +51,8 @@ fun BuySomethingNote(
             )
     ) {
         Column(
-            modifier = Modifier
-                .padding(12.dp)
-                .weight(1f),
+            modifier = (if (shouldShowNoteType) Modifier.weight(1f) else Modifier)
+                .padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -102,6 +99,10 @@ fun BuySomethingNote(
 @Composable
 private fun BuySomethingPreview() {
     BuySomethingNote(
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(horizontal = contentPadding)
+            .width(noteWidth),
         title = "\uD83D\uDED2 Monthly Needs",
         items = listOf(
             true to "Create a mobile app UI",

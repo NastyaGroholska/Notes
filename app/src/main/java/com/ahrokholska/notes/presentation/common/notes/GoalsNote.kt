@@ -33,6 +33,7 @@ import com.ahrokholska.notes.presentation.theme.noteColors
 
 @Composable
 fun GoalsNote(
+    modifier: Modifier = Modifier,
     title: String,
     tasks: List<Pair<Note.Goals.Task, List<Note.Goals.Task>>>,
     color: Color,
@@ -40,10 +41,7 @@ fun GoalsNote(
     shouldShowNoteType: Boolean = true
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .padding(horizontal = contentPadding)
-            .width(noteWidth)
+        modifier = modifier
             .clip(RoundedCornerShape(noteCornerRadius))
             .clickable { onNoteClick() }
             .background(color = color, shape = RoundedCornerShape(noteCornerRadius))
@@ -54,7 +52,8 @@ fun GoalsNote(
             )
     ) {
         Column(
-            modifier = Modifier.padding(12.dp).weight(1f),
+            modifier = (if (shouldShowNoteType) Modifier.weight(1f) else Modifier)
+                .padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -117,6 +116,10 @@ private fun Task(modifier: Modifier = Modifier, finished: Boolean, text: String)
 @Composable
 private fun GoalsNotePreview() {
     GoalsNote(
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(horizontal = contentPadding)
+            .width(noteWidth),
         title = "\uD83D\uDED2 Monthly Needs",
         tasks = listOf(
             Note.Goals.Task(false, "Create a mobile app UI") to listOf(

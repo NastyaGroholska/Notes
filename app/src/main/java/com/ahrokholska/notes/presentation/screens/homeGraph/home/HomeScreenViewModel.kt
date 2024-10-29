@@ -1,4 +1,4 @@
-package com.ahrokholska.notes.presentation.screens.home
+package com.ahrokholska.notes.presentation.screens.homeGraph.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

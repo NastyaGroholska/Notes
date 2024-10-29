@@ -28,6 +28,7 @@ import com.ahrokholska.notes.presentation.theme.noteColors
 
 @Composable
 fun GuidanceNote(
+    modifier: Modifier = Modifier,
     title: String,
     body: String,
     image: String,
@@ -36,10 +37,7 @@ fun GuidanceNote(
     shouldShowNoteType: Boolean = true
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .padding(horizontal = contentPadding)
-            .width(noteWidth)
+        modifier = modifier
             .clip(RoundedCornerShape(noteCornerRadius))
             .clickable { onNoteClick() }
             .background(color = color, shape = RoundedCornerShape(noteCornerRadius))
@@ -50,7 +48,8 @@ fun GuidanceNote(
             )
     ) {
         Column(
-            modifier = Modifier.padding(12.dp).weight(1f),
+            modifier = (if (shouldShowNoteType) Modifier.weight(1f) else Modifier)
+                .padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -95,6 +94,10 @@ fun GuidanceNote(
 @Composable
 private fun GuidanceNotePreview() {
     GuidanceNote(
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(horizontal = contentPadding)
+            .width(noteWidth),
         title = "\uD83D\uDCA1 New Product Idea Design",
         body = "Create a mobile app UI",
         image = "",

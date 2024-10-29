@@ -9,28 +9,40 @@ import androidx.navigation.toRoute
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
 import com.ahrokholska.notes.presentation.screens.createNewNotes.fill.CreateNoteScreen
 import com.ahrokholska.notes.presentation.screens.createNewNotes.type.SelectNoteTypeScreen
-import com.ahrokholska.notes.presentation.screens.home.HomeScreen
+import com.ahrokholska.notes.presentation.screens.homeGraph.allNotes.AllNotesScreen
+import com.ahrokholska.notes.presentation.screens.homeGraph.home.HomeScreen
 import com.ahrokholska.notes.presentation.screens.noteDetails.NoteDetailsScreen
 
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.Home) {
-        composable<Screen.Home> {
-            HomeScreen(
-                onPlusClick = { navController.navigate(Screen.CreateNewNotesGraph) },
-                onScreenClick = {
-                    when (it) {
-                        BottomBarScreen.HOME -> {}
-                        BottomBarScreen.FINISHED -> TODO()
-                        BottomBarScreen.SEARCH -> TODO()
-                        BottomBarScreen.SETTINGS -> TODO()
+    NavHost(navController = navController, startDestination = Screen.HomeGraph) {
+        navigation<Screen.HomeGraph>(startDestination = Screen.HomeGraph.Home) {
+            composable<Screen.HomeGraph.Home> {
+                HomeScreen(
+                    onPlusClick = { navController.navigate(Screen.CreateNewNotesGraph) },
+                    onScreenClick = {
+                        when (it) {
+                            BottomBarScreen.HOME -> {}
+                            BottomBarScreen.FINISHED -> TODO()
+                            BottomBarScreen.SEARCH -> TODO()
+                            BottomBarScreen.SETTINGS -> TODO()
+                        }
+                    },
+                    onNoteClick = { id, type ->
+                        navController.navigate(Screen.NoteDetails(id, type))
                     }
-                },
-                onNoteClick = { id, type ->
-                    navController.navigate(Screen.NoteDetails(id, type))
-                }
-            )
+                )
+            }
+
+            composable<Screen.HomeGraph.AllNotes> {
+                val args = it.toRoute<Screen.HomeGraph.AllNotes>()
+                AllNotesScreen(type = args.type, onBackClick = navController::navigateUp)
+            }
+
+            composable<Screen.HomeGraph.AllPinnedNotes> {
+                //TODO
+            }
         }
 
         composable<Screen.NoteDetails> {

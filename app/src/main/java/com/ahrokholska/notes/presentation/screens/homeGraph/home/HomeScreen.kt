@@ -1,4 +1,4 @@
-package com.ahrokholska.notes.presentation.screens.home
+package com.ahrokholska.notes.presentation.screens.homeGraph.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -10,12 +10,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
@@ -44,13 +46,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ahrokholska.notes.R
+import com.ahrokholska.notes.presentation.common.NotePreviewCard
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomAppBar
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
-import com.ahrokholska.notes.presentation.common.notes.BuySomethingNote
-import com.ahrokholska.notes.presentation.common.notes.GoalsNote
-import com.ahrokholska.notes.presentation.common.notes.GuidanceNote
-import com.ahrokholska.notes.presentation.common.notes.InterestingIdeaNote
-import com.ahrokholska.notes.presentation.common.notes.RoutineTasksNote
+import com.ahrokholska.notes.presentation.common.notes.noteWidth
 import com.ahrokholska.notes.presentation.model.NotePreview
 import com.ahrokholska.notes.presentation.model.NoteType
 import com.ahrokholska.notes.presentation.theme.background
@@ -255,48 +254,15 @@ private fun NoteList(
                 .height(IntrinsicSize.Max)
         ) {
             notes.forEach { note ->
-                when (note) {
-                    is NotePreview.BuyingSomething -> BuySomethingNote(
-                        title = note.title,
-                        items = note.items,
-                        color = note.color,
-                        onNoteClick = { onNoteClick(note.id, NoteType.BuyingSomething) },
-                        shouldShowNoteType = shouldShowNoteType
-                    )
-
-                    is NotePreview.Goals -> GoalsNote(
-                        title = note.title,
-                        tasks = note.tasks,
-                        color = note.color,
-                        onNoteClick = { onNoteClick(note.id, NoteType.Goals) },
-                        shouldShowNoteType = shouldShowNoteType
-                    )
-
-                    is NotePreview.Guidance -> GuidanceNote(
-                        title = note.title,
-                        body = note.body,
-                        image = note.image,
-                        color = note.color,
-                        onNoteClick = { onNoteClick(note.id, NoteType.Guidance) },
-                        shouldShowNoteType = shouldShowNoteType
-                    )
-
-                    is NotePreview.InterestingIdea -> InterestingIdeaNote(
-                        title = note.title,
-                        text = note.body,
-                        color = note.color,
-                        onNoteClick = { onNoteClick(note.id, NoteType.InterestingIdea) },
-                        shouldShowNoteType = shouldShowNoteType
-                    )
-
-                    is NotePreview.RoutineTasks -> RoutineTasksNote(
-                        active = note.active,
-                        completed = note.completed,
-                        color = note.color,
-                        onNoteClick = { onNoteClick(note.id, NoteType.RoutineTasks) },
-                        shouldShowNoteType = shouldShowNoteType
-                    )
-                }
+                NotePreviewCard(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(horizontal = com.ahrokholska.notes.presentation.common.notes.contentPadding)
+                        .width(noteWidth),
+                    note = note,
+                    onNoteClick = onNoteClick,
+                    shouldShowNoteType = shouldShowNoteType
+                )
             }
         }
     }

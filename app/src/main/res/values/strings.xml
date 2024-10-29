@@ -68,4 +68,7 @@
     <!--CancelConfirmDialog-->
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
+
+    <!--AllNotesScreen-->
+    <string name="notes">Notes</string>
 </resources>

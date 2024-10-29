@@ -28,6 +28,7 @@ import com.ahrokholska.notes.presentation.theme.noteColors
 
 @Composable
 fun RoutineTasksNote(
+    modifier: Modifier = Modifier,
     active: List<Note.RoutineTasks.SubNote>,
     completed: List<Note.RoutineTasks.SubNote>,
     color: Color,
@@ -35,10 +36,7 @@ fun RoutineTasksNote(
     shouldShowNoteType: Boolean = true
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .padding(horizontal = contentPadding)
-            .width(noteWidth)
+        modifier = modifier
             .clip(RoundedCornerShape(noteCornerRadius))
             .clickable { onNoteClick() }
             .background(
@@ -52,9 +50,8 @@ fun RoutineTasksNote(
             )
     ) {
         Column(
-            modifier = Modifier
+            modifier = (if (shouldShowNoteType) Modifier.weight(1f) else Modifier)
                 .padding(12.dp)
-                .weight(1f)
         ) {
             if (active.isNotEmpty()) {
                 Text(
@@ -116,6 +113,10 @@ fun RoutineTasksNote(
 @Composable
 private fun RoutineTasksNotePreview() {
     RoutineTasksNote(
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(horizontal = contentPadding)
+            .width(noteWidth),
         active = listOf(
             Note.RoutineTasks.SubNote(
                 title = "Title Here",
