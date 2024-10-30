@@ -60,7 +60,8 @@ fun HomeScreen(
     viewModel: HomeScreenViewModel = hiltViewModel(),
     onPlusClick: () -> Unit,
     onScreenClick: (screen: BottomBarScreen) -> Unit,
-    onNoteClick: (Int, NoteType) -> Unit
+    onNoteClick: (Int, NoteType) -> Unit,
+    onViewAllClick: (NoteType) -> Unit,
 ) {
     HomeScreenContent(
         pinnedNotes = viewModel.pinnedNotes.collectAsState().value,
@@ -71,7 +72,8 @@ fun HomeScreen(
         routineTasksNotes = viewModel.routineTasksNotes.collectAsState().value,
         onPlusClick = onPlusClick,
         onScreenClick = onScreenClick,
-        onNoteClick = onNoteClick
+        onNoteClick = onNoteClick,
+        onViewAllClick = onViewAllClick,
     )
 }
 
@@ -87,7 +89,8 @@ fun HomeScreenContent(
     routineTasksNotes: List<NotePreview.RoutineTasks>?,
     onPlusClick: () -> Unit = {},
     onScreenClick: (screen: BottomBarScreen) -> Unit = {},
-    onNoteClick: (Int, NoteType) -> Unit = { _, _ -> }
+    onNoteClick: (Int, NoteType) -> Unit = { _, _ -> },
+    onViewAllClick: (NoteType) -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -130,7 +133,7 @@ fun HomeScreenContent(
                             title = stringResource(NoteType.InterestingIdea.title),
                             notes = interestingIdeaNotes,
                             onNoteClick = onNoteClick,
-                            onViewAllClick = {}
+                            onViewAllClick = { onViewAllClick(NoteType.InterestingIdea) }
                         )
                     }
                 }
@@ -140,7 +143,7 @@ fun HomeScreenContent(
                             title = stringResource(NoteType.BuyingSomething.title),
                             notes = buySomethingNotes,
                             onNoteClick = onNoteClick,
-                            onViewAllClick = {}
+                            onViewAllClick = { onViewAllClick(NoteType.BuyingSomething) }
                         )
                     }
                 }
@@ -150,7 +153,7 @@ fun HomeScreenContent(
                             title = stringResource(NoteType.Goals.title),
                             notes = goalsNotes,
                             onNoteClick = onNoteClick,
-                            onViewAllClick = {}
+                            onViewAllClick = { onViewAllClick(NoteType.Goals) }
                         )
                     }
                 }
@@ -160,7 +163,7 @@ fun HomeScreenContent(
                             title = stringResource(NoteType.Guidance.title),
                             notes = guidanceNotes,
                             onNoteClick = onNoteClick,
-                            onViewAllClick = {}
+                            onViewAllClick = { onViewAllClick(NoteType.Guidance) }
                         )
                     }
                 }
@@ -170,7 +173,7 @@ fun HomeScreenContent(
                             title = stringResource(NoteType.RoutineTasks.title),
                             notes = routineTasksNotes,
                             onNoteClick = onNoteClick,
-                            onViewAllClick = {}
+                            onViewAllClick = { onViewAllClick(NoteType.RoutineTasks) }
                         )
                     }
                 }

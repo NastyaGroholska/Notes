@@ -31,7 +31,8 @@ fun Navigation() {
                     },
                     onNoteClick = { id, type ->
                         navController.navigate(Screen.NoteDetails(id, type))
-                    }
+                    },
+                    onViewAllClick = { navController.navigate(Screen.HomeGraph.AllNotes(it)) }
                 )
             }
 
