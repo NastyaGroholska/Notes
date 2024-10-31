@@ -9,10 +9,12 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ahrokholska.notes.R
 import com.ahrokholska.notes.presentation.common.NotePreviewCard
 import com.ahrokholska.notes.presentation.common.topBar.TopBarWithTitle
@@ -22,12 +24,17 @@ import com.ahrokholska.notes.presentation.theme.background
 import com.ahrokholska.notes.presentation.theme.noteColors
 
 @Composable
-fun AllNotesScreen(type: NoteType, onBackClick: () -> Unit) {
+fun AllNotesScreen(
+    viewModel: AllNotesScreenViewModel = hiltViewModel(),
+    type: NoteType,
+    onBackClick: () -> Unit
+) {
     AllNotesScreenContent(
         type = type,
-        notes = listOf(),
+        notes = viewModel.notes.collectAsState().value,
         onBackClick = onBackClick,
-        onNoteClick = { _, _ -> })
+        onNoteClick = { _, _ -> }
+    )
 }
 
 @Composable
