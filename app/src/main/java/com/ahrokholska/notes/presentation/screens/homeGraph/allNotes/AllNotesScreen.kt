@@ -27,13 +27,14 @@ import com.ahrokholska.notes.presentation.theme.noteColors
 fun AllNotesScreen(
     viewModel: AllNotesScreenViewModel = hiltViewModel(),
     type: NoteType,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onNoteClick: (Int, NoteType) -> Unit
 ) {
     AllNotesScreenContent(
         type = type,
         notes = viewModel.notes.collectAsState().value,
         onBackClick = onBackClick,
-        onNoteClick = { _, _ -> }
+        onNoteClick = onNoteClick
     )
 }
 

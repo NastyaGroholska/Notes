@@ -38,7 +38,13 @@ fun Navigation() {
 
             composable<Screen.HomeGraph.AllNotes> {
                 val args = it.toRoute<Screen.HomeGraph.AllNotes>()
-                AllNotesScreen(type = args.type, onBackClick = navController::navigateUp)
+                AllNotesScreen(
+                    type = args.type,
+                    onBackClick = navController::navigateUp,
+                    onNoteClick = { id, type ->
+                        navController.navigate(Screen.NoteDetails(id, type))
+                    }
+                )
             }
 
             composable<Screen.HomeGraph.AllPinnedNotes> {
