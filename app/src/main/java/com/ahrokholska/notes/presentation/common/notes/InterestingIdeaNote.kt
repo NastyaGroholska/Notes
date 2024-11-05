@@ -3,6 +3,7 @@ package com.ahrokholska.notes.presentation.common.notes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -43,22 +44,19 @@ fun InterestingIdeaNote(
                 width = 1.dp,
                 color = BlackAlpha20,
                 shape = RoundedCornerShape(noteCornerRadius)
-            )
+            ),
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Column(modifier = if (shouldShowNoteType) Modifier.weight(1f) else Modifier) {
+        Column(modifier = Modifier.padding(12.dp)) {
             Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(12.dp),
+                modifier = Modifier.fillMaxWidth(),
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(12.dp),
+                modifier = Modifier.fillMaxWidth(),
                 text = text,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.secondary

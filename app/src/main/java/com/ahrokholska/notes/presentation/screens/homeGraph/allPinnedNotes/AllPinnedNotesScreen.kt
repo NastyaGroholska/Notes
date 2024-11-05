@@ -1,8 +1,7 @@
-package com.ahrokholska.notes.presentation.screens.homeGraph.allNotes
+package com.ahrokholska.notes.presentation.screens.homeGraph.allPinnedNotes
 
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -14,36 +13,33 @@ import com.ahrokholska.notes.presentation.screens.homeGraph.NotesGrid
 import com.ahrokholska.notes.presentation.theme.noteColors
 
 @Composable
-fun AllNotesScreen(
-    viewModel: AllNotesScreenViewModel = hiltViewModel(),
-    type: NoteType,
+fun AllPinnedNotesScreen(
+    viewModel: AllPinnedNotesScreenViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     onNoteClick: (Int, NoteType) -> Unit
 ) {
-    AllNotesScreenContent(
-        type = type,
-        notes = viewModel.notes.collectAsState().value,
+    AllPinnedNotesScreenContent(
+        notes = listOf(),
         onBackClick = onBackClick,
         onNoteClick = onNoteClick
     )
 }
 
 @Composable
-fun AllNotesScreenContent(
-    type: NoteType,
+fun AllPinnedNotesScreenContent(
     notes: List<NotePreview>,
     onBackClick: () -> Unit = {},
     onNoteClick: (Int, NoteType) -> Unit = { _, _ -> }
 ) {
     NotesGrid(
-        title = stringResource(type.title) + " " + stringResource(R.string.notes),
+        title = stringResource(R.string.pinned_notes),
         onBackClick = onBackClick
     ) {
         items(notes) { note ->
             NotePreviewCard(
                 note = note,
                 onNoteClick = onNoteClick,
-                shouldShowNoteType = false
+                shouldShowNoteType = true
             )
         }
     }
@@ -51,9 +47,8 @@ fun AllNotesScreenContent(
 
 @Preview
 @Composable
-private fun AllNotesScreenPreview() {
-    AllNotesScreenContent(
-        NoteType.InterestingIdea,
+private fun AllPinnedNotesScreenPreview() {
+    AllPinnedNotesScreenContent(
         listOf(
             NotePreview.InterestingIdea(
                 title = "\uD83D\uDCA1 New Product Idea Design",
