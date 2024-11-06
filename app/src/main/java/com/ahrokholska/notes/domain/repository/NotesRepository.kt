@@ -34,6 +34,7 @@ interface NotesRepository {
     ): Result<Unit>
 
     fun getLast10PinnedNotes(): Flow<List<NotePreview>>
+    fun getAllPinnedNotes(): Flow<List<NotePreview>>
     suspend fun pinNote(noteId: Int, noteType: NoteType, time: Long)
     suspend fun unpinNote(noteId: Int, noteType: NoteType)
     suspend fun finishNote(noteId: Int, noteType: NoteType, time: Long)

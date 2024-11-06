@@ -2,6 +2,7 @@ package com.ahrokholska.notes.presentation.screens.homeGraph.allPinnedNotes
 
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -19,7 +20,7 @@ fun AllPinnedNotesScreen(
     onNoteClick: (Int, NoteType) -> Unit
 ) {
     AllPinnedNotesScreenContent(
-        notes = listOf(),
+        notes = viewModel.notes.collectAsState().value,
         onBackClick = onBackClick,
         onNoteClick = onNoteClick
     )

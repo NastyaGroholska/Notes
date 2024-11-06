@@ -170,32 +170,39 @@ class NotesRepositoryImpl @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getLast10PinnedNotes(): Flow<List<NotePreview>> =
-        pinNoteDao.getLast10PinnedNotes().flatMapLatest { list ->
-            if (list.isEmpty()) return@flatMapLatest flowOf(listOf<NotePreview>())
-            combine(list.map { note ->
-                when (note.noteType) {
-                    NoteType.InterestingIdea ->
-                        interestingIdeaNotesDao.getInterestingIdeaNote(note.noteId)
-                            .map { it.toDomainPreview() }
+        pinNoteDao.getLast10PinnedNotes().flatMapLatest { list -> list.toNotePreview() }
 
-                    NoteType.BuyingSomething ->
-                        buySomethingNotesDao.getBuySomethingNote(note.noteId)
-                            .map { it.toDomainPreview() }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getAllPinnedNotes(): Flow<List<NotePreview>> =
+        pinNoteDao.getAllPinnedNotes().flatMapLatest { list -> list.toNotePreview() }
 
-                    NoteType.Goals ->
-                        goalsNotesDao.getGoalsNote(note.noteId)
-                            .map { map ->
-                                map.entries.first().toDomainPreview()
-                            }
-
-                    NoteType.Guidance -> guidanceNotesDao.getGuidanceNote(note.noteId)
+    private fun List<PinnedNoteEntity>.toNotePreview() = if (isEmpty()) {
+        flowOf(listOf())
+    } else {
+        combine(map { note ->
+            when (note.noteType) {
+                NoteType.InterestingIdea ->
+                    interestingIdeaNotesDao.getInterestingIdeaNote(note.noteId)
                         .map { it.toDomainPreview() }
 
-                    NoteType.RoutineTasks -> routineTasksNotesDao.getRoutineTasksNote(note.noteId)
+                NoteType.BuyingSomething ->
+                    buySomethingNotesDao.getBuySomethingNote(note.noteId)
                         .map { it.toDomainPreview() }
-                }
-            }) { it.asList() }
-        }
+
+                NoteType.Goals ->
+                    goalsNotesDao.getGoalsNote(note.noteId)
+                        .map { map ->
+                            map.entries.first().toDomainPreview()
+                        }
+
+                NoteType.Guidance -> guidanceNotesDao.getGuidanceNote(note.noteId)
+                    .map { it.toDomainPreview() }
+
+                NoteType.RoutineTasks -> routineTasksNotesDao.getRoutineTasksNote(note.noteId)
+                    .map { it.toDomainPreview() }
+            }
+        }) { it.asList() }
+    }
 
     override suspend fun pinNote(noteId: Int, noteType: NoteType, time: Long) =
         withContext(Dispatchers.IO) {
