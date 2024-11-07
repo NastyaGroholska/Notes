@@ -62,6 +62,7 @@ fun HomeScreen(
     onScreenClick: (screen: BottomBarScreen) -> Unit,
     onNoteClick: (Int, NoteType) -> Unit,
     onViewAllClick: (NoteType) -> Unit,
+    onViewAllPinnedClick: () -> Unit,
 ) {
     HomeScreenContent(
         pinnedNotes = viewModel.pinnedNotes.collectAsState().value,
@@ -74,6 +75,7 @@ fun HomeScreen(
         onScreenClick = onScreenClick,
         onNoteClick = onNoteClick,
         onViewAllClick = onViewAllClick,
+        onViewAllPinnedClick = onViewAllPinnedClick,
     )
 }
 
@@ -91,6 +93,7 @@ fun HomeScreenContent(
     onScreenClick: (screen: BottomBarScreen) -> Unit = {},
     onNoteClick: (Int, NoteType) -> Unit = { _, _ -> },
     onViewAllClick: (NoteType) -> Unit = {},
+    onViewAllPinnedClick: () -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -122,7 +125,7 @@ fun HomeScreenContent(
                             title = stringResource(R.string.pinned_notes),
                             notes = pinnedNotes,
                             onNoteClick = onNoteClick,
-                            onViewAllClick = {},
+                            onViewAllClick = onViewAllPinnedClick,
                             shouldShowNoteType = true
                         )
                     }

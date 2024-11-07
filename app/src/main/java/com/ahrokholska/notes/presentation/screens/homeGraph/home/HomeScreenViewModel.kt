@@ -27,11 +27,25 @@ class HomeScreenViewModel @Inject constructor(
     val pinnedNotes = getPinnedNotesUseCase().map { list ->
         list.mapIndexed { index, item ->
             when (item) {
-                is com.ahrokholska.notes.domain.model.NotePreview.BuyingSomething -> item.toUI(index)
-                is com.ahrokholska.notes.domain.model.NotePreview.Goals -> item.toUI(index)
-                is com.ahrokholska.notes.domain.model.NotePreview.Guidance -> item.toUI(index)
-                is com.ahrokholska.notes.domain.model.NotePreview.InterestingIdea -> item.toUI(index)
-                is com.ahrokholska.notes.domain.model.NotePreview.RoutineTasks -> item.toUI(index)
+                is com.ahrokholska.notes.domain.model.NotePreview.BuyingSomething -> item.toUI(
+                    index = index, inCombinedList = true
+                )
+
+                is com.ahrokholska.notes.domain.model.NotePreview.Goals -> item.toUI(
+                    index = index, inCombinedList = true
+                )
+
+                is com.ahrokholska.notes.domain.model.NotePreview.Guidance -> item.toUI(
+                    index = index, inCombinedList = true
+                )
+
+                is com.ahrokholska.notes.domain.model.NotePreview.InterestingIdea -> item.toUI(
+                    index = index, inCombinedList = true
+                )
+
+                is com.ahrokholska.notes.domain.model.NotePreview.RoutineTasks -> item.toUI(
+                    index = index, inCombinedList = true
+                )
             }
         }
     }.stateIn(viewModelScope, SharingStarted.Lazily, null)

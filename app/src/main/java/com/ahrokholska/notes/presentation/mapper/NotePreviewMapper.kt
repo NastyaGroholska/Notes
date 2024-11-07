@@ -11,41 +11,50 @@ fun com.ahrokholska.notes.domain.model.NotePreview.toUI(index: Int) = when (this
     is com.ahrokholska.notes.domain.model.NotePreview.RoutineTasks -> toUI(index)
 }
 
-fun com.ahrokholska.notes.domain.model.NotePreview.BuyingSomething.toUI(index: Int) =
-    NotePreview.BuyingSomething(
-        id = id,
-        title = title,
-        items = items,
-        color = noteColors[(index + 2) % noteColors.size]
-    )
+fun com.ahrokholska.notes.domain.model.NotePreview.BuyingSomething.toUI(
+    index: Int, inCombinedList: Boolean = false
+) = NotePreview.BuyingSomething(
+    id = id,
+    title = title,
+    items = items,
+    color = noteColors[(if (inCombinedList) index else index + 2) % noteColors.size]
+)
 
-fun com.ahrokholska.notes.domain.model.NotePreview.Goals.toUI(index: Int) = NotePreview.Goals(
+fun com.ahrokholska.notes.domain.model.NotePreview.Goals.toUI(
+    index: Int, inCombinedList: Boolean = false
+) = NotePreview.Goals(
     id = id,
     title = title,
     tasks = tasks,
-    color = noteColors[(index + 3) % noteColors.size]
+    color = noteColors[(if (inCombinedList) index else index + 3) % noteColors.size]
 )
 
-fun com.ahrokholska.notes.domain.model.NotePreview.Guidance.toUI(index: Int) = NotePreview.Guidance(
+fun com.ahrokholska.notes.domain.model.NotePreview.Guidance.toUI(
+    index: Int, inCombinedList: Boolean = false
+) = NotePreview.Guidance(
     id = id,
     title = title,
     body = body,
     image = image,
-    color = noteColors[(index + 4) % noteColors.size]
+    color = noteColors[(if (inCombinedList) index else index + 4) % noteColors.size]
 )
 
-fun com.ahrokholska.notes.domain.model.NotePreview.InterestingIdea.toUI(index: Int) =
+fun com.ahrokholska.notes.domain.model.NotePreview.InterestingIdea.toUI(
+    index: Int, inCombinedList: Boolean = false
+) =
     NotePreview.InterestingIdea(
         id = id,
         title = title,
         body = body,
-        color = noteColors[(index + 1) % noteColors.size]
+        color = noteColors[(if (inCombinedList) index else index + 1) % noteColors.size]
     )
 
-fun com.ahrokholska.notes.domain.model.NotePreview.RoutineTasks.toUI(index: Int) =
+fun com.ahrokholska.notes.domain.model.NotePreview.RoutineTasks.toUI(
+    index: Int, inCombinedList: Boolean = false
+) =
     NotePreview.RoutineTasks(
         id = id,
         active = active,
         completed = completed,
-        color = noteColors[(index + 5) % noteColors.size]
+        color = noteColors[(if (inCombinedList) index else index + 5) % noteColors.size]
     )

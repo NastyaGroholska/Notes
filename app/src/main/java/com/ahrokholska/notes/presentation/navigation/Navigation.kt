@@ -10,6 +10,7 @@ import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
 import com.ahrokholska.notes.presentation.screens.createNewNotes.fill.CreateNoteScreen
 import com.ahrokholska.notes.presentation.screens.createNewNotes.type.SelectNoteTypeScreen
 import com.ahrokholska.notes.presentation.screens.homeGraph.allNotes.AllNotesScreen
+import com.ahrokholska.notes.presentation.screens.homeGraph.allPinnedNotes.AllPinnedNotesScreen
 import com.ahrokholska.notes.presentation.screens.homeGraph.home.HomeScreen
 import com.ahrokholska.notes.presentation.screens.noteDetails.NoteDetailsScreen
 
@@ -32,7 +33,8 @@ fun Navigation() {
                     onNoteClick = { id, type ->
                         navController.navigate(Screen.NoteDetails(id, type))
                     },
-                    onViewAllClick = { navController.navigate(Screen.HomeGraph.AllNotes(it)) }
+                    onViewAllClick = { navController.navigate(Screen.HomeGraph.AllNotes(it)) },
+                    onViewAllPinnedClick = { navController.navigate(Screen.HomeGraph.AllPinnedNotes) }
                 )
             }
 
@@ -48,7 +50,12 @@ fun Navigation() {
             }
 
             composable<Screen.HomeGraph.AllPinnedNotes> {
-                //TODO
+                AllPinnedNotesScreen(
+                    onBackClick = navController::navigateUp,
+                    onNoteClick = { id, type ->
+                        navController.navigate(Screen.NoteDetails(id, type))
+                    }
+                )
             }
         }
 
