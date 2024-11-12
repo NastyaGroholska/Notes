@@ -71,4 +71,9 @@
 
     <!--AllNotesScreen-->
     <string name="notes">Notes</string>
+
+    <!--FinishedNotesScreen-->
+    <string name="finished_notes">Finished Notes</string>
+    <string name="amazing_journey">Amazing Journey!</string>
+    <string name="you_have_successfully_finished_notes">You have successfully finished %1$s notes</string>
 </resources>

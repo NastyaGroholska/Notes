@@ -16,19 +16,12 @@ import com.ahrokholska.notes.presentation.theme.background
 
 @Composable
 fun NotesGrid(
-    title: String,
-    onBackClick: () -> Unit = {},
+    topBar: @Composable () -> Unit = {},
     content: LazyStaggeredGridScope.() -> Unit
 ) {
     Scaffold(
         containerColor = background,
-        topBar = {
-            TopBarWithTitle(
-                modifier = Modifier.statusBarsPadding(),
-                title = title,
-                onBackClick = onBackClick
-            )
-        },
+        topBar = topBar,
     ) { innerPadding ->
         LazyVerticalStaggeredGrid(
             modifier = Modifier
@@ -43,4 +36,22 @@ fun NotesGrid(
             content()
         }
     }
+}
+
+@Composable
+fun NotesGridSimpleTopBar(
+    title: String,
+    onBackClick: () -> Unit = {},
+    content: LazyStaggeredGridScope.() -> Unit
+) {
+    NotesGrid(
+        topBar = {
+            TopBarWithTitle(
+                modifier = Modifier.statusBarsPadding(),
+                title = title,
+                onBackClick = onBackClick
+            )
+        },
+        content = content
+    )
 }

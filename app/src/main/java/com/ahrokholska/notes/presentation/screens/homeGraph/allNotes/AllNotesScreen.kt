@@ -10,7 +10,7 @@ import com.ahrokholska.notes.R
 import com.ahrokholska.notes.presentation.common.NotePreviewCard
 import com.ahrokholska.notes.presentation.model.NotePreview
 import com.ahrokholska.notes.presentation.model.NoteType
-import com.ahrokholska.notes.presentation.screens.homeGraph.NotesGrid
+import com.ahrokholska.notes.presentation.screens.homeGraph.NotesGridSimpleTopBar
 import com.ahrokholska.notes.presentation.theme.noteColors
 
 @Composable
@@ -35,7 +35,7 @@ fun AllNotesScreenContent(
     onBackClick: () -> Unit = {},
     onNoteClick: (Int, NoteType) -> Unit = { _, _ -> }
 ) {
-    NotesGrid(
+    NotesGridSimpleTopBar(
         title = stringResource(type.title) + " " + stringResource(R.string.notes),
         onBackClick = onBackClick
     ) {
