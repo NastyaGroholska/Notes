@@ -9,6 +9,7 @@ import androidx.navigation.toRoute
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
 import com.ahrokholska.notes.presentation.screens.createNewNotes.fill.CreateNoteScreen
 import com.ahrokholska.notes.presentation.screens.createNewNotes.type.SelectNoteTypeScreen
+import com.ahrokholska.notes.presentation.screens.finishedNotes.FinishedNotesScreen
 import com.ahrokholska.notes.presentation.screens.homeGraph.allNotes.AllNotesScreen
 import com.ahrokholska.notes.presentation.screens.homeGraph.allPinnedNotes.AllPinnedNotesScreen
 import com.ahrokholska.notes.presentation.screens.homeGraph.home.HomeScreen
@@ -25,7 +26,7 @@ fun Navigation() {
                     onScreenClick = {
                         when (it) {
                             BottomBarScreen.HOME -> {}
-                            BottomBarScreen.FINISHED -> TODO()
+                            BottomBarScreen.FINISHED -> navController.navigate(Screen.AllFinishedNotes)
                             BottomBarScreen.SEARCH -> TODO()
                             BottomBarScreen.SETTINGS -> TODO()
                         }
@@ -57,6 +58,32 @@ fun Navigation() {
                     }
                 )
             }
+        }
+
+        composable<Screen.AllFinishedNotes> {
+            FinishedNotesScreen(
+                onNoteClick = { id, type ->
+                    navController.navigate(Screen.NoteDetails(id, type))
+                },
+                onPlusClick = {
+                    navController.navigate(Screen.CreateNewNotesGraph) {
+                        popUpTo(Screen.AllFinishedNotes) {
+                            inclusive = true
+                        }
+                    }
+                },
+                onScreenClick = {
+                    when (it) {
+                        BottomBarScreen.HOME -> {
+                            navController.navigateUp()
+                        }
+
+                        BottomBarScreen.FINISHED -> {}
+                        BottomBarScreen.SEARCH -> TODO()
+                        BottomBarScreen.SETTINGS -> TODO()
+                    }
+                },
+            )
         }
 
         composable<Screen.NoteDetails> {
