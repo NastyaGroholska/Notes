@@ -6,6 +6,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.ahrokholska.notes.data.local.entities.FinishedNoteEntity
 import com.ahrokholska.notes.domain.model.NoteType
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FinishNoteDao {
@@ -20,4 +21,7 @@ interface FinishNoteDao {
         unpinNote()
         insertFinishRecord(FinishedNoteEntity(noteId, type, time))
     }
+
+    @Query("SELECT * FROM finished_notes ORDER BY time")
+    fun getAllFinishedNotes(): Flow<List<FinishedNoteEntity>>
 }

@@ -170,38 +170,44 @@ class NotesRepositoryImpl @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getLast10PinnedNotes(): Flow<List<NotePreview>> =
-        pinNoteDao.getLast10PinnedNotes().flatMapLatest { list -> list.toNotePreview() }
+        pinNoteDao.getLast10PinnedNotes().flatMapLatest { list ->
+            if (list.isEmpty()) {
+                flowOf(listOf())
+            } else {
+                combine(list.map { note -> mapNote(note.noteType, note.noteId) }) { it.asList() }
+            }
+        }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getAllPinnedNotes(): Flow<List<NotePreview>> =
-        pinNoteDao.getAllPinnedNotes().flatMapLatest { list -> list.toNotePreview() }
-
-    private fun List<PinnedNoteEntity>.toNotePreview() = if (isEmpty()) {
-        flowOf(listOf())
-    } else {
-        combine(map { note ->
-            when (note.noteType) {
-                NoteType.InterestingIdea ->
-                    interestingIdeaNotesDao.getInterestingIdeaNote(note.noteId)
-                        .map { it.toDomainPreview() }
-
-                NoteType.BuyingSomething ->
-                    buySomethingNotesDao.getBuySomethingNote(note.noteId)
-                        .map { it.toDomainPreview() }
-
-                NoteType.Goals ->
-                    goalsNotesDao.getGoalsNote(note.noteId)
-                        .map { map ->
-                            map.entries.first().toDomainPreview()
-                        }
-
-                NoteType.Guidance -> guidanceNotesDao.getGuidanceNote(note.noteId)
-                    .map { it.toDomainPreview() }
-
-                NoteType.RoutineTasks -> routineTasksNotesDao.getRoutineTasksNote(note.noteId)
-                    .map { it.toDomainPreview() }
+        pinNoteDao.getAllPinnedNotes().flatMapLatest { list ->
+            if (list.isEmpty()) {
+                flowOf(listOf())
+            } else {
+                combine(list.map { note -> mapNote(note.noteType, note.noteId) }) { it.asList() }
             }
-        }) { it.asList() }
+        }
+
+    private fun mapNote(noteType: NoteType, noteId: Int) = when (noteType) {
+        NoteType.InterestingIdea ->
+            interestingIdeaNotesDao.getInterestingIdeaNote(noteId)
+                .map { it.toDomainPreview() }
+
+        NoteType.BuyingSomething ->
+            buySomethingNotesDao.getBuySomethingNote(noteId)
+                .map { it.toDomainPreview() }
+
+        NoteType.Goals ->
+            goalsNotesDao.getGoalsNote(noteId)
+                .map { map ->
+                    map.entries.first().toDomainPreview()
+                }
+
+        NoteType.Guidance -> guidanceNotesDao.getGuidanceNote(noteId)
+            .map { it.toDomainPreview() }
+
+        NoteType.RoutineTasks -> routineTasksNotesDao.getRoutineTasksNote(noteId)
+            .map { it.toDomainPreview() }
     }
 
     override suspend fun pinNote(noteId: Int, noteType: NoteType, time: Long) =
@@ -217,6 +223,16 @@ class NotesRepositoryImpl @Inject constructor(
         withContext(Dispatchers.IO) {
             finishNoteDao.finishNote(noteId, noteType, time) {
                 pinNoteDao.unpinNote(noteId, noteType)
+            }
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getAllFinishedNotes(): Flow<List<NotePreview>> =
+        finishNoteDao.getAllFinishedNotes().flatMapLatest { list ->
+            if (list.isEmpty()) {
+                flowOf(listOf())
+            } else {
+                combine(list.map { note -> mapNote(note.noteType, note.noteId) }) { it.asList() }
             }
         }
 }

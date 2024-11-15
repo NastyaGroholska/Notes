@@ -19,6 +19,7 @@ interface PinNoteDao {
     @Query("SELECT * FROM pinned_notes ORDER BY time DESC LIMIT 10")
 
     fun getLast10PinnedNotes(): Flow<List<PinnedNoteEntity>>
+
     @Query("SELECT * FROM pinned_notes ORDER BY time")
     fun getAllPinnedNotes(): Flow<List<PinnedNoteEntity>>
 }
