@@ -4,11 +4,11 @@ import com.ahrokholska.notes.presentation.model.NotePreview
 import com.ahrokholska.notes.presentation.theme.noteColors
 
 fun com.ahrokholska.notes.domain.model.NotePreview.toUI(index: Int) = when (this) {
-    is com.ahrokholska.notes.domain.model.NotePreview.BuyingSomething -> toUI(index)
-    is com.ahrokholska.notes.domain.model.NotePreview.Goals -> toUI(index)
-    is com.ahrokholska.notes.domain.model.NotePreview.Guidance -> toUI(index)
-    is com.ahrokholska.notes.domain.model.NotePreview.InterestingIdea -> toUI(index)
-    is com.ahrokholska.notes.domain.model.NotePreview.RoutineTasks -> toUI(index)
+    is com.ahrokholska.notes.domain.model.NotePreview.BuyingSomething -> toUI(index, true)
+    is com.ahrokholska.notes.domain.model.NotePreview.Goals -> toUI(index, true)
+    is com.ahrokholska.notes.domain.model.NotePreview.Guidance -> toUI(index, true)
+    is com.ahrokholska.notes.domain.model.NotePreview.InterestingIdea -> toUI(index, true)
+    is com.ahrokholska.notes.domain.model.NotePreview.RoutineTasks -> toUI(index, true)
 }
 
 fun com.ahrokholska.notes.domain.model.NotePreview.BuyingSomething.toUI(

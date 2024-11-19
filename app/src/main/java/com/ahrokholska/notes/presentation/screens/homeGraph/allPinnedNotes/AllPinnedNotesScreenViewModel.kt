@@ -14,6 +14,6 @@ import javax.inject.Inject
 class AllPinnedNotesScreenViewModel @Inject constructor(getAllPinnedNotesUseCase: GetAllPinnedNotesUseCase) :
     ViewModel() {
     val notes = getAllPinnedNotesUseCase().map { list ->
-        list.map { it.toUI(0) }
+        list.mapIndexed { index, item -> item.toUI(index) }
     }.stateIn(viewModelScope, SharingStarted.Lazily, listOf())
 }

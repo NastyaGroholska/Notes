@@ -14,6 +14,6 @@ import javax.inject.Inject
 class FinishedNotesViewModel @Inject constructor(getAllFinishedNotesUseCase: GetAllFinishedNotesUseCase) :
     ViewModel() {
     val notes = getAllFinishedNotesUseCase().map { list ->
-        list.map { it.toUI(0) }
+        list.mapIndexed { index, item -> item.toUI(index) }
     }.stateIn(viewModelScope, SharingStarted.Lazily, listOf())
 }
