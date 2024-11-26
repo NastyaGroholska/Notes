@@ -14,6 +14,7 @@ import com.ahrokholska.notes.presentation.screens.homeGraph.allNotes.AllNotesScr
 import com.ahrokholska.notes.presentation.screens.homeGraph.allPinnedNotes.AllPinnedNotesScreen
 import com.ahrokholska.notes.presentation.screens.homeGraph.home.HomeScreen
 import com.ahrokholska.notes.presentation.screens.noteDetails.NoteDetailsScreen
+import com.ahrokholska.notes.presentation.screens.search.SearchScreen
 
 @Composable
 fun Navigation() {
@@ -27,7 +28,7 @@ fun Navigation() {
                         when (it) {
                             BottomBarScreen.HOME -> {}
                             BottomBarScreen.FINISHED -> navController.navigate(Screen.AllFinishedNotes)
-                            BottomBarScreen.SEARCH -> TODO()
+                            BottomBarScreen.SEARCH -> navController.navigate(Screen.SearchNotes)
                             BottomBarScreen.SETTINGS -> TODO()
                         }
                     },
@@ -74,12 +75,14 @@ fun Navigation() {
                 },
                 onScreenClick = {
                     when (it) {
-                        BottomBarScreen.HOME -> {
-                            navController.navigateUp()
+                        BottomBarScreen.HOME -> navController.navigateUp()
+                        BottomBarScreen.FINISHED -> {}
+                        BottomBarScreen.SEARCH -> navController.navigate(Screen.SearchNotes) {
+                            popUpTo(Screen.AllFinishedNotes) {
+                                inclusive = true
+                            }
                         }
 
-                        BottomBarScreen.FINISHED -> {}
-                        BottomBarScreen.SEARCH -> TODO()
                         BottomBarScreen.SETTINGS -> TODO()
                     }
                 },
@@ -91,6 +94,32 @@ fun Navigation() {
             NoteDetailsScreen(
                 type = args.type,
                 onBackClick = navController::navigateUp
+            )
+        }
+
+        composable<Screen.SearchNotes> {
+            SearchScreen(
+                onBackClick = navController::navigateUp,
+                onPlusClick = {
+                    navController.navigate(Screen.CreateNewNotesGraph) {
+                        popUpTo(Screen.SearchNotes) {
+                            inclusive = true
+                        }
+                    }
+                },
+                onScreenClick = {
+                    when (it) {
+                        BottomBarScreen.HOME -> navController.navigateUp()
+                        BottomBarScreen.FINISHED -> navController.navigate(Screen.AllFinishedNotes) {
+                            popUpTo(Screen.SearchNotes) {
+                                inclusive = true
+                            }
+                        }
+
+                        BottomBarScreen.SEARCH -> {}
+                        BottomBarScreen.SETTINGS -> TODO()
+                    }
+                }
             )
         }
 

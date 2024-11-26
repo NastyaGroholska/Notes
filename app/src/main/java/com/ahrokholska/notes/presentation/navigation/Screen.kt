@@ -29,5 +29,8 @@ sealed class Screen {
     data object AllFinishedNotes : Screen()
 
     @Serializable
+    data object SearchNotes : Screen()
+
+    @Serializable
     data class NoteDetails(val id: Int, val type: NoteType) : Screen()
 }
