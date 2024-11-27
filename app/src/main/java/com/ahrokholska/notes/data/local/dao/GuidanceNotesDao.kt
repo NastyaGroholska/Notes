@@ -6,6 +6,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.ahrokholska.notes.data.local.entities.GuidanceNoteEntity
 import com.ahrokholska.notes.data.local.intermediate.GuidanceNoteDetails
+import com.ahrokholska.notes.data.local.intermediate.NoteTitle
 import com.ahrokholska.notes.domain.model.NoteType
 import kotlinx.coroutines.flow.Flow
 
@@ -66,4 +67,7 @@ abstract class GuidanceNotesDao {
 
     @Query("SELECT * FROM guidance_note WHERE guidance_note.id = :id")
     abstract fun getGuidanceNote(id: Int): Flow<GuidanceNoteEntity>
+
+    @Query("SELECT title, id FROM guidance_note")
+    abstract fun getAllTitles(): Flow<List<NoteTitle>>
 }

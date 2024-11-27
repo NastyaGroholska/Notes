@@ -8,11 +8,13 @@ import com.ahrokholska.notes.data.local.dao.InterestingIdeaNotesDao
 import com.ahrokholska.notes.data.local.dao.PinNoteDao
 import com.ahrokholska.notes.data.local.dao.RoutineTasksNotesDao
 import com.ahrokholska.notes.data.local.entities.PinnedNoteEntity
+import com.ahrokholska.notes.data.mapper.toDomain
 import com.ahrokholska.notes.data.mapper.toDomainPreview
 import com.ahrokholska.notes.data.mapper.toEntity
 import com.ahrokholska.notes.data.mapper.toNote
 import com.ahrokholska.notes.domain.model.Note
 import com.ahrokholska.notes.domain.model.NotePreview
+import com.ahrokholska.notes.domain.model.NoteTitle
 import com.ahrokholska.notes.domain.model.NoteType
 import com.ahrokholska.notes.domain.repository.NotesRepository
 import com.ahrokholska.notes.utils.ResultUtils.getResult
@@ -235,4 +237,12 @@ class NotesRepositoryImpl @Inject constructor(
                 combine(list.map { note -> mapNote(note.noteType, note.noteId) }) { it.asList() }
             }
         }
+
+    override fun getAllTitles(): Flow<List<NoteTitle>> =
+        combine(
+            interestingIdeaNotesDao.getAllTitles().toDomain(NoteType.InterestingIdea),
+            buySomethingNotesDao.getAllTitles().toDomain(NoteType.BuyingSomething),
+            guidanceNotesDao.getAllTitles().toDomain(NoteType.Guidance),
+            goalsNotesDao.getAllTitles().toDomain(NoteType.Goals)
+        ) { it -> it.flatMap { it.toList() } }
 }

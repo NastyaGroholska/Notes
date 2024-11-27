@@ -8,6 +8,7 @@ import com.ahrokholska.notes.data.local.entities.BuySomethingNoteEntity
 import com.ahrokholska.notes.data.local.entities.BuySomethingNoteItemEntity
 import com.ahrokholska.notes.data.local.intermediate.BuySomethingNoteDetails
 import com.ahrokholska.notes.data.local.intermediate.BuySomethingNoteEntityWithItems
+import com.ahrokholska.notes.data.local.intermediate.NoteTitle
 import com.ahrokholska.notes.domain.model.Note
 import com.ahrokholska.notes.domain.model.NoteType
 import kotlinx.coroutines.flow.Flow
@@ -92,4 +93,7 @@ abstract class BuySomethingNotesDao {
 
     @Query("SELECT * FROM buy_something_note WHERE buy_something_note.id = :id")
     abstract fun getBuySomethingNote(id: Int): Flow<BuySomethingNoteEntityWithItems>
+
+    @Query("SELECT title, id FROM buy_something_note")
+    abstract fun getAllTitles(): Flow<List<NoteTitle>>
 }

@@ -8,6 +8,7 @@ import com.ahrokholska.notes.data.local.entities.GoalsNoteEntity
 import com.ahrokholska.notes.data.local.entities.GoalsNoteSubtaskEntity
 import com.ahrokholska.notes.data.local.entities.GoalsNoteTaskEntity
 import com.ahrokholska.notes.data.local.intermediate.GoalsNoteDetails
+import com.ahrokholska.notes.data.local.intermediate.NoteTitle
 import com.ahrokholska.notes.data.local.intermediate.TaskAndSubtask
 import com.ahrokholska.notes.domain.model.Note
 import com.ahrokholska.notes.domain.model.NoteType
@@ -139,4 +140,7 @@ abstract class GoalsNotesDao {
                 "WHERE goals_note.id = :id"
     )
     abstract fun getGoalsNote(id: Int): Flow<Map<GoalsNoteEntity, List<TaskAndSubtask>>>
+
+    @Query("SELECT title, id FROM goals_note")
+    abstract fun getAllTitles(): Flow<List<NoteTitle>>
 }

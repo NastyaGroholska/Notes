@@ -26,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,19 +39,23 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ahrokholska.notes.R
+import com.ahrokholska.notes.domain.model.NoteTitle
+import com.ahrokholska.notes.domain.model.NoteType
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomAppBar
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
 import com.ahrokholska.notes.presentation.theme.background
 
 @Composable
 fun SearchScreen(
+    viewModel: SearchScreenViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     onPlusClick: () -> Unit,
     onScreenClick: (screen: BottomBarScreen) -> Unit
 ) {
     SearchScreenContent(
-        list = listOf(),
+        list = viewModel.titles.collectAsState().value,
         onBackClick = onBackClick,
         onPlusClick = onPlusClick,
         onScreenClick = onScreenClick
@@ -59,7 +64,7 @@ fun SearchScreen(
 
 @Composable
 fun SearchScreenContent(
-    list: List<String>,
+    list: List<NoteTitle>,
     onBackClick: () -> Unit = {},
     onPlusClick: () -> Unit = {},
     onScreenClick: (screen: BottomBarScreen) -> Unit = {}
@@ -128,7 +133,7 @@ fun SearchScreenContent(
                             .fillMaxWidth()
                             .clickable { }
                             .padding(vertical = 12.dp),
-                        text = item
+                        text = item.title
                     )
                 }
             }
@@ -148,5 +153,10 @@ fun SearchScreenContent(
 @Preview
 @Composable
 private fun SearchScreenPreview() {
-    SearchScreenContent(list = listOf("Product Idea", "Monthly Buying List"))
+    SearchScreenContent(
+        list = listOf(
+            NoteTitle("Product Idea", 0, NoteType.Goals),
+            NoteTitle("Monthly Buying List", 0, NoteType.Goals)
+        )
+    )
 }

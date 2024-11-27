@@ -2,6 +2,7 @@ package com.ahrokholska.notes.domain.repository
 
 import com.ahrokholska.notes.domain.model.Note
 import com.ahrokholska.notes.domain.model.NotePreview
+import com.ahrokholska.notes.domain.model.NoteTitle
 import com.ahrokholska.notes.domain.model.NoteType
 import kotlinx.coroutines.flow.Flow
 
@@ -39,4 +40,5 @@ interface NotesRepository {
     suspend fun unpinNote(noteId: Int, noteType: NoteType)
     suspend fun finishNote(noteId: Int, noteType: NoteType, time: Long)
     fun getAllFinishedNotes(): Flow<List<NotePreview>>
+    fun getAllTitles(): Flow<List<NoteTitle>>
 }
