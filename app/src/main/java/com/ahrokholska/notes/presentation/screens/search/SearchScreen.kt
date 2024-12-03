@@ -56,6 +56,7 @@ fun SearchScreen(
 ) {
     SearchScreenContent(
         list = viewModel.titles.collectAsState().value,
+        onSearchChange = viewModel::changeSearch,
         onBackClick = onBackClick,
         onPlusClick = onPlusClick,
         onScreenClick = onScreenClick
@@ -65,6 +66,7 @@ fun SearchScreen(
 @Composable
 fun SearchScreenContent(
     list: List<NoteTitle>,
+    onSearchChange: (String) -> Unit = {},
     onBackClick: () -> Unit = {},
     onPlusClick: () -> Unit = {},
     onScreenClick: (screen: BottomBarScreen) -> Unit = {}
@@ -110,7 +112,10 @@ fun SearchScreenContent(
                             )
                             .padding(8.dp),
                         value = value,
-                        onValueChange = { value = it },
+                        onValueChange = {
+                            value = it
+                            onSearchChange(it)
+                        },
                         decorationBox = { innerTextField ->
                             innerTextField()
                         }
