@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.ahrokholska.notes.domain.mapper.toUI
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
 import com.ahrokholska.notes.presentation.screens.createNewNotes.fill.CreateNoteScreen
 import com.ahrokholska.notes.presentation.screens.createNewNotes.type.SelectNoteTypeScreen
@@ -119,7 +120,10 @@ fun Navigation() {
                         BottomBarScreen.SEARCH -> {}
                         BottomBarScreen.SETTINGS -> TODO()
                     }
-                }
+                },
+                onNoteClick = { id, type ->
+                    navController.navigate(Screen.NoteDetails(id, type.toUI()))
+                },
             )
         }
 

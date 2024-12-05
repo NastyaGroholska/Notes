@@ -52,14 +52,16 @@ fun SearchScreen(
     viewModel: SearchScreenViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     onPlusClick: () -> Unit,
-    onScreenClick: (screen: BottomBarScreen) -> Unit
+    onScreenClick: (screen: BottomBarScreen) -> Unit,
+    onNoteClick: (Int, NoteType) -> Unit
 ) {
     SearchScreenContent(
         list = viewModel.titles.collectAsState().value,
         onSearchChange = viewModel::changeSearch,
         onBackClick = onBackClick,
         onPlusClick = onPlusClick,
-        onScreenClick = onScreenClick
+        onScreenClick = onScreenClick,
+        onNoteClick = onNoteClick
     )
 }
 
@@ -69,7 +71,8 @@ fun SearchScreenContent(
     onSearchChange: (String) -> Unit = {},
     onBackClick: () -> Unit = {},
     onPlusClick: () -> Unit = {},
-    onScreenClick: (screen: BottomBarScreen) -> Unit = {}
+    onScreenClick: (screen: BottomBarScreen) -> Unit = {},
+    onNoteClick: (Int, NoteType) -> Unit = { _, _ -> }
 ) {
     Box(
         modifier = Modifier
@@ -136,7 +139,7 @@ fun SearchScreenContent(
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { }
+                            .clickable { onNoteClick(item.id, item.type) }
                             .padding(vertical = 12.dp),
                         text = item.title
                     )
