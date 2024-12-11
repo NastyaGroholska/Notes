@@ -34,9 +34,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -67,7 +70,7 @@ fun SearchScreen(
 
 @Composable
 fun SearchScreenContent(
-    list: List<NoteTitle>,
+    list: List<Pair<NoteTitle, Pair<Int, Int>>>,
     onSearchChange: (String) -> Unit = {},
     onBackClick: () -> Unit = {},
     onPlusClick: () -> Unit = {},
@@ -139,9 +142,16 @@ fun SearchScreenContent(
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { onNoteClick(item.id, item.type) }
+                            .clickable { onNoteClick(item.first.id, item.first.type) }
                             .padding(vertical = 12.dp),
-                        text = item.title
+                        text = buildAnnotatedString {
+                            append(item.first.title)
+                            addStyle(
+                                style = SpanStyle(background = Color.Yellow),
+                                start = item.second.first,
+                                end = item.second.second
+                            )
+                        }
                     )
                 }
             }
@@ -163,8 +173,8 @@ fun SearchScreenContent(
 private fun SearchScreenPreview() {
     SearchScreenContent(
         list = listOf(
-            NoteTitle("Product Idea", 0, NoteType.Goals),
-            NoteTitle("Monthly Buying List", 0, NoteType.Goals)
+            NoteTitle("Product Idea", 0, NoteType.Goals) to (0 to 1),
+            NoteTitle("Monthly Buying List", 0, NoteType.Goals) to (0 to 1)
         )
     )
 }

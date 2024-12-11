@@ -2,6 +2,7 @@ package com.ahrokholska.notes.presentation.screens.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ahrokholska.notes.domain.model.NoteTitle
 import com.ahrokholska.notes.domain.useCase.GetAllTitlesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +20,18 @@ class SearchScreenViewModel @Inject constructor(
     private val filter = MutableStateFlow("")
     val titles = getAllTitlesUseCase()
         .combine(filter) { titles, filter ->
-            if (filter.isEmpty()) titles else titles.filter { it.title.contains(filter) }
+            if (filter.isEmpty()) {
+                titles.map { it to (0 to 0) }
+            } else {
+                val newList = mutableListOf<Pair<NoteTitle, Pair<Int, Int>>>()
+                titles.forEach {
+                    val index = it.title.indexOf(filter)
+                    if (index != -1) {
+                        newList.add(it to (index to (index + filter.length)))
+                    }
+                }
+                newList
+            }
         }
         .stateIn(viewModelScope, SharingStarted.Lazily, listOf())
 
