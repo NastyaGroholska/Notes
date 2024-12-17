@@ -2,6 +2,7 @@ package com.ahrokholska.notes.presentation.screens.createNewNotes.fill.screenTyp
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -46,7 +47,6 @@ fun BuySomethingNoteScreen(
         onItemChange = viewModel::changeItem,
         onBackClick = onBackClick,
         onSaveClick = { title, items ->
-            //TODO validation
             viewModel.saveNote(title, items, onNoteSaved)
         }
     )
@@ -55,12 +55,12 @@ fun BuySomethingNoteScreen(
 @Composable
 fun BuySomethingNoteScreenContent(
     title: String,
-    items: List<String>,
+    items: List<Pair<String, Boolean>>,
     onBackClick: () -> Unit = {},
     onAddItemClick: () -> Unit = {},
     onTitleChange: (String) -> Unit = {},
     onItemChange: (String, Int) -> Unit = { _, _ -> },
-    onSaveClick: (String, List<String>) -> Unit = { _, _ -> }
+    onSaveClick: (String, List<Pair<String, Boolean>>) -> Unit = { _, _ -> }
 ) {
     val adjustedTitle = title.ifEmpty { stringResource(R.string.monthly_needs) }
     Scaffold(
@@ -93,28 +93,36 @@ fun BuySomethingNoteScreenContent(
                 Spacer(modifier = Modifier.height(16.dp))
             }
             itemsIndexed(items) { index, item ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Checkbox(checked = false, onCheckedChange = {})
-                    Spacer(modifier = Modifier.width(12.dp))
-                    BasicTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = item,
-                        onValueChange = { onItemChange(it, index) },
-                        textStyle = MaterialTheme.typography.bodyLarge
-                    )
-                    { innerTextField ->
-                        Box(contentAlignment = Alignment.CenterStart) {
-                            if (item.isEmpty()) {
-                                Text(
-                                    text = stringResource(R.string.enter_item_name),
-                                    color = MaterialTheme.colorScheme.secondary
-                                )
+                Column {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Checkbox(checked = false, onCheckedChange = {})
+                        Spacer(modifier = Modifier.width(12.dp))
+                        BasicTextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            value = item.first,
+                            onValueChange = { onItemChange(it, index) },
+                            textStyle = MaterialTheme.typography.bodyLarge
+                        )
+                        { innerTextField ->
+                            Box(contentAlignment = Alignment.CenterStart) {
+                                if (item.first.isEmpty()) {
+                                    Text(
+                                        text = stringResource(R.string.enter_item_name),
+                                        color = MaterialTheme.colorScheme.secondary
+                                    )
+                                }
+                                innerTextField()
                             }
-                            innerTextField()
                         }
                     }
+                    if (item.second)
+                        Text(
+                            modifier = Modifier.padding(start = 60.dp),
+                            text = stringResource(R.string.empty_name),
+                            color = MaterialTheme.colorScheme.error
+                        )
                 }
             }
             item {
@@ -135,5 +143,8 @@ fun BuySomethingNoteScreenContent(
 @Preview
 @Composable
 private fun BuySomethingNoteScreenPreview() {
-    BuySomethingNoteScreenContent("", listOf("A box of instant noodles", "3 boxes of coffee", ""))
+    BuySomethingNoteScreenContent(
+        "",
+        listOf("A box of instant noodles" to false, "3 boxes of coffee" to false, "" to true)
+    )
 }
