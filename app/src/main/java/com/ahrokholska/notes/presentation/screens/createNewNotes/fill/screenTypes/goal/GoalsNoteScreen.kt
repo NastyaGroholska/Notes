@@ -2,6 +2,7 @@ package com.ahrokholska.notes.presentation.screens.createNewNotes.fill.screenTyp
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ahrokholska.notes.R
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarSave
 import com.ahrokholska.notes.presentation.common.topBar.TopBar
+import com.ahrokholska.notes.presentation.model.TextAndError
 import com.ahrokholska.notes.presentation.theme.background
 
 @Composable
@@ -48,7 +50,6 @@ fun GoalsNoteScreen(
         onSubItemChange = viewModel::subItemChange,
         onBackClick = onBackClick,
         onSaveClick = { title, tasks ->
-            //TODO validation
             viewModel.saveNote(title, tasks, onNoteSaved)
         }
     )
@@ -57,14 +58,14 @@ fun GoalsNoteScreen(
 @Composable
 fun GoalsNoteScreenContent(
     title: String,
-    items: List<Pair<String, List<String>>>,
+    items: List<Pair<TextAndError, List<TextAndError>>>,
     onBackClick: () -> Unit = {},
     onAddMainItemClick: () -> Unit = {},
     onAddSubItemClick: (Int) -> Unit = {},
     onTitleChange: (String) -> Unit = {},
     onMainItemChange: (String, Int) -> Unit = { _, _ -> },
     onSubItemChange: (String, Int, Int) -> Unit = { _, _, _ -> },
-    onSaveClick: (String, List<Pair<String, List<String>>>) -> Unit = { _, _ -> },
+    onSaveClick: (String, List<Pair<TextAndError, List<TextAndError>>>) -> Unit = { _, _ -> },
 ) {
     val adjustedTitle = title.ifEmpty { stringResource(R.string.goal) }
     Scaffold(
@@ -98,13 +99,32 @@ fun GoalsNoteScreenContent(
             }
             items.forEachIndexed { index1, item ->
                 item {
-                    Task(value = item.first, onValueChange = { onMainItemChange(it, index1) })
+                    Task(value = item.first.text, onValueChange = { onMainItemChange(it, index1) })
+                }
+                if (item.first.error) {
+                    item {
+                        Text(
+                            modifier = Modifier.padding(start = 60.dp),
+                            text = stringResource(R.string.empty_name),
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
                 }
                 itemsIndexed(item.second) { index2, subItem ->
-                    Task(
-                        modifier = Modifier.padding(start = 36.dp),
-                        value = subItem,
-                        onValueChange = { onSubItemChange(it, index1, index2) })
+                    Column {
+                        Task(
+                            modifier = Modifier.padding(start = 36.dp),
+                            value = subItem.text,
+                            onValueChange = { onSubItemChange(it, index1, index2) }
+                        )
+                        if (subItem.error) {
+                            Text(
+                                modifier = Modifier.padding(start = 60.dp),
+                                text = stringResource(R.string.empty_name),
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    }
                 }
                 item {
                     Spacer(modifier = Modifier.height(12.dp))
@@ -168,8 +188,12 @@ private fun GoalsNoteScreenPreview() {
     GoalsNoteScreenContent(
         title = "",
         items = listOf(
-            "A" to listOf("A box of instant noodles", "3 boxes of coffee", ""),
-            "B" to listOf("")
+            TextAndError("A") to listOf(
+                TextAndError("A box of instant noodles"),
+                TextAndError("3 boxes of coffee"),
+                TextAndError("")
+            ),
+            TextAndError("B") to listOf(TextAndError(""))
         )
     )
 }
