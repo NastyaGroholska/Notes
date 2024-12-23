@@ -33,6 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ahrokholska.notes.R
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarSave
 import com.ahrokholska.notes.presentation.common.topBar.TopBar
+import com.ahrokholska.notes.presentation.model.TextAndError
 import com.ahrokholska.notes.presentation.theme.background
 import com.ahrokholska.notes.presentation.theme.noteColors
 
@@ -54,12 +55,12 @@ fun RoutineTasksNoteScreen(
 
 @Composable
 fun RoutineTasksNoteScreenContent(
-    items: List<Pair<String, String>>,
+    items: List<Pair<TextAndError, TextAndError>>,
     onBackClick: () -> Unit = {},
     onAddItemClick: () -> Unit = {},
     onItemTitleChange: (String, Int) -> Unit = { _, _ -> },
     onItemBodyChange: (String, Int) -> Unit = { _, _ -> },
-    onSaveClick: (List<Pair<String, String>>) -> Unit = { },
+    onSaveClick: (List<Pair<TextAndError, TextAndError>>) -> Unit = { },
 ) {
     Scaffold(
         containerColor = background,
@@ -94,7 +95,7 @@ fun RoutineTasksNoteScreenContent(
                         Checkbox(checked = false, onCheckedChange = {})
                         BasicTextField(
                             modifier = Modifier.fillMaxWidth(),
-                            value = item.first.ifEmpty { stringResource(R.string.title) },
+                            value = item.first.text.ifEmpty { stringResource(R.string.title) },
                             onValueChange = { onItemTitleChange(it, index) },
                             textStyle = MaterialTheme.typography.titleLarge
                         )
@@ -102,18 +103,25 @@ fun RoutineTasksNoteScreenContent(
                             innerTextField()
                         }
                     }
+                    if (item.first.error) {
+                        Text(
+                            modifier = Modifier.padding(start = 50.dp),
+                            text = stringResource(R.string.empty_name),
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
                     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
                     BasicTextField(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 12.dp),
-                        value = item.second,
+                        value = item.second.text,
                         onValueChange = { onItemBodyChange(it, index) },
                         textStyle = MaterialTheme.typography.bodyLarge
                     )
                     { innerTextField ->
                         Box(contentAlignment = Alignment.CenterStart) {
-                            if (item.second.isEmpty()) {
+                            if (item.second.text.isEmpty()) {
                                 Text(
                                     text = stringResource(R.string.enter_item_name),
                                     color = MaterialTheme.colorScheme.secondary
@@ -121,6 +129,13 @@ fun RoutineTasksNoteScreenContent(
                             }
                             innerTextField()
                         }
+                    }
+                    if (item.second.error) {
+                        Text(
+                            modifier = Modifier.padding(start = 12.dp),
+                            text = stringResource(R.string.empty_name),
+                            color = MaterialTheme.colorScheme.error
+                        )
                     }
                 }
                 if (index != (items.size - 1)) {
@@ -145,5 +160,12 @@ fun RoutineTasksNoteScreenContent(
 @Preview
 @Composable
 private fun RoutineTasksNoteScreenPreview() {
-    RoutineTasksNoteScreenContent(items = listOf("" to "", "" to "", "" to "", "" to ""))
+    RoutineTasksNoteScreenContent(
+        items = listOf(
+            TextAndError("") to TextAndError(""),
+            TextAndError("") to TextAndError(""),
+            TextAndError("", true) to TextAndError("", true),
+            TextAndError("") to TextAndError(""),
+        )
+    )
 }
