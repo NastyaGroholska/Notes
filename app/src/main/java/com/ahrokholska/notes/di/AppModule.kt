@@ -2,6 +2,7 @@ package com.ahrokholska.notes.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.work.WorkManager
 import com.ahrokholska.notes.data.local.AppDatabase
 import com.ahrokholska.notes.data.repository.NotesRepositoryImpl
 import com.ahrokholska.notes.domain.repository.NotesRepository
@@ -49,6 +50,10 @@ object AppModule {
     @Provides
     @Singleton
     fun provideFinishNoteDao(db: AppDatabase) = db.finishNoteDao()
+
+    @Provides
+    @Singleton
+    fun provideWorkManager(@ApplicationContext context: Context) = WorkManager.getInstance(context)
 
     @Module
     @InstallIn(SingletonComponent::class)

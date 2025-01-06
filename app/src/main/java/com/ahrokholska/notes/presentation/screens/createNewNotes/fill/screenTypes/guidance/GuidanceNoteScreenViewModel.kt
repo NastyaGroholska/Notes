@@ -2,6 +2,7 @@ package com.ahrokholska.notes.presentation.screens.createNewNotes.fill.screenTyp
 
 import androidx.lifecycle.viewModelScope
 import com.ahrokholska.notes.domain.model.Note
+import com.ahrokholska.notes.domain.useCase.CopyImageUseCase
 import com.ahrokholska.notes.domain.useCase.SaveNoteUseCase
 import com.ahrokholska.notes.presentation.screens.createNewNotes.fill.screenTypes.NoteWithTitleViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,7 +13,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GuidanceNoteScreenViewModel @Inject constructor(private val saveNoteUseCase: SaveNoteUseCase) :
+class GuidanceNoteScreenViewModel @Inject constructor(
+    private val saveNoteUseCase: SaveNoteUseCase,
+    private val copyImageUseCase: CopyImageUseCase
+) :
     NoteWithTitleViewModel() {
     private val _body = MutableStateFlow("")
     val body = _body.asStateFlow()
@@ -34,7 +38,7 @@ class GuidanceNoteScreenViewModel @Inject constructor(private val saveNoteUseCas
     fun saveNote(title: String, body: String, image: String, onSuccess: () -> Unit) =
         saveNote {
             saveNoteUseCase(Note.Guidance(title = title, body = body, image = image))
-            //TODO copy image
+            copyImageUseCase(image)
             onSuccess()
         }
 }
