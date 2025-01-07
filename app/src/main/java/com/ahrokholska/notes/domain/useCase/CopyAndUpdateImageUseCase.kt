@@ -6,7 +6,7 @@ import androidx.work.workDataOf
 import com.ahrokholska.notes.data.work.CopyImageWorker
 import javax.inject.Inject
 
-class CopyImageUseCase @Inject constructor(private val workManager: WorkManager) {
+class CopyAndUpdateImageUseCase @Inject constructor(private val workManager: WorkManager) {
     operator fun invoke(uri: String) {
         workManager.enqueue(
             OneTimeWorkRequestBuilder<CopyImageWorker>()

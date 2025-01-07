@@ -70,4 +70,7 @@ abstract class GuidanceNotesDao {
 
     @Query("SELECT title, id FROM guidance_note")
     abstract fun getAllTitles(): Flow<List<NoteTitle>>
+
+    @Query("UPDATE guidance_note SET image=:image WHERE image=:oldImage")
+    abstract suspend fun updateImage(oldImage: String, image: String)
 }

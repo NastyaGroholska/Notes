@@ -7,14 +7,23 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.ahrokholska.notes.domain.repository.NotesRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 
-class CopyImageWorker(private val appContext: Context, workerParams: WorkerParameters) :
+@HiltWorker
+class CopyImageWorker @AssistedInject constructor(
+    private val repository: NotesRepository,
+    @Assisted private val appContext: Context,
+    @Assisted workerParams: WorkerParameters
+) :
     CoroutineWorker(appContext, workerParams) {
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         val file = File(
@@ -38,6 +47,7 @@ class CopyImageWorker(private val appContext: Context, workerParams: WorkerParam
             }
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output)
         }
+        repository.updateImage(uriString, file.path)
         Result.success()
     }
 

@@ -41,4 +41,5 @@ interface NotesRepository {
     suspend fun finishNote(noteId: Int, noteType: NoteType, time: Long)
     fun getAllFinishedNotes(): Flow<List<NotePreview>>
     fun getAllTitles(): Flow<List<NoteTitle>>
+    suspend fun updateImage(oldImage: String, image: String)
 }

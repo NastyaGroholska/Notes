@@ -245,4 +245,9 @@ class NotesRepositoryImpl @Inject constructor(
             guidanceNotesDao.getAllTitles().toDomain(NoteType.Guidance),
             goalsNotesDao.getAllTitles().toDomain(NoteType.Goals)
         ) { it -> it.flatMap { it.toList() } }
+
+    override suspend fun updateImage(oldImage: String, image: String) =
+        withContext(Dispatchers.IO) {
+            guidanceNotesDao.updateImage(oldImage, image)
+        }
 }
