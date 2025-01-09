@@ -16,6 +16,7 @@ import com.ahrokholska.notes.presentation.screens.homeGraph.allPinnedNotes.AllPi
 import com.ahrokholska.notes.presentation.screens.homeGraph.home.HomeScreen
 import com.ahrokholska.notes.presentation.screens.noteDetails.NoteDetailsScreen
 import com.ahrokholska.notes.presentation.screens.search.SearchScreen
+import com.ahrokholska.notes.presentation.screens.settings.SettingsScreen
 
 @Composable
 fun Navigation() {
@@ -30,7 +31,7 @@ fun Navigation() {
                             BottomBarScreen.HOME -> {}
                             BottomBarScreen.FINISHED -> navController.navigate(Screen.AllFinishedNotes)
                             BottomBarScreen.SEARCH -> navController.navigate(Screen.SearchNotes)
-                            BottomBarScreen.SETTINGS -> TODO()
+                            BottomBarScreen.SETTINGS -> navController.navigate(Screen.Settings)
                         }
                     },
                     onNoteClick = { id, type ->
@@ -84,7 +85,11 @@ fun Navigation() {
                             }
                         }
 
-                        BottomBarScreen.SETTINGS -> TODO()
+                        BottomBarScreen.SETTINGS -> navController.navigate(Screen.Settings) {
+                            popUpTo(Screen.AllFinishedNotes) {
+                                inclusive = true
+                            }
+                        }
                     }
                 },
             )
@@ -118,11 +123,45 @@ fun Navigation() {
                         }
 
                         BottomBarScreen.SEARCH -> {}
-                        BottomBarScreen.SETTINGS -> TODO()
+                        BottomBarScreen.SETTINGS -> navController.navigate(Screen.Settings) {
+                            popUpTo(Screen.SearchNotes) {
+                                inclusive = true
+                            }
+                        }
                     }
                 },
                 onNoteClick = { id, type ->
                     navController.navigate(Screen.NoteDetails(id, type.toUI()))
+                },
+            )
+        }
+
+        composable<Screen.Settings> {
+            SettingsScreen(
+                onBackClick = navController::navigateUp,
+                onPlusClick = {
+                    navController.navigate(Screen.CreateNewNotesGraph) {
+                        popUpTo(Screen.Settings) {
+                            inclusive = true
+                        }
+                    }
+                },
+                onScreenClick = {
+                    when (it) {
+                        BottomBarScreen.HOME -> navController.navigateUp()
+                        BottomBarScreen.FINISHED -> navController.navigate(Screen.AllFinishedNotes) {
+                            popUpTo(Screen.Settings) {
+                                inclusive = true
+                            }
+                        }
+
+                        BottomBarScreen.SEARCH -> navController.navigate(Screen.SearchNotes) {
+                            popUpTo(Screen.Settings) {
+                                inclusive = true
+                            }
+                        }
+                        BottomBarScreen.SETTINGS -> {}
+                    }
                 },
             )
         }
