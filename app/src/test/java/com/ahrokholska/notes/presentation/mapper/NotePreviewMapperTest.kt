@@ -6,6 +6,7 @@ import com.ahrokholska.notes.getEmptyGuidanceNote
 import com.ahrokholska.notes.getEmptyInterestingIdeaNote
 import com.ahrokholska.notes.getEmptyRoutineTasksNote
 import com.ahrokholska.notes.presentation.model.NotePreview
+import com.ahrokholska.notes.presentation.theme.noteColors
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -43,5 +44,20 @@ class NotePreviewMapperTest {
         val note = getEmptyRoutineTasksNote()
         val mappedNote = note.toUI(0)
         assertEquals(NotePreview.RoutineTasks::class, mappedNote::class)
+    }
+
+    @Test
+    fun `list of NotePreview domain after mapping to presentation has correct colors`() {
+        val notes = listOf(
+            getEmptyRoutineTasksNote(),
+            getEmptyGuidanceNote(),
+            getEmptyGoalsNote(),
+            getEmptyBuyingSomethingNote(),
+            getEmptyInterestingIdeaNote()
+        )
+        val mappedNotes = notes.mapIndexed { index, item -> item.toUI(index) }
+        mappedNotes.forEachIndexed { index, notePreview ->
+            assertEquals(noteColors[index % noteColors.size], notePreview.color)
+        }
     }
 }
