@@ -60,4 +60,13 @@ class NotePreviewMapperTest {
             assertEquals(noteColors[index % noteColors.size], notePreview.color)
         }
     }
+
+    @Test
+    fun `list of InterestingIdea domain after mapping to presentation has correct colors`() {
+        val notes = List(noteColors.size + 1) { getEmptyInterestingIdeaNote() }
+        val mappedNotes = notes.mapIndexed { index, item -> item.toUI(index) }
+        mappedNotes.forEachIndexed { index, notePreview ->
+            assertEquals(noteColors[(index + 1) % noteColors.size], notePreview.color)
+        }
+    }
 }
