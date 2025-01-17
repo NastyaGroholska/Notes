@@ -69,4 +69,40 @@ class NotePreviewMapperTest {
             assertEquals(noteColors[(index + 1) % noteColors.size], notePreview.color)
         }
     }
+
+    @Test
+    fun `list of BuyingSomething domain after mapping to presentation has correct colors`() {
+        val notes = List(noteColors.size + 1) { getEmptyBuyingSomethingNote() }
+        val mappedNotes = notes.mapIndexed { index, item -> item.toUI(index) }
+        mappedNotes.forEachIndexed { index, notePreview ->
+            assertEquals(noteColors[(index + 2) % noteColors.size], notePreview.color)
+        }
+    }
+
+    @Test
+    fun `list of Goals domain after mapping to presentation has correct colors`() {
+        val notes = List(noteColors.size + 1) { getEmptyGoalsNote() }
+        val mappedNotes = notes.mapIndexed { index, item -> item.toUI(index) }
+        mappedNotes.forEachIndexed { index, notePreview ->
+            assertEquals(noteColors[(index + 3) % noteColors.size], notePreview.color)
+        }
+    }
+
+    @Test
+    fun `list of Guidance domain after mapping to presentation has correct colors`() {
+        val notes = List(noteColors.size + 1) { getEmptyGuidanceNote() }
+        val mappedNotes = notes.mapIndexed { index, item -> item.toUI(index) }
+        mappedNotes.forEachIndexed { index, notePreview ->
+            assertEquals(noteColors[(index + 4) % noteColors.size], notePreview.color)
+        }
+    }
+
+    @Test
+    fun `list of RoutineTasks domain after mapping to presentation has correct colors`() {
+        val notes = List(noteColors.size + 1) { getEmptyRoutineTasksNote() }
+        val mappedNotes = notes.mapIndexed { index, item -> item.toUI(index) }
+        mappedNotes.forEachIndexed { index, notePreview ->
+            assertEquals(noteColors[(index + 5) % noteColors.size], notePreview.color)
+        }
+    }
 }
