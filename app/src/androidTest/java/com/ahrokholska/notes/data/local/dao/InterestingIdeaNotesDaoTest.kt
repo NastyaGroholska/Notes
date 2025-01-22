@@ -70,4 +70,21 @@ class InterestingIdeaNotesDaoTest {
         assertEquals(2, allNotes.size)
         assert(allNotes.all { it.title != note1.title })
     }
+
+    @Test
+    fun getLast10ReturnsCorrectList() = runTest {
+        val note0 = InterestingIdeaNoteEntity(title = "note0", body = "body0")
+        val tenNotes =
+            List(10) { InterestingIdeaNoteEntity(title = "note${it + 1}", body = "body${it + 1}") }
+        dao.insert(note0)
+        tenNotes.forEach {
+            dao.insert(it)
+        }
+        val last10Notes = dao.getLast10InterestingIdeaNotes().first()
+        assertEquals(10, last10Notes.size)
+        last10Notes.reversed().forEachIndexed { index, note ->
+            assertEquals(tenNotes[index].title, note.title)
+            assertEquals(tenNotes[index].body, note.body)
+        }
+    }
 }
