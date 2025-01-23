@@ -6,6 +6,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.ahrokholska.notes.data.local.AppDatabase
 import com.ahrokholska.notes.data.local.entities.InterestingIdeaNoteEntity
+import com.ahrokholska.notes.data.local.entities.PinnedNoteEntity
+import com.ahrokholska.notes.domain.model.NoteType
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -86,5 +88,48 @@ class InterestingIdeaNotesDaoTest {
             assertEquals(tenNotes[index].title, note.title)
             assertEquals(tenNotes[index].body, note.body)
         }
+    }
+
+    @Test
+    fun getNoteWithoutDetailsIsCorrect() = runTest {
+        val note = InterestingIdeaNoteEntity(title = "note1", body = "body1")
+        dao.insert(note)
+        val noteId = dao.getAllInterestingIdeaNotes().first().first().id
+        val noteDetails = dao.getInterestingIdeaNoteDetails(noteId).first()
+            ?: throw Error("note details does not exist")
+        assertEquals(note.title, noteDetails.note.title)
+        assertEquals(note.body, noteDetails.note.body)
+        assertEquals(false, noteDetails.isPinned)
+        assertEquals(false, noteDetails.isFinished)
+    }
+
+    @Test
+    fun getPinnedNoteDetailsIsCorrect() = runTest {
+        val note = InterestingIdeaNoteEntity(title = "note1", body = "body1")
+        dao.insert(note)
+        val noteId = dao.getAllInterestingIdeaNotes().first().first().id
+        database.pinNoteDao()
+            .pinNote(PinnedNoteEntity(noteId, NoteType.InterestingIdea, System.currentTimeMillis()))
+        val noteDetails = dao.getInterestingIdeaNoteDetails(noteId).first()
+            ?: throw Error("note details does not exist")
+        assertEquals(note.title, noteDetails.note.title)
+        assertEquals(note.body, noteDetails.note.body)
+        assertEquals(true, noteDetails.isPinned)
+        assertEquals(false, noteDetails.isFinished)
+    }
+
+    @Test
+    fun getFinishedNoteDetailsIsCorrect() = runTest {
+        val note = InterestingIdeaNoteEntity(title = "note1", body = "body1")
+        dao.insert(note)
+        val noteId = dao.getAllInterestingIdeaNotes().first().first().id
+        database.finishNoteDao()
+            .finishNote(noteId, NoteType.InterestingIdea, System.currentTimeMillis(), {})
+        val noteDetails = dao.getInterestingIdeaNoteDetails(noteId).first()
+            ?: throw Error("note details does not exist")
+        assertEquals(note.title, noteDetails.note.title)
+        assertEquals(note.body, noteDetails.note.body)
+        assertEquals(false, noteDetails.isPinned)
+        assertEquals(true, noteDetails.isFinished)
     }
 }
