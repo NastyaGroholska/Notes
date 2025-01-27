@@ -132,4 +132,19 @@ class InterestingIdeaNotesDaoTest {
         assertEquals(false, noteDetails.isPinned)
         assertEquals(true, noteDetails.isFinished)
     }
+
+    @Test
+    fun getNoteByIdIsCorrect() = runTest {
+        val tenNotes = List(10) { InterestingIdeaNoteEntity(title = "note$it", body = "body$it") }
+        tenNotes.forEach {
+            dao.insert(it)
+        }
+        val targetNoteTitle = "note1"
+        val targetNoteBody = "body1"
+        val noteId = (dao.getAllInterestingIdeaNotes().first().find { it.title == targetNoteTitle }
+            ?: throw Error("note wasn't inserted")).id
+        val note = dao.getInterestingIdeaNote(noteId).first()
+        assertEquals(targetNoteTitle, note.title)
+        assertEquals(targetNoteBody, note.body)
+    }
 }
