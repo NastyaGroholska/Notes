@@ -2,7 +2,7 @@ package com.ahrokholska.notes.presentation.screens.noteDetails.guidance
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.ahrokholska.notes.domain.model.NoteType
+import com.ahrokholska.api.model.NoteType
 import com.ahrokholska.notes.domain.useCase.DeleteNoteUseCase
 import com.ahrokholska.notes.domain.useCase.FinishNoteUseCase
 import com.ahrokholska.notes.domain.useCase.PinNoteUseCase

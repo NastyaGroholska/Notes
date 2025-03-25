@@ -122,17 +122,17 @@ private fun RoutineTasksDetailsScreenPreview() {
     RoutineTasksDetailsScreenContent(
         Note.RoutineTasks(
             active = listOf(
-                com.ahrokholska.notes.domain.model.Note.RoutineTasks.SubNote(
+                com.ahrokholska.api.model.Note.RoutineTasks.SubNote(
                     title = "Title Here",
                     text = "Create a mobile app UI Kit that provide a basic notes functionality but with some improvement..."
                 ),
-                com.ahrokholska.notes.domain.model.Note.RoutineTasks.SubNote(
+                com.ahrokholska.api.model.Note.RoutineTasks.SubNote(
                     title = "Title Here",
                     text = "Create a mobile "
                 )
             ),
             completed = listOf(
-                com.ahrokholska.notes.domain.model.Note.RoutineTasks.SubNote(
+                com.ahrokholska.api.model.Note.RoutineTasks.SubNote(
                     title = "Title Here",
                     text = "Create a mobile app UI Kit that provide a basic notes functionality but with some improvement..."
                 )

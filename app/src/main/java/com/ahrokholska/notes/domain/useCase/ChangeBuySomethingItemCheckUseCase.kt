@@ -1,6 +1,6 @@
 package com.ahrokholska.notes.domain.useCase
 
-import com.ahrokholska.notes.domain.repository.NotesRepository
+import com.ahrokholska.api.NotesRepository
 import javax.inject.Inject
 
 class ChangeBuySomethingItemCheckUseCase @Inject constructor(private val notesRepository: NotesRepository) {

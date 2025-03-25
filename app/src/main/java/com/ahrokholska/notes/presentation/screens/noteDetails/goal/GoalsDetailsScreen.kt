@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.ahrokholska.notes.domain.model.Note.Goals.Task
+import com.ahrokholska.api.model.Note.Goals.Task
 import com.ahrokholska.notes.presentation.model.Note
 import com.ahrokholska.notes.presentation.screens.noteDetails.DetailsScreenGeneric
 import com.ahrokholska.notes.presentation.theme.noteColors

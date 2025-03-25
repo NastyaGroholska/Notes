@@ -3,15 +3,15 @@ package com.ahrokholska.notes.presentation.mapper
 import com.ahrokholska.notes.presentation.model.NotePreview
 import com.ahrokholska.notes.presentation.theme.noteColors
 
-fun com.ahrokholska.notes.domain.model.NotePreview.toUI(index: Int) = when (this) {
-    is com.ahrokholska.notes.domain.model.NotePreview.BuyingSomething -> toUI(index, true)
-    is com.ahrokholska.notes.domain.model.NotePreview.Goals -> toUI(index, true)
-    is com.ahrokholska.notes.domain.model.NotePreview.Guidance -> toUI(index, true)
-    is com.ahrokholska.notes.domain.model.NotePreview.InterestingIdea -> toUI(index, true)
-    is com.ahrokholska.notes.domain.model.NotePreview.RoutineTasks -> toUI(index, true)
+fun com.ahrokholska.api.model.NotePreview.toUI(index: Int) = when (this) {
+    is com.ahrokholska.api.model.NotePreview.BuyingSomething -> toUI(index, true)
+    is com.ahrokholska.api.model.NotePreview.Goals -> toUI(index, true)
+    is com.ahrokholska.api.model.NotePreview.Guidance -> toUI(index, true)
+    is com.ahrokholska.api.model.NotePreview.InterestingIdea -> toUI(index, true)
+    is com.ahrokholska.api.model.NotePreview.RoutineTasks -> toUI(index, true)
 }
 
-fun com.ahrokholska.notes.domain.model.NotePreview.BuyingSomething.toUI(
+fun com.ahrokholska.api.model.NotePreview.BuyingSomething.toUI(
     index: Int, inCombinedList: Boolean = false
 ) = NotePreview.BuyingSomething(
     id = id,
@@ -20,7 +20,7 @@ fun com.ahrokholska.notes.domain.model.NotePreview.BuyingSomething.toUI(
     color = noteColors[(if (inCombinedList) index else index + 2) % noteColors.size]
 )
 
-fun com.ahrokholska.notes.domain.model.NotePreview.Goals.toUI(
+fun com.ahrokholska.api.model.NotePreview.Goals.toUI(
     index: Int, inCombinedList: Boolean = false
 ) = NotePreview.Goals(
     id = id,
@@ -29,7 +29,7 @@ fun com.ahrokholska.notes.domain.model.NotePreview.Goals.toUI(
     color = noteColors[(if (inCombinedList) index else index + 3) % noteColors.size]
 )
 
-fun com.ahrokholska.notes.domain.model.NotePreview.Guidance.toUI(
+fun com.ahrokholska.api.model.NotePreview.Guidance.toUI(
     index: Int, inCombinedList: Boolean = false
 ) = NotePreview.Guidance(
     id = id,
@@ -39,7 +39,7 @@ fun com.ahrokholska.notes.domain.model.NotePreview.Guidance.toUI(
     color = noteColors[(if (inCombinedList) index else index + 4) % noteColors.size]
 )
 
-fun com.ahrokholska.notes.domain.model.NotePreview.InterestingIdea.toUI(
+fun com.ahrokholska.api.model.NotePreview.InterestingIdea.toUI(
     index: Int, inCombinedList: Boolean = false
 ) =
     NotePreview.InterestingIdea(
@@ -49,7 +49,7 @@ fun com.ahrokholska.notes.domain.model.NotePreview.InterestingIdea.toUI(
         color = noteColors[(if (inCombinedList) index else index + 1) % noteColors.size]
     )
 
-fun com.ahrokholska.notes.domain.model.NotePreview.RoutineTasks.toUI(
+fun com.ahrokholska.api.model.NotePreview.RoutineTasks.toUI(
     index: Int, inCombinedList: Boolean = false
 ) =
     NotePreview.RoutineTasks(

@@ -1,8 +1,7 @@
 package com.ahrokholska.notes.presentation.model
 
 import androidx.compose.ui.graphics.Color
-import com.ahrokholska.notes.domain.model.Note.Goals.Task
-import com.ahrokholska.notes.domain.model.Note.RoutineTasks.SubNote
+import com.ahrokholska.api.model.Note
 
 sealed class NotePreview {
     abstract val id: Int
@@ -25,7 +24,7 @@ sealed class NotePreview {
     data class Goals(
         override val id: Int = 0,
         val title: String,
-        val tasks: List<Pair<Task, List<Task>>>,
+        val tasks: List<Pair<Note.Goals.Task, List<Note.Goals.Task>>>,
         override val color: Color
     ) : NotePreview()
 
@@ -39,8 +38,8 @@ sealed class NotePreview {
 
     data class RoutineTasks(
         override val id: Int = 0,
-        val active: List<SubNote>,
-        val completed: List<SubNote>,
+        val active: List<Note.RoutineTasks.SubNote>,
+        val completed: List<Note.RoutineTasks.SubNote>,
         override val color: Color
     ) : NotePreview()
 }

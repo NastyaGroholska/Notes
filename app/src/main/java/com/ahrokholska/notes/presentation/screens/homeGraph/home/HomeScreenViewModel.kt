@@ -2,6 +2,7 @@ package com.ahrokholska.notes.presentation.screens.homeGraph.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ahrokholska.api.model.NotePreview
 import com.ahrokholska.notes.domain.useCase.GetPinnedNotesUseCase
 import com.ahrokholska.notes.domain.useCase.getLast10Notes.GetLast10BuySomethingNotesUseCase
 import com.ahrokholska.notes.domain.useCase.getLast10Notes.GetLast10GoalsNotesUseCase
@@ -27,23 +28,23 @@ class HomeScreenViewModel @Inject constructor(
     val pinnedNotes = getPinnedNotesUseCase().map { list ->
         list.mapIndexed { index, item ->
             when (item) {
-                is com.ahrokholska.notes.domain.model.NotePreview.BuyingSomething -> item.toUI(
+                is NotePreview.BuyingSomething -> item.toUI(
                     index = index, inCombinedList = true
                 )
 
-                is com.ahrokholska.notes.domain.model.NotePreview.Goals -> item.toUI(
+                is NotePreview.Goals -> item.toUI(
                     index = index, inCombinedList = true
                 )
 
-                is com.ahrokholska.notes.domain.model.NotePreview.Guidance -> item.toUI(
+                is NotePreview.Guidance -> item.toUI(
                     index = index, inCombinedList = true
                 )
 
-                is com.ahrokholska.notes.domain.model.NotePreview.InterestingIdea -> item.toUI(
+                is NotePreview.InterestingIdea -> item.toUI(
                     index = index, inCombinedList = true
                 )
 
-                is com.ahrokholska.notes.domain.model.NotePreview.RoutineTasks -> item.toUI(
+                is NotePreview.RoutineTasks -> item.toUI(
                     index = index, inCombinedList = true
                 )
             }

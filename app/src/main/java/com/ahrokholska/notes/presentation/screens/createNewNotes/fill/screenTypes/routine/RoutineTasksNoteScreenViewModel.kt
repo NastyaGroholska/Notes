@@ -1,7 +1,7 @@
 package com.ahrokholska.notes.presentation.screens.createNewNotes.fill.screenTypes.routine
 
 import androidx.lifecycle.viewModelScope
-import com.ahrokholska.notes.domain.model.Note
+import com.ahrokholska.api.model.Note
 import com.ahrokholska.notes.domain.useCase.SaveNoteUseCase
 import com.ahrokholska.notes.presentation.model.TextAndError
 import com.ahrokholska.notes.presentation.screens.createNewNotes.fill.screenTypes.NoteViewModel

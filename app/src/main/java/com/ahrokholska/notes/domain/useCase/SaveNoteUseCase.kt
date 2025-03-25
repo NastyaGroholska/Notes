@@ -1,7 +1,7 @@
 package com.ahrokholska.notes.domain.useCase
 
-import com.ahrokholska.notes.domain.model.Note
-import com.ahrokholska.notes.domain.repository.NotesRepository
+import com.ahrokholska.api.NotesRepository
+import com.ahrokholska.api.model.Note
 import javax.inject.Inject
 
 class SaveNoteUseCase @Inject constructor(private val notesRepository: NotesRepository) {

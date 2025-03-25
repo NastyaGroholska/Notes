@@ -10,7 +10,7 @@ import android.provider.MediaStore
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.ahrokholska.notes.domain.repository.NotesRepository
+import com.ahrokholska.api.NotesRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers

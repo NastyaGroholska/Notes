@@ -1,7 +1,7 @@
 package com.ahrokholska.notes.domain.useCase
 
-import com.ahrokholska.notes.domain.model.NoteType
-import com.ahrokholska.notes.domain.repository.NotesRepository
+import com.ahrokholska.api.NotesRepository
+import com.ahrokholska.api.model.NoteType
 import javax.inject.Inject
 
 class UnPinNoteUseCase @Inject constructor(private val notesRepository: NotesRepository) {

@@ -2,7 +2,7 @@ package com.ahrokholska.notes.presentation.screens.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ahrokholska.notes.domain.model.NoteTitle
+import com.ahrokholska.api.model.NoteTitle
 import com.ahrokholska.notes.domain.useCase.GetAllTitlesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

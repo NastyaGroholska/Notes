@@ -43,9 +43,9 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ahrokholska.api.model.NoteTitle
+import com.ahrokholska.api.model.NoteType
 import com.ahrokholska.notes.R
-import com.ahrokholska.notes.domain.model.NoteTitle
-import com.ahrokholska.notes.domain.model.NoteType
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomAppBar
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
 import com.ahrokholska.notes.presentation.theme.background

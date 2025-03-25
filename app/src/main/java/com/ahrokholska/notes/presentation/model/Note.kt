@@ -1,8 +1,8 @@
 package com.ahrokholska.notes.presentation.model
 
 import androidx.compose.ui.graphics.Color
-import com.ahrokholska.notes.domain.model.Note.Goals.Task
-import com.ahrokholska.notes.domain.model.Note.RoutineTasks.SubNote
+import com.ahrokholska.api.model.Note.Goals.Task
+import com.ahrokholska.api.model.Note.RoutineTasks.SubNote
 
 sealed class Note {
     abstract val id: Int

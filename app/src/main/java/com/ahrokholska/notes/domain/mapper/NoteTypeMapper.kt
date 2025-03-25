@@ -1,6 +1,6 @@
 package com.ahrokholska.notes.domain.mapper
 
-import com.ahrokholska.notes.domain.model.NoteType
+import com.ahrokholska.api.model.NoteType
 
 typealias NoteTypeUI = com.ahrokholska.notes.presentation.model.NoteType
 
