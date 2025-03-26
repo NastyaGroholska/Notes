@@ -1,0 +1,17 @@
+<resources>
+    <!--RoutineTasks-->
+    <string name="active_sub_notes">ACTIVE SUB NOTES</string>
+    <string name="completed_sub_notes">COMPLETED SUB NOTES</string>
+
+    <!--NoteType-->
+    <string name="interesting_idea">Interesting Idea</string>
+    <string name="interesting_idea_descr">Use free text area, feel free to write it all</string>
+    <string name="buying_something">Buying Something</string>
+    <string name="buying_something_descr">Use checklist, so you won’t miss anything</string>
+    <string name="goals">Goals</string>
+    <string name="goals_descr">Near/future goals, notes and keep focus</string>
+    <string name="guidance">Guidance</string>
+    <string name="guidance_descr">Create guidance for routine activities</string>
+    <string name="routine_tasks">Routine Tasks</string>
+    <string name="routine_tasks_descr">Checklist with sub-checklist</string>
+</resources>

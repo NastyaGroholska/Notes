@@ -36,14 +36,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ahrokholska.note_presentation.model.NotePreview
+import com.ahrokholska.note_presentation.model.NoteType
+import com.ahrokholska.note_presentation.theme.noteColors
 import com.ahrokholska.notes.R
 import com.ahrokholska.notes.presentation.common.NotePreviewCard
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomAppBar
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
-import com.ahrokholska.notes.presentation.model.NotePreview
-import com.ahrokholska.notes.presentation.model.NoteType
 import com.ahrokholska.notes.presentation.screens.homeGraph.NotesGrid
-import com.ahrokholska.notes.presentation.theme.noteColors
 
 @Composable
 fun FinishedNotesScreen(

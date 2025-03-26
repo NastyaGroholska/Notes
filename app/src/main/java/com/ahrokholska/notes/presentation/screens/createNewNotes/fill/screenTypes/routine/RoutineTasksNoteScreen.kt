@@ -30,12 +30,12 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ahrokholska.note_presentation.theme.noteColors
 import com.ahrokholska.notes.R
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarSave
-import com.ahrokholska.notes.presentation.common.topBar.TopBar
 import com.ahrokholska.notes.presentation.model.TextAndError
-import com.ahrokholska.notes.presentation.theme.background
-import com.ahrokholska.notes.presentation.theme.noteColors
+import com.ahrokholska.presentation.composable.TopBar
+import com.ahrokholska.presentation.theme.background
 
 @Composable
 fun RoutineTasksNoteScreen(

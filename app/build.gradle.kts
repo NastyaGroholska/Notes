@@ -56,6 +56,10 @@ android {
 dependencies {
     implementation(project(":data:notes:api"))
     implementation(project(":data:notes:room"))
+    implementation(project(":core:note-presentation"))
+    implementation(project(":core:presentation-domain-mapper"))
+    implementation(project(":core:presentation"))
+    implementation(project(":feature:note-details"))
     implementation(project(":utils"))
 
     implementation(libs.androidx.core.ktx)
@@ -67,6 +71,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons.extended)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

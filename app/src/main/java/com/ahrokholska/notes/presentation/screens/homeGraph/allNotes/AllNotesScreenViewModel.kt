@@ -3,13 +3,13 @@ package com.ahrokholska.notes.presentation.screens.homeGraph.allNotes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ahrokholska.note_presentation.model.NoteType
 import com.ahrokholska.notes.domain.useCase.getAllNotes.GetAllBuySomethingNotesUseCase
 import com.ahrokholska.notes.domain.useCase.getAllNotes.GetAllGoalsNotesUseCase
 import com.ahrokholska.notes.domain.useCase.getAllNotes.GetAllGuidanceNotesUseCase
 import com.ahrokholska.notes.domain.useCase.getAllNotes.GetAllInterestingIdeaNotesUseCase
 import com.ahrokholska.notes.domain.useCase.getAllNotes.GetAllRoutineTasksNotesUseCase
 import com.ahrokholska.notes.presentation.mapper.toUI
-import com.ahrokholska.notes.presentation.model.NoteType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flowOf

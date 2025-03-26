@@ -1,12 +1,12 @@
 package com.ahrokholska.notes.presentation.mapper
 
+import com.ahrokholska.note_presentation.model.NotePreview
+import com.ahrokholska.note_presentation.theme.noteColors
 import com.ahrokholska.notes.getEmptyBuyingSomethingNote
 import com.ahrokholska.notes.getEmptyGoalsNote
 import com.ahrokholska.notes.getEmptyGuidanceNote
 import com.ahrokholska.notes.getEmptyInterestingIdeaNote
 import com.ahrokholska.notes.getEmptyRoutineTasksNote
-import com.ahrokholska.notes.presentation.model.NotePreview
-import com.ahrokholska.notes.presentation.theme.noteColors
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

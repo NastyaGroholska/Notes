@@ -48,7 +48,7 @@ import com.ahrokholska.api.model.NoteType
 import com.ahrokholska.notes.R
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomAppBar
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
-import com.ahrokholska.notes.presentation.theme.background
+import com.ahrokholska.presentation.theme.background
 
 @Composable
 fun SearchScreen(

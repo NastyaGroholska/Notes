@@ -29,14 +29,17 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.ahrokholska.note_presentation.model.NoteType
 import com.ahrokholska.notes.R
-import com.ahrokholska.notes.presentation.common.topBar.TopBarWithTitle
-import com.ahrokholska.notes.presentation.model.NoteType
+import com.ahrokholska.presentation.composable.TopBarWithTitle
 import com.ahrokholska.notes.presentation.theme.BlackAlpha40
-import com.ahrokholska.notes.presentation.theme.background
+import com.ahrokholska.presentation.theme.background
 
 @Composable
-fun SelectNoteTypeScreen(onBackClick: () -> Unit, onTypeClick: (NoteType) -> Unit) {
+fun SelectNoteTypeScreen(
+    onBackClick: () -> Unit,
+    onTypeClick: (NoteType) -> Unit
+) {
     SelectNoteTypeScreenContent(onBackClick = onBackClick, onTypeClick = onTypeClick)
 }
 

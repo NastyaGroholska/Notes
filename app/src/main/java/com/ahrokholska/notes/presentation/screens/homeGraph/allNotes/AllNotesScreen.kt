@@ -6,12 +6,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ahrokholska.note_presentation.model.NotePreview
+import com.ahrokholska.note_presentation.model.NoteType
+import com.ahrokholska.note_presentation.theme.noteColors
 import com.ahrokholska.notes.R
 import com.ahrokholska.notes.presentation.common.NotePreviewCard
-import com.ahrokholska.notes.presentation.model.NotePreview
-import com.ahrokholska.notes.presentation.model.NoteType
 import com.ahrokholska.notes.presentation.screens.homeGraph.NotesGridSimpleTopBar
-import com.ahrokholska.notes.presentation.theme.noteColors
 
 @Composable
 fun AllNotesScreen(

@@ -54,8 +54,8 @@ import coil.compose.SubcomposeAsyncImage
 import com.ahrokholska.notes.R
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomAppBar
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
-import com.ahrokholska.notes.presentation.common.topBar.TopBarWithTitle
-import com.ahrokholska.notes.presentation.theme.background
+import com.ahrokholska.presentation.composable.TopBarWithTitle
+import com.ahrokholska.presentation.theme.background
 
 @Composable
 fun SettingsScreen(
@@ -151,16 +151,17 @@ fun SettingsScreenContent(
                     }
                 }
                 Spacer(modifier = Modifier.height(32.dp))
-                Row(modifier = Modifier
-                    .border(
-                        width = 1.dp,
-                        shape = RoundedCornerShape(50),
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    .clip(RoundedCornerShape(50))
-                    .clickable { }
-                    .padding(vertical = 8.dp)
-                    .fillMaxWidth(),
+                Row(
+                    modifier = Modifier
+                        .border(
+                            width = 1.dp,
+                            shape = RoundedCornerShape(50),
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        .clip(RoundedCornerShape(50))
+                        .clickable { }
+                        .padding(vertical = 8.dp)
+                        .fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -178,7 +179,10 @@ fun SettingsScreenContent(
                     )
                 }
                 HorizontalDivider(modifier = Modifier.padding(vertical = 24.dp))
-                Text(text = stringResource(R.string.app_settings), color = MaterialTheme.colorScheme.secondary)
+                Text(
+                    text = stringResource(R.string.app_settings),
+                    color = MaterialTheme.colorScheme.secondary
+                )
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     modifier = Modifier

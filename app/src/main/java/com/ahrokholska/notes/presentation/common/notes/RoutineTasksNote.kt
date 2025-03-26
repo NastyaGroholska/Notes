@@ -21,11 +21,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.ahrokholska.api.model.Note
+import com.ahrokholska.note_presentation.composable.RoutineTasksSubNote
+import com.ahrokholska.note_presentation.model.Note
+import com.ahrokholska.note_presentation.model.NoteType
+import com.ahrokholska.note_presentation.theme.noteColors
 import com.ahrokholska.notes.R
-import com.ahrokholska.notes.presentation.model.NoteType
 import com.ahrokholska.notes.presentation.theme.BlackAlpha20
-import com.ahrokholska.notes.presentation.theme.noteColors
 
 @Composable
 fun RoutineTasksNote(

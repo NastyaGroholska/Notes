@@ -2,13 +2,13 @@ package com.ahrokholska.notes.presentation.common
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.ahrokholska.note_presentation.model.NotePreview
+import com.ahrokholska.note_presentation.model.NoteType
 import com.ahrokholska.notes.presentation.common.notes.BuySomethingNote
 import com.ahrokholska.notes.presentation.common.notes.GoalsNote
 import com.ahrokholska.notes.presentation.common.notes.GuidanceNote
 import com.ahrokholska.notes.presentation.common.notes.InterestingIdeaNote
 import com.ahrokholska.notes.presentation.common.notes.RoutineTasksNote
-import com.ahrokholska.notes.presentation.model.NotePreview
-import com.ahrokholska.notes.presentation.model.NoteType
 
 @Composable
 fun NotePreviewCard(

@@ -1,6 +1,6 @@
 package com.ahrokholska.notes
 
-import com.ahrokholska.notes.domain.model.NotePreview
+import com.ahrokholska.api.model.NotePreview
 
 fun getEmptyInterestingIdeaNote() = NotePreview.InterestingIdea(title = "", body = "")
 fun getEmptyBuyingSomethingNote() = NotePreview.BuyingSomething(title = "", items = listOf())

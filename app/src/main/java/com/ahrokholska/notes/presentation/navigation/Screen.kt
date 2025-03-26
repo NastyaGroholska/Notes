@@ -1,6 +1,6 @@
 package com.ahrokholska.notes.presentation.navigation
 
-import com.ahrokholska.notes.presentation.model.NoteType
+import com.ahrokholska.note_presentation.model.NoteType
 import kotlinx.serialization.Serializable
 
 sealed class Screen {
@@ -33,7 +33,4 @@ sealed class Screen {
 
     @Serializable
     data object Settings : Screen()
-
-    @Serializable
-    data class NoteDetails(val id: Int, val type: NoteType) : Screen()
 }

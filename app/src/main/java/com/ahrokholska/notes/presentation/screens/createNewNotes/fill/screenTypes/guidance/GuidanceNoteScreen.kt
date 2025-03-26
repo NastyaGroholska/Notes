@@ -34,11 +34,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ahrokholska.note_presentation.composable.GuidanceImage
 import com.ahrokholska.notes.R
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarSave
-import com.ahrokholska.notes.presentation.common.notes.GuidanceImage
-import com.ahrokholska.notes.presentation.common.topBar.TopBar
-import com.ahrokholska.notes.presentation.theme.background
+import com.ahrokholska.presentation.composable.TopBar
+import com.ahrokholska.presentation.theme.background
 
 @Composable
 fun GuidanceNoteScreen(

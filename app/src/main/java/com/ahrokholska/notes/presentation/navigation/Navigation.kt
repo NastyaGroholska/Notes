@@ -6,7 +6,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.ahrokholska.notes.domain.mapper.toUI
+import com.ahrokholska.note_details.presentation.navigation.navigateToNoteDetailsScreen
+import com.ahrokholska.note_details.presentation.navigation.noteDetailsScreen
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
 import com.ahrokholska.notes.presentation.screens.createNewNotes.fill.CreateNoteScreen
 import com.ahrokholska.notes.presentation.screens.createNewNotes.type.SelectNoteTypeScreen
@@ -14,9 +15,9 @@ import com.ahrokholska.notes.presentation.screens.finishedNotes.FinishedNotesScr
 import com.ahrokholska.notes.presentation.screens.homeGraph.allNotes.AllNotesScreen
 import com.ahrokholska.notes.presentation.screens.homeGraph.allPinnedNotes.AllPinnedNotesScreen
 import com.ahrokholska.notes.presentation.screens.homeGraph.home.HomeScreen
-import com.ahrokholska.notes.presentation.screens.noteDetails.NoteDetailsScreen
 import com.ahrokholska.notes.presentation.screens.search.SearchScreen
 import com.ahrokholska.notes.presentation.screens.settings.SettingsScreen
+import com.ahrokholska.presentation_domain_mapper.toUI
 
 @Composable
 fun Navigation() {
@@ -34,9 +35,7 @@ fun Navigation() {
                             BottomBarScreen.SETTINGS -> navController.navigate(Screen.Settings)
                         }
                     },
-                    onNoteClick = { id, type ->
-                        navController.navigate(Screen.NoteDetails(id, type))
-                    },
+                    onNoteClick = navController::navigateToNoteDetailsScreen,
                     onViewAllClick = { navController.navigate(Screen.HomeGraph.AllNotes(it)) },
                     onViewAllPinnedClick = { navController.navigate(Screen.HomeGraph.AllPinnedNotes) }
                 )
@@ -47,27 +46,21 @@ fun Navigation() {
                 AllNotesScreen(
                     type = args.type,
                     onBackClick = navController::navigateUp,
-                    onNoteClick = { id, type ->
-                        navController.navigate(Screen.NoteDetails(id, type))
-                    }
+                    onNoteClick = navController::navigateToNoteDetailsScreen
                 )
             }
 
             composable<Screen.HomeGraph.AllPinnedNotes> {
                 AllPinnedNotesScreen(
                     onBackClick = navController::navigateUp,
-                    onNoteClick = { id, type ->
-                        navController.navigate(Screen.NoteDetails(id, type))
-                    }
+                    onNoteClick = navController::navigateToNoteDetailsScreen
                 )
             }
         }
 
         composable<Screen.AllFinishedNotes> {
             FinishedNotesScreen(
-                onNoteClick = { id, type ->
-                    navController.navigate(Screen.NoteDetails(id, type))
-                },
+                onNoteClick = navController::navigateToNoteDetailsScreen,
                 onPlusClick = {
                     navController.navigate(Screen.CreateNewNotesGraph) {
                         popUpTo(Screen.AllFinishedNotes) {
@@ -95,13 +88,7 @@ fun Navigation() {
             )
         }
 
-        composable<Screen.NoteDetails> {
-            val args = it.toRoute<Screen.NoteDetails>()
-            NoteDetailsScreen(
-                type = args.type,
-                onBackClick = navController::navigateUp
-            )
-        }
+        noteDetailsScreen(onExit = navController::navigateUp)
 
         composable<Screen.SearchNotes> {
             SearchScreen(
@@ -131,7 +118,7 @@ fun Navigation() {
                     }
                 },
                 onNoteClick = { id, type ->
-                    navController.navigate(Screen.NoteDetails(id, type.toUI()))
+                    navController.navigateToNoteDetailsScreen(id, type.toUI())
                 },
             )
         }
@@ -160,6 +147,7 @@ fun Navigation() {
                                 inclusive = true
                             }
                         }
+
                         BottomBarScreen.SETTINGS -> {}
                     }
                 },
