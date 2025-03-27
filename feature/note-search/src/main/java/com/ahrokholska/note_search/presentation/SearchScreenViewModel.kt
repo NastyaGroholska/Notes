@@ -1,9 +1,9 @@
-package com.ahrokholska.notes.presentation.screens.search
+package com.ahrokholska.note_search.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ahrokholska.api.model.NoteTitle
-import com.ahrokholska.notes.domain.useCase.GetAllTitlesUseCase
+import com.ahrokholska.note_search.domain.useCase.GetAllTitlesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchScreenViewModel @Inject constructor(
+internal class SearchScreenViewModel @Inject constructor(
     getAllTitlesUseCase: GetAllTitlesUseCase
 ) : ViewModel() {
     private val filter = MutableStateFlow("")

@@ -29,8 +29,5 @@ sealed class Screen {
     data object AllFinishedNotes : Screen()
 
     @Serializable
-    data object SearchNotes : Screen()
-
-    @Serializable
     data object Settings : Screen()
 }

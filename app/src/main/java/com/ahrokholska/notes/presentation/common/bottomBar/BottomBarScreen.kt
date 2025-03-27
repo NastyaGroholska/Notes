@@ -11,7 +11,7 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.ahrokholska.notes.R
+import com.ahrokholska.presentation.R
 
 enum class BottomBarScreen(
     val icon: ImageVector,

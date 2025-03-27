@@ -1,6 +1,18 @@
 package com.ahrokholska.notes.presentation.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
@@ -8,6 +20,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.ahrokholska.note_details.presentation.navigation.navigateToNoteDetailsScreen
 import com.ahrokholska.note_details.presentation.navigation.noteDetailsScreen
+import com.ahrokholska.note_search.presentation.navigateToNoteSearchScreen
+import com.ahrokholska.note_search.presentation.noteSearchScreen
+import com.ahrokholska.note_search.presentation.popUpToNoteSearchScreen
+import com.ahrokholska.notes.presentation.common.bottomBar.BottomAppBar
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
 import com.ahrokholska.notes.presentation.screens.createNewNotes.fill.CreateNoteScreen
 import com.ahrokholska.notes.presentation.screens.createNewNotes.type.SelectNoteTypeScreen
@@ -15,9 +31,7 @@ import com.ahrokholska.notes.presentation.screens.finishedNotes.FinishedNotesScr
 import com.ahrokholska.notes.presentation.screens.homeGraph.allNotes.AllNotesScreen
 import com.ahrokholska.notes.presentation.screens.homeGraph.allPinnedNotes.AllPinnedNotesScreen
 import com.ahrokholska.notes.presentation.screens.homeGraph.home.HomeScreen
-import com.ahrokholska.notes.presentation.screens.search.SearchScreen
 import com.ahrokholska.notes.presentation.screens.settings.SettingsScreen
-import com.ahrokholska.presentation_domain_mapper.toUI
 
 @Composable
 fun Navigation() {
@@ -31,7 +45,7 @@ fun Navigation() {
                         when (it) {
                             BottomBarScreen.HOME -> {}
                             BottomBarScreen.FINISHED -> navController.navigate(Screen.AllFinishedNotes)
-                            BottomBarScreen.SEARCH -> navController.navigate(Screen.SearchNotes)
+                            BottomBarScreen.SEARCH -> navController.navigateToNoteSearchScreen()
                             BottomBarScreen.SETTINGS -> navController.navigate(Screen.Settings)
                         }
                     },
@@ -72,7 +86,7 @@ fun Navigation() {
                     when (it) {
                         BottomBarScreen.HOME -> navController.navigateUp()
                         BottomBarScreen.FINISHED -> {}
-                        BottomBarScreen.SEARCH -> navController.navigate(Screen.SearchNotes) {
+                        BottomBarScreen.SEARCH -> navController.navigateToNoteSearchScreen {
                             popUpTo(Screen.AllFinishedNotes) {
                                 inclusive = true
                             }
@@ -90,37 +104,46 @@ fun Navigation() {
 
         noteDetailsScreen(onExit = navController::navigateUp)
 
-        composable<Screen.SearchNotes> {
-            SearchScreen(
-                onBackClick = navController::navigateUp,
-                onPlusClick = {
-                    navController.navigate(Screen.CreateNewNotesGraph) {
-                        popUpTo(Screen.SearchNotes) {
-                            inclusive = true
-                        }
-                    }
-                },
-                onScreenClick = {
-                    when (it) {
-                        BottomBarScreen.HOME -> navController.navigateUp()
-                        BottomBarScreen.FINISHED -> navController.navigate(Screen.AllFinishedNotes) {
-                            popUpTo(Screen.SearchNotes) {
-                                inclusive = true
-                            }
-                        }
+        noteSearchScreen(
+            onExit = navController::navigateUp,
+            onNoteClick = navController::navigateToNoteDetailsScreen,
+        ) { content ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .navigationBarsPadding(),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                var bottomBarHeight by remember { mutableStateOf(0.dp) }
+                val density = LocalDensity.current
 
-                        BottomBarScreen.SEARCH -> {}
-                        BottomBarScreen.SETTINGS -> navController.navigate(Screen.Settings) {
-                            popUpTo(Screen.SearchNotes) {
-                                inclusive = true
+                content(bottomBarHeight)
+
+                BottomAppBar(
+                    modifier = Modifier.onGloballyPositioned {
+                        bottomBarHeight = with(density) { it.size.height.toDp() }
+                    },
+                    currentScreen = BottomBarScreen.SEARCH,
+                    onPlusClick = {
+                        navController.navigate(Screen.CreateNewNotesGraph) {
+                            popUpToNoteSearchScreen(inclusive = true)
+                        }
+                    },
+                    onScreenClick = {
+                        when (it) {
+                            BottomBarScreen.HOME -> navController.navigateUp()
+                            BottomBarScreen.FINISHED -> navController.navigate(Screen.AllFinishedNotes) {
+                                popUpToNoteSearchScreen(inclusive = true)
+                            }
+
+                            BottomBarScreen.SEARCH -> {}
+                            BottomBarScreen.SETTINGS -> navController.navigate(Screen.Settings) {
+                                popUpToNoteSearchScreen(inclusive = true)
                             }
                         }
-                    }
-                },
-                onNoteClick = { id, type ->
-                    navController.navigateToNoteDetailsScreen(id, type.toUI())
-                },
-            )
+                    },
+                )
+            }
         }
 
         composable<Screen.Settings> {
@@ -142,7 +165,7 @@ fun Navigation() {
                             }
                         }
 
-                        BottomBarScreen.SEARCH -> navController.navigate(Screen.SearchNotes) {
+                        BottomBarScreen.SEARCH -> navController.navigateToNoteSearchScreen {
                             popUpTo(Screen.Settings) {
                                 inclusive = true
                             }

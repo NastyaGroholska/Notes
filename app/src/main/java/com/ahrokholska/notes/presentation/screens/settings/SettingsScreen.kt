@@ -97,7 +97,7 @@ fun SettingsScreenContent(
             topBar = {
                 TopBarWithTitle(
                     modifier = Modifier.statusBarsPadding(),
-                    title = stringResource(R.string.settings),
+                    title = stringResource(com.ahrokholska.presentation.R.string.settings),
                     onBackClick = onBackClick
                 )
             }
