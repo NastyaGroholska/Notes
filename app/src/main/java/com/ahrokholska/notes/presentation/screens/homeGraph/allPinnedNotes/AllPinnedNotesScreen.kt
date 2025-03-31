@@ -1,17 +1,21 @@
 package com.ahrokholska.notes.presentation.screens.homeGraph.allPinnedNotes
 
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ahrokholska.note_presentation.composable.NotePreviewCard
+import com.ahrokholska.note_presentation.composable.NotesGrid
 import com.ahrokholska.note_presentation.model.NotePreview
 import com.ahrokholska.note_presentation.model.NoteType
 import com.ahrokholska.note_presentation.theme.noteColors
 import com.ahrokholska.notes.R
-import com.ahrokholska.notes.presentation.common.NotePreviewCard
-import com.ahrokholska.notes.presentation.screens.homeGraph.NotesGridSimpleTopBar
+import com.ahrokholska.presentation.composable.TopBarWithTitle
+import com.ahrokholska.presentation.theme.background
 
 @Composable
 fun AllPinnedNotesScreen(
@@ -32,9 +36,15 @@ fun AllPinnedNotesScreenContent(
     onBackClick: () -> Unit = {},
     onNoteClick: (Int, NoteType) -> Unit = { _, _ -> }
 ) {
-    NotesGridSimpleTopBar(
-        title = stringResource(R.string.pinned_notes),
-        onBackClick = onBackClick
+    NotesGrid(
+        background = background,
+        topBar = {
+            TopBarWithTitle(
+                modifier = Modifier.statusBarsPadding(),
+                title = stringResource(R.string.pinned_notes),
+                onBackClick = onBackClick
+            )
+        }
     ) {
         items(notes) { note ->
             NotePreviewCard(

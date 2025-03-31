@@ -1,10 +1,11 @@
-package com.ahrokholska.notes.presentation.common.notes
+package com.ahrokholska.note_presentation.composable.notes
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,9 +13,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,17 +27,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.ahrokholska.note_presentation.composable.GuidanceImage
+import com.ahrokholska.note_presentation.composable.contentPadding
+import com.ahrokholska.note_presentation.composable.noteCornerRadius
+import com.ahrokholska.note_presentation.composable.noteWidth
 import com.ahrokholska.note_presentation.model.NoteType
+import com.ahrokholska.note_presentation.theme.BlackAlpha20
 import com.ahrokholska.note_presentation.theme.noteColors
-import com.ahrokholska.notes.presentation.theme.BlackAlpha20
 
 @Composable
-fun GuidanceNote(
+fun BuySomethingNote(
     modifier: Modifier = Modifier,
     title: String,
-    body: String,
-    image: String,
+    items: List<Pair<Boolean, String>>,
     color: Color,
     onNoteClick: () -> Unit = {},
     shouldShowNoteType: Boolean = true
@@ -61,19 +66,21 @@ fun GuidanceNote(
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(16.dp))
-            GuidanceImage(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(8.dp))
-                    .height(80.dp),
-                image = image
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = body,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.secondary
-            )
+            items.forEach { item ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 0.dp) {
+                        Checkbox(checked = item.first, onCheckedChange = {}, enabled = false)
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = item.second,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
         }
         if (shouldShowNoteType) {
             Text(
@@ -84,7 +91,7 @@ fun GuidanceNote(
                         shape = RoundedCornerShape(0.dp, 0.dp, noteCornerRadius, noteCornerRadius)
                     )
                     .padding(12.dp),
-                text = stringResource(id = NoteType.Guidance.title),
+                text = stringResource(id = NoteType.BuyingSomething.title),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.secondary
             )
@@ -94,15 +101,20 @@ fun GuidanceNote(
 
 @Preview
 @Composable
-private fun GuidanceNotePreview() {
-    GuidanceNote(
+private fun BuySomethingPreview() {
+    BuySomethingNote(
         modifier = Modifier
             .fillMaxHeight()
             .padding(horizontal = contentPadding)
             .width(noteWidth),
-        title = "\uD83D\uDCA1 New Product Idea Design",
-        body = "Create a mobile app UI",
-        image = "",
+        title = "\uD83D\uDED2 Monthly Needs",
+        items = listOf(
+            true to "Create a mobile app UI",
+            false to "Create a mo\n" +
+                    "bile app\n" +
+                    " UI",
+            true to "Create a mobile app UI",
+        ),
         color = noteColors[4]
     )
 }

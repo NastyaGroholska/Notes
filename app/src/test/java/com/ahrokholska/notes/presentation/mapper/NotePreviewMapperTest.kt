@@ -7,10 +7,11 @@ import com.ahrokholska.notes.getEmptyGoalsNote
 import com.ahrokholska.notes.getEmptyGuidanceNote
 import com.ahrokholska.notes.getEmptyInterestingIdeaNote
 import com.ahrokholska.notes.getEmptyRoutineTasksNote
+import com.ahrokholska.presentation_domain_mapper.toUI
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class NotePreviewMapperTest {
+class NotePreviewMapperTest {   //TODO move
     @Test
     fun `InterestingIdea domain is mapped to InterestingIdea presentation`() {
         val note = getEmptyInterestingIdeaNote()

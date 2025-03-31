@@ -1,9 +1,7 @@
-package com.ahrokholska.notes.presentation.mapper
+package com.ahrokholska.presentation_domain_mapper
 
 import com.ahrokholska.note_presentation.model.NotePreview
 import com.ahrokholska.note_presentation.theme.noteColors
-import com.ahrokholska.presentation_domain_mapper.toPresentation
-import com.ahrokholska.presentation_domain_mapper.toTaskPresentation
 
 fun com.ahrokholska.api.model.NotePreview.toUI(index: Int) = when (this) {
     is com.ahrokholska.api.model.NotePreview.BuyingSomething -> toUI(index, true)

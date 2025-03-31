@@ -18,6 +18,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.ahrokholska.finished_notes.presentation.navigateToAllFinishedNotesScreen
+import com.ahrokholska.finished_notes.presentation.noteAllFinishedNotesScreen
+import com.ahrokholska.finished_notes.presentation.popUpToAllFinishedNotesScreen
 import com.ahrokholska.note_details.presentation.navigation.navigateToNoteDetailsScreen
 import com.ahrokholska.note_details.presentation.navigation.noteDetailsScreen
 import com.ahrokholska.note_search.presentation.navigateToNoteSearchScreen
@@ -27,7 +30,6 @@ import com.ahrokholska.notes.presentation.common.bottomBar.BottomAppBar
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
 import com.ahrokholska.notes.presentation.screens.createNewNotes.fill.CreateNoteScreen
 import com.ahrokholska.notes.presentation.screens.createNewNotes.type.SelectNoteTypeScreen
-import com.ahrokholska.notes.presentation.screens.finishedNotes.FinishedNotesScreen
 import com.ahrokholska.notes.presentation.screens.homeGraph.allNotes.AllNotesScreen
 import com.ahrokholska.notes.presentation.screens.homeGraph.allPinnedNotes.AllPinnedNotesScreen
 import com.ahrokholska.notes.presentation.screens.homeGraph.home.HomeScreen
@@ -44,7 +46,7 @@ fun Navigation() {
                     onScreenClick = {
                         when (it) {
                             BottomBarScreen.HOME -> {}
-                            BottomBarScreen.FINISHED -> navController.navigate(Screen.AllFinishedNotes)
+                            BottomBarScreen.FINISHED -> navController.navigateToAllFinishedNotesScreen()
                             BottomBarScreen.SEARCH -> navController.navigateToNoteSearchScreen()
                             BottomBarScreen.SETTINGS -> navController.navigate(Screen.Settings)
                         }
@@ -72,34 +74,43 @@ fun Navigation() {
             }
         }
 
-        composable<Screen.AllFinishedNotes> {
-            FinishedNotesScreen(
-                onNoteClick = navController::navigateToNoteDetailsScreen,
-                onPlusClick = {
-                    navController.navigate(Screen.CreateNewNotesGraph) {
-                        popUpTo(Screen.AllFinishedNotes) {
-                            inclusive = true
-                        }
-                    }
-                },
-                onScreenClick = {
-                    when (it) {
-                        BottomBarScreen.HOME -> navController.navigateUp()
-                        BottomBarScreen.FINISHED -> {}
-                        BottomBarScreen.SEARCH -> navController.navigateToNoteSearchScreen {
-                            popUpTo(Screen.AllFinishedNotes) {
-                                inclusive = true
-                            }
-                        }
+        noteAllFinishedNotesScreen(onNoteClick = navController::navigateToNoteDetailsScreen) { content ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .navigationBarsPadding(),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                var bottomBarHeight by remember { mutableStateOf(0.dp) }
+                val density = LocalDensity.current
 
-                        BottomBarScreen.SETTINGS -> navController.navigate(Screen.Settings) {
-                            popUpTo(Screen.AllFinishedNotes) {
-                                inclusive = true
+                content(bottomBarHeight)
+
+                BottomAppBar(
+                    modifier = Modifier.onGloballyPositioned {
+                        bottomBarHeight = with(density) { it.size.height.toDp() }
+                    },
+                    currentScreen = BottomBarScreen.FINISHED,
+                    onPlusClick = {
+                        navController.navigate(Screen.CreateNewNotesGraph) {
+                            popUpToAllFinishedNotesScreen(inclusive = true)
+                        }
+                    },
+                    onScreenClick = {
+                        when (it) {
+                            BottomBarScreen.HOME -> navController.navigateUp()
+                            BottomBarScreen.FINISHED -> {}
+                            BottomBarScreen.SEARCH -> navController.navigateToNoteSearchScreen {
+                                popUpToAllFinishedNotesScreen(inclusive = true)
+                            }
+
+                            BottomBarScreen.SETTINGS -> navController.navigate(Screen.Settings) {
+                                popUpToAllFinishedNotesScreen(inclusive = true)
                             }
                         }
-                    }
-                },
-            )
+                    },
+                )
+            }
         }
 
         noteDetailsScreen(onExit = navController::navigateUp)
@@ -132,7 +143,7 @@ fun Navigation() {
                     onScreenClick = {
                         when (it) {
                             BottomBarScreen.HOME -> navController.navigateUp()
-                            BottomBarScreen.FINISHED -> navController.navigate(Screen.AllFinishedNotes) {
+                            BottomBarScreen.FINISHED -> navController.navigateToAllFinishedNotesScreen {
                                 popUpToNoteSearchScreen(inclusive = true)
                             }
 
@@ -159,7 +170,7 @@ fun Navigation() {
                 onScreenClick = {
                     when (it) {
                         BottomBarScreen.HOME -> navController.navigateUp()
-                        BottomBarScreen.FINISHED -> navController.navigate(Screen.AllFinishedNotes) {
+                        BottomBarScreen.FINISHED -> navController.navigateToAllFinishedNotesScreen {
                             popUpTo(Screen.Settings) {
                                 inclusive = true
                             }

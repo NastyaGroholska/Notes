@@ -10,3 +10,5 @@ val noteColors = listOf(
     Color(0xFFFDEBAB),
     Color(0xFFF7F6D4)
 )
+
+val BlackAlpha20 = Color(0x33000000)

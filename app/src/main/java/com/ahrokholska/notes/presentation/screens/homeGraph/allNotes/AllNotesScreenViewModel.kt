@@ -9,7 +9,7 @@ import com.ahrokholska.notes.domain.useCase.getAllNotes.GetAllGoalsNotesUseCase
 import com.ahrokholska.notes.domain.useCase.getAllNotes.GetAllGuidanceNotesUseCase
 import com.ahrokholska.notes.domain.useCase.getAllNotes.GetAllInterestingIdeaNotesUseCase
 import com.ahrokholska.notes.domain.useCase.getAllNotes.GetAllRoutineTasksNotesUseCase
-import com.ahrokholska.notes.presentation.mapper.toUI
+import com.ahrokholska.presentation_domain_mapper.toUI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flowOf
@@ -26,7 +26,7 @@ class AllNotesScreenViewModel @Inject constructor(
     getAllInterestingIdeaNotesUseCase: GetAllInterestingIdeaNotesUseCase,
     getAllRoutineTasksNotesUseCase: GetAllRoutineTasksNotesUseCase,
 ) : ViewModel() {
-    val type = savedStateHandle.get<NoteType>("type")
+    val type = savedStateHandle.get<NoteType>("type")   //TODO
 
     val notes = when (type) {
         NoteType.InterestingIdea -> getAllInterestingIdeaNotesUseCase()

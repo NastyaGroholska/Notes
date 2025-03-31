@@ -9,7 +9,7 @@ import com.ahrokholska.notes.domain.useCase.getLast10Notes.GetLast10GoalsNotesUs
 import com.ahrokholska.notes.domain.useCase.getLast10Notes.GetLast10GuidanceNotesUseCase
 import com.ahrokholska.notes.domain.useCase.getLast10Notes.GetLast10InterestingIdeaNotesUseCase
 import com.ahrokholska.notes.domain.useCase.getLast10Notes.GetLast10RoutineTasksNotesUseCase
-import com.ahrokholska.notes.presentation.mapper.toUI
+import com.ahrokholska.presentation_domain_mapper.toUI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -28,7 +28,7 @@ class HomeScreenViewModel @Inject constructor(
     val pinnedNotes = getPinnedNotesUseCase().map { list ->
         list.mapIndexed { index, item ->
             when (item) {
-                is NotePreview.BuyingSomething -> item.toUI(
+                is NotePreview.BuyingSomething -> item.toUI(    //TODO
                     index = index, inCombinedList = true
                 )
 

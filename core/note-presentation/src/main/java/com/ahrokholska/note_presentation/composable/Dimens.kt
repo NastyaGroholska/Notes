@@ -1,4 +1,4 @@
-package com.ahrokholska.notes.presentation.common.notes
+package com.ahrokholska.note_presentation.composable
 
 import androidx.compose.ui.unit.dp
 

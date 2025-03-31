@@ -1,4 +1,4 @@
-package com.ahrokholska.notes.presentation.common.notes
+package com.ahrokholska.note_presentation.composable.notes
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,12 +21,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.ahrokholska.note_presentation.R
 import com.ahrokholska.note_presentation.composable.RoutineTasksSubNote
+import com.ahrokholska.note_presentation.composable.contentPadding
+import com.ahrokholska.note_presentation.composable.noteCornerRadius
+import com.ahrokholska.note_presentation.composable.noteWidth
 import com.ahrokholska.note_presentation.model.Note
 import com.ahrokholska.note_presentation.model.NoteType
+import com.ahrokholska.note_presentation.theme.BlackAlpha20
 import com.ahrokholska.note_presentation.theme.noteColors
-import com.ahrokholska.notes.R
-import com.ahrokholska.notes.presentation.theme.BlackAlpha20
 
 @Composable
 fun RoutineTasksNote(

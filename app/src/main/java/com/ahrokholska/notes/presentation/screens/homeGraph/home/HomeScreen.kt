@@ -49,10 +49,10 @@ import com.ahrokholska.note_presentation.model.NotePreview
 import com.ahrokholska.note_presentation.model.NoteType
 import com.ahrokholska.note_presentation.theme.noteColors
 import com.ahrokholska.notes.R
-import com.ahrokholska.notes.presentation.common.NotePreviewCard
+import com.ahrokholska.note_presentation.composable.NotePreviewCard
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomAppBar
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
-import com.ahrokholska.notes.presentation.common.notes.noteWidth
+import com.ahrokholska.note_presentation.composable.noteWidth
 import com.ahrokholska.presentation.theme.background
 
 @Composable
@@ -263,7 +263,7 @@ private fun NoteList(
                 NotePreviewCard(
                     modifier = Modifier
                         .fillMaxHeight()
-                        .padding(horizontal = com.ahrokholska.notes.presentation.common.notes.contentPadding)
+                        .padding(horizontal = com.ahrokholska.note_presentation.composable.contentPadding)
                         .width(noteWidth),
                     note = note,
                     onNoteClick = onNoteClick,

@@ -36,19 +36,9 @@
     <!--RoutineTasksScreen-->
     <string name="title">Title</string>
     <string name="add_sub_notes">+ Add Sub Notes</string>
-    <!--TODO remove 2 lines-->
-    <string name="active_sub_notes">ACTIVE SUB NOTES</string>
-    <string name="completed_sub_notes">COMPLETED SUB NOTES</string>
 
     <!--AllNotesScreen-->
     <string name="notes">Notes</string>
-
-    <!--FinishedNotesScreen-->
-    <string name="finished_notes">Finished Notes</string>
-    <string name="amazing_journey">Amazing Journey!</string>
-    <string name="you_have_successfully_finished_notes">You have successfully finished %1$s notes</string>
-    <string name="no_finished_notes_yet">No Finished Notes Yet</string>
-    <string name="once_you_create_a_note_and_finish_it">Once you create a note and finish it, it will be appeared on this screen. So, let’s start your journey!</string>
 
     <!--SettingsScreen-->
     <string name="edit_profile">Edit Profile</string>

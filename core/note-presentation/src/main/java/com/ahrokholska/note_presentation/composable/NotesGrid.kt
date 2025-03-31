@@ -1,21 +1,21 @@
-package com.ahrokholska.notes.presentation.screens.homeGraph
+package com.ahrokholska.note_presentation.composable
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridScope
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.ahrokholska.presentation.composable.TopBarWithTitle
-import com.ahrokholska.presentation.theme.background
 
 @Composable
 fun NotesGrid(
+    background: Color = MaterialTheme.colorScheme.background,
     topBar: @Composable () -> Unit = {},
     content: LazyStaggeredGridScope.() -> Unit
 ) {
@@ -36,22 +36,4 @@ fun NotesGrid(
             content()
         }
     }
-}
-
-@Composable
-fun NotesGridSimpleTopBar(
-    title: String,
-    onBackClick: () -> Unit = {},
-    content: LazyStaggeredGridScope.() -> Unit
-) {
-    NotesGrid(
-        topBar = {
-            TopBarWithTitle(
-                modifier = Modifier.statusBarsPadding(),
-                title = title,
-                onBackClick = onBackClick
-            )
-        },
-        content = content
-    )
 }
