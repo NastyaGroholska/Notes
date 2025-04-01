@@ -1,18 +1,6 @@
 package com.ahrokholska.notes.presentation.navigation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
@@ -26,7 +14,7 @@ import com.ahrokholska.note_details.presentation.navigation.noteDetailsScreen
 import com.ahrokholska.note_search.presentation.navigateToNoteSearchScreen
 import com.ahrokholska.note_search.presentation.noteSearchScreen
 import com.ahrokholska.note_search.presentation.popUpToNoteSearchScreen
-import com.ahrokholska.notes.presentation.common.bottomBar.BottomAppBar
+import com.ahrokholska.notes.presentation.common.MainScreenDecoration
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
 import com.ahrokholska.notes.presentation.screens.createNewNotes.fill.CreateNoteScreen
 import com.ahrokholska.notes.presentation.screens.createNewNotes.type.SelectNoteTypeScreen
@@ -75,42 +63,27 @@ fun Navigation() {
         }
 
         noteAllFinishedNotesScreen(onNoteClick = navController::navigateToNoteDetailsScreen) { content ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .navigationBarsPadding(),
-                contentAlignment = Alignment.BottomCenter
-            ) {
-                var bottomBarHeight by remember { mutableStateOf(0.dp) }
-                val density = LocalDensity.current
-
-                content(bottomBarHeight)
-
-                BottomAppBar(
-                    modifier = Modifier.onGloballyPositioned {
-                        bottomBarHeight = with(density) { it.size.height.toDp() }
-                    },
-                    currentScreen = BottomBarScreen.FINISHED,
-                    onPlusClick = {
-                        navController.navigate(Screen.CreateNewNotesGraph) {
+            MainScreenDecoration(
+                content = content,
+                onPlusClick = {
+                    navController.navigate(Screen.CreateNewNotesGraph) {
+                        popUpToAllFinishedNotesScreen(inclusive = true)
+                    }
+                },
+                onScreenClick = {
+                    when (it) {
+                        BottomBarScreen.HOME -> navController.navigateUp()
+                        BottomBarScreen.FINISHED -> {}
+                        BottomBarScreen.SEARCH -> navController.navigateToNoteSearchScreen {
                             popUpToAllFinishedNotesScreen(inclusive = true)
                         }
-                    },
-                    onScreenClick = {
-                        when (it) {
-                            BottomBarScreen.HOME -> navController.navigateUp()
-                            BottomBarScreen.FINISHED -> {}
-                            BottomBarScreen.SEARCH -> navController.navigateToNoteSearchScreen {
-                                popUpToAllFinishedNotesScreen(inclusive = true)
-                            }
 
-                            BottomBarScreen.SETTINGS -> navController.navigate(Screen.Settings) {
-                                popUpToAllFinishedNotesScreen(inclusive = true)
-                            }
+                        BottomBarScreen.SETTINGS -> navController.navigate(Screen.Settings) {
+                            popUpToAllFinishedNotesScreen(inclusive = true)
                         }
-                    },
-                )
-            }
+                    }
+                },
+            )
         }
 
         noteDetailsScreen(onExit = navController::navigateUp)
@@ -119,42 +92,27 @@ fun Navigation() {
             onExit = navController::navigateUp,
             onNoteClick = navController::navigateToNoteDetailsScreen,
         ) { content ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .navigationBarsPadding(),
-                contentAlignment = Alignment.BottomCenter
-            ) {
-                var bottomBarHeight by remember { mutableStateOf(0.dp) }
-                val density = LocalDensity.current
-
-                content(bottomBarHeight)
-
-                BottomAppBar(
-                    modifier = Modifier.onGloballyPositioned {
-                        bottomBarHeight = with(density) { it.size.height.toDp() }
-                    },
-                    currentScreen = BottomBarScreen.SEARCH,
-                    onPlusClick = {
-                        navController.navigate(Screen.CreateNewNotesGraph) {
+            MainScreenDecoration(
+                content = content,
+                onPlusClick = {
+                    navController.navigate(Screen.CreateNewNotesGraph) {
+                        popUpToNoteSearchScreen(inclusive = true)
+                    }
+                },
+                onScreenClick = {
+                    when (it) {
+                        BottomBarScreen.HOME -> navController.navigateUp()
+                        BottomBarScreen.FINISHED -> navController.navigateToAllFinishedNotesScreen {
                             popUpToNoteSearchScreen(inclusive = true)
                         }
-                    },
-                    onScreenClick = {
-                        when (it) {
-                            BottomBarScreen.HOME -> navController.navigateUp()
-                            BottomBarScreen.FINISHED -> navController.navigateToAllFinishedNotesScreen {
-                                popUpToNoteSearchScreen(inclusive = true)
-                            }
 
-                            BottomBarScreen.SEARCH -> {}
-                            BottomBarScreen.SETTINGS -> navController.navigate(Screen.Settings) {
-                                popUpToNoteSearchScreen(inclusive = true)
-                            }
+                        BottomBarScreen.SEARCH -> {}
+                        BottomBarScreen.SETTINGS -> navController.navigate(Screen.Settings) {
+                            popUpToNoteSearchScreen(inclusive = true)
                         }
-                    },
-                )
-            }
+                    }
+                },
+            )
         }
 
         composable<Screen.Settings> {
