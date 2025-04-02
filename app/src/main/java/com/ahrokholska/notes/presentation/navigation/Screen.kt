@@ -17,14 +17,5 @@ sealed class Screen {
     }
 
     @Serializable
-    data object CreateNewNotesGraph : Screen() {
-        @Serializable
-        data object SelectNoteType : Screen()
-
-        @Serializable
-        data class CreateNote(val type: NoteType) : Screen()
-    }
-
-    @Serializable
     data object Settings : Screen()
 }

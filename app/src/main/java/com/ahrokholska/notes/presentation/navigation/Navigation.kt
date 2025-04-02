@@ -6,6 +6,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.ahrokholska.create_note.presentation.createNewNotesGraph
+import com.ahrokholska.create_note.presentation.navigateToCreateNewNotesGraph
+import com.ahrokholska.create_note.presentation.popCreateNewNotesGraph
 import com.ahrokholska.finished_notes.presentation.navigateToAllFinishedNotesScreen
 import com.ahrokholska.finished_notes.presentation.noteAllFinishedNotesScreen
 import com.ahrokholska.finished_notes.presentation.popUpToAllFinishedNotesScreen
@@ -16,8 +19,6 @@ import com.ahrokholska.note_search.presentation.noteSearchScreen
 import com.ahrokholska.note_search.presentation.popUpToNoteSearchScreen
 import com.ahrokholska.notes.presentation.common.MainScreenDecoration
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
-import com.ahrokholska.notes.presentation.screens.createNewNotes.fill.CreateNoteScreen
-import com.ahrokholska.notes.presentation.screens.createNewNotes.type.SelectNoteTypeScreen
 import com.ahrokholska.notes.presentation.screens.homeGraph.allNotes.AllNotesScreen
 import com.ahrokholska.notes.presentation.screens.homeGraph.allPinnedNotes.AllPinnedNotesScreen
 import com.ahrokholska.notes.presentation.screens.homeGraph.home.HomeScreen
@@ -30,7 +31,7 @@ fun Navigation() {
         navigation<Screen.HomeGraph>(startDestination = Screen.HomeGraph.Home) {
             composable<Screen.HomeGraph.Home> {
                 HomeScreen(
-                    onPlusClick = { navController.navigate(Screen.CreateNewNotesGraph) },
+                    onPlusClick = navController::navigateToCreateNewNotesGraph,
                     onScreenClick = {
                         when (it) {
                             BottomBarScreen.HOME -> {}
@@ -66,7 +67,7 @@ fun Navigation() {
             MainScreenDecoration(
                 content = content,
                 onPlusClick = {
-                    navController.navigate(Screen.CreateNewNotesGraph) {
+                    navController.navigateToCreateNewNotesGraph {
                         popUpToAllFinishedNotesScreen(inclusive = true)
                     }
                 },
@@ -95,7 +96,7 @@ fun Navigation() {
             MainScreenDecoration(
                 content = content,
                 onPlusClick = {
-                    navController.navigate(Screen.CreateNewNotesGraph) {
+                    navController.navigateToCreateNewNotesGraph {
                         popUpToNoteSearchScreen(inclusive = true)
                     }
                 },
@@ -119,7 +120,7 @@ fun Navigation() {
             SettingsScreen(
                 onBackClick = navController::navigateUp,
                 onPlusClick = {
-                    navController.navigate(Screen.CreateNewNotesGraph) {
+                    navController.navigateToCreateNewNotesGraph {
                         popUpTo(Screen.Settings) {
                             inclusive = true
                         }
@@ -146,28 +147,10 @@ fun Navigation() {
             )
         }
 
-        navigation<Screen.CreateNewNotesGraph>(startDestination = Screen.CreateNewNotesGraph.SelectNoteType) {
-            composable<Screen.CreateNewNotesGraph.SelectNoteType> {
-                SelectNoteTypeScreen(
-                    onBackClick = navController::navigateUp,
-                    onTypeClick = {
-                        navController.navigate(Screen.CreateNewNotesGraph.CreateNote(it))
-                    }
-                )
-            }
-
-            composable<Screen.CreateNewNotesGraph.CreateNote> {
-                val args = it.toRoute<Screen.CreateNewNotesGraph.CreateNote>()
-                CreateNoteScreen(
-                    type = args.type,
-                    onBackClick = navController::navigateUp,
-                    onNoteSaved = {
-                        navController.popBackStack(
-                            route = Screen.CreateNewNotesGraph,
-                            inclusive = true
-                        )
-                    })
-            }
-        }
+        createNewNotesGraph(
+            navController = navController,
+            onExit = navController::navigateUp,
+            onNoteSaved = navController::popCreateNewNotesGraph
+        )
     }
 }

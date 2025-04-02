@@ -1,0 +1,31 @@
+<resources>
+    <!--SelectNoteTypeScreen-->
+    <string name="new_notes">New Notes</string>
+    <string name="what_do_you_want_to_note">What Do You Want to Note?</string>
+
+    <!--CreateNoteScreen-->
+    <string name="save">Save</string>
+
+    <!--InterestingIdeaNoteScreen-->
+    <string name="new_idea">💡 New Idea</string>
+    <string name="your_idea">Your idea</string>
+
+    <!--BuySomethingNoteScreen-->
+    <string name="monthly_needs">🛒 Monthly Needs</string>
+    <string name="enter_item_name">Enter item name</string>
+    <string name="add_checkbox">+ Add checkbox</string>
+    <string name="empty_name">empty name</string>
+
+    <!--GoalsNoteScreen-->
+    <string name="goal">✨ Goal</string>
+    <string name="add_subtask">+ Add subtask</string>
+    <string name="add_main_task">+ Add main task</string>
+
+    <!--GuidanceNoteScreen-->
+    <string name="guidance_title">📋 Guidance</string>
+    <string name="your_guidance">Your guidance</string>
+
+    <!--RoutineTasksScreen-->
+    <string name="title">Title</string>
+    <string name="add_sub_notes">+ Add Sub Notes</string>
+</resources>
