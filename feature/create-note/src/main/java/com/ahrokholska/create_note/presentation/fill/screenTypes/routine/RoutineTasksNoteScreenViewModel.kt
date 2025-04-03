@@ -48,32 +48,26 @@ internal class RoutineTasksNoteScreenViewModel @Inject constructor(
         }
     }
 
-    fun saveNote(items: List<Pair<TextAndError, TextAndError>>, onSuccess: () -> Unit) = saveNote {
+    fun saveNote(onSuccess: () -> Unit) = super.saveNote {
         var hasErrors = false
-        items.forEachIndexed { index, pair ->   //TODO
+        val validatedList = _items.value.toMutableList()
+        validatedList.forEachIndexed { index, pair ->
             if (pair.first.text.isBlank()) {
                 hasErrors = true
-                _items.update {
-                    it.toMutableList().apply {
-                        this[index] =
-                            this[index].copy(first = this[index].first.copy(error = true))
-                    }
-                }
+                validatedList[index] =
+                    validatedList[index].copy(first = validatedList[index].first.copy(error = true))
             }
             if (pair.second.text.isBlank()) {
                 hasErrors = true
-                _items.update {
-                    it.toMutableList().apply {
-                        this[index] =
-                            this[index].copy(second = this[index].second.copy(error = true))
-                    }
-                }
+                validatedList[index] =
+                    validatedList[index].copy(second = validatedList[index].second.copy(error = true))
             }
         }
+        _items.update { validatedList }
         if (!hasErrors) {
             saveNoteUseCase(
                 Note.RoutineTasks(
-                    active = items.map {
+                    active = validatedList.map {
                         Note.RoutineTasks.SubNote(
                             title = it.first.text,
                             text = it.second.text

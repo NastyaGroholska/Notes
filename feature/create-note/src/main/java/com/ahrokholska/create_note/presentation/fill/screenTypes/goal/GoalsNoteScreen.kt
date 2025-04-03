@@ -49,8 +49,8 @@ internal fun GoalsNoteScreen(
         onMainItemChange = viewModel::mainItemChange,
         onSubItemChange = viewModel::subItemChange,
         onBackClick = onBackClick,
-        onSaveClick = { title, tasks ->
-            viewModel.saveNote(title, tasks, onNoteSaved)
+        onSaveClick = { title ->
+            viewModel.saveNote(title, onNoteSaved)
         }
     )
 }
@@ -65,7 +65,7 @@ internal fun GoalsNoteScreenContent(
     onTitleChange: (String) -> Unit = {},
     onMainItemChange: (String, Int) -> Unit = { _, _ -> },
     onSubItemChange: (String, Int, Int) -> Unit = { _, _, _ -> },
-    onSaveClick: (String, List<Pair<TextAndError, List<TextAndError>>>) -> Unit = { _, _ -> },
+    onSaveClick: (String) -> Unit = { },
 ) {
     val adjustedTitle = title.ifEmpty { stringResource(R.string.goal) }
     Scaffold(
@@ -76,7 +76,7 @@ internal fun GoalsNoteScreenContent(
                 onBackClick = onBackClick
             )
         },
-        bottomBar = { BottomBarSave { onSaveClick(adjustedTitle, items) } }
+        bottomBar = { BottomBarSave { onSaveClick(adjustedTitle) } }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier

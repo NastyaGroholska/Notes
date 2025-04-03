@@ -11,11 +11,8 @@ internal open class NoteViewModel : ViewModel() {
     protected fun saveNote(block: suspend () -> Unit) {
         if (isSaving) return
         isSaving = true
-        try {
-            viewModelScope.launch {
-                block()
-            }
-        } finally {
+        viewModelScope.launch {
+            block()
             isSaving = false
         }
     }

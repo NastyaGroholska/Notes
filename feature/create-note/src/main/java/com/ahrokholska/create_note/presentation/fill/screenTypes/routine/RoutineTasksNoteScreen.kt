@@ -49,7 +49,7 @@ internal fun RoutineTasksNoteScreen(
         onItemTitleChange = viewModel::changeItemTitle,
         onItemBodyChange = viewModel::changeItemBody,
         onBackClick = onBackClick,
-        onSaveClick = { viewModel.saveNote(it, onNoteSaved) }
+        onSaveClick = { viewModel.saveNote(onNoteSaved) }
     )
 }
 
@@ -60,7 +60,7 @@ internal fun RoutineTasksNoteScreenContent(
     onAddItemClick: () -> Unit = {},
     onItemTitleChange: (String, Int) -> Unit = { _, _ -> },
     onItemBodyChange: (String, Int) -> Unit = { _, _ -> },
-    onSaveClick: (List<Pair<TextAndError, TextAndError>>) -> Unit = { },
+    onSaveClick: () -> Unit = { },
 ) {
     Scaffold(
         containerColor = background,
@@ -70,7 +70,7 @@ internal fun RoutineTasksNoteScreenContent(
                 onBackClick = onBackClick
             )
         },
-        bottomBar = { BottomBarSave { onSaveClick(items) } }
+        bottomBar = { BottomBarSave { onSaveClick() } }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier

@@ -62,40 +62,31 @@ internal class GoalsNoteScreenViewModel @Inject constructor(private val saveNote
         }
     }
 
-    fun saveNote(
-        title: String,
-        tasks: List<Pair<TextAndError, List<TextAndError>>>,
-        onSuccess: () -> Unit
-    ) = saveNote {
+    fun saveNote(title: String, onSuccess: () -> Unit) = saveNote {
         var hasErrors = false
-        tasks.forEachIndexed { index1, item ->      //TODO
+        val validatedList = _items.value.toMutableList()
+        validatedList.forEachIndexed { index1, item ->
             if (item.first.text.isBlank()) {
                 hasErrors = true
-                _items.update {
-                    it.toMutableList().apply {
-                        this[index1] = this[index1].copy(first = item.first.copy(error = true))
-                    }
-                }
+                validatedList[index1] =
+                    validatedList[index1].copy(first = item.first.copy(error = true))
             }
             item.second.forEachIndexed { index2, subitem ->
                 if (subitem.text.isBlank()) {
                     hasErrors = true
-                    _items.update {
-                        it.toMutableList().apply {
-                            this[index1] = this[index1].copy(
-                                second = this[index1].second.toMutableList()
-                                    .apply { this[index2] = this[index2].copy(error = true) }
-                            )
-                        }
-                    }
+                    validatedList[index1] = validatedList[index1].copy(
+                        second = validatedList[index1].second.toMutableList()
+                            .apply { this[index2] = this[index2].copy(error = true) }
+                    )
                 }
             }
         }
+        _items.update { validatedList }
         if (!hasErrors) {
             saveNoteUseCase(
                 Note.Goals(
                     title = title,
-                    tasks = tasks.map { pair ->
+                    tasks = validatedList.map { pair ->
                         Note.Goals.Task(
                             finished = false,
                             text = pair.first.text
