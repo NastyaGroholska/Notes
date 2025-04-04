@@ -3,9 +3,7 @@ package com.ahrokholska.notes.presentation.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import com.ahrokholska.create_note.presentation.createNewNotesGraph
 import com.ahrokholska.create_note.presentation.navigateToCreateNewNotesGraph
 import com.ahrokholska.create_note.presentation.popCreateNewNotesGraph
@@ -19,48 +17,30 @@ import com.ahrokholska.note_search.presentation.noteSearchScreen
 import com.ahrokholska.note_search.presentation.popUpToNoteSearchScreen
 import com.ahrokholska.notes.presentation.common.MainScreenDecoration
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
-import com.ahrokholska.notes.presentation.screens.homeGraph.allNotes.AllNotesScreen
-import com.ahrokholska.notes.presentation.screens.homeGraph.allPinnedNotes.AllPinnedNotesScreen
-import com.ahrokholska.notes.presentation.screens.homeGraph.home.HomeScreen
 import com.ahrokholska.notes.presentation.screens.settings.SettingsScreen
+import com.ahrokholska.notes_home.presentation.HomeGraph
+import com.ahrokholska.notes_home.presentation.homeGraph
 
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.HomeGraph) {
-        navigation<Screen.HomeGraph>(startDestination = Screen.HomeGraph.Home) {
-            composable<Screen.HomeGraph.Home> {
-                HomeScreen(
-                    onPlusClick = navController::navigateToCreateNewNotesGraph,
-                    onScreenClick = {
-                        when (it) {
-                            BottomBarScreen.HOME -> {}
-                            BottomBarScreen.FINISHED -> navController.navigateToAllFinishedNotesScreen()
-                            BottomBarScreen.SEARCH -> navController.navigateToNoteSearchScreen()
-                            BottomBarScreen.SETTINGS -> navController.navigate(Screen.Settings)
-                        }
-                    },
-                    onNoteClick = navController::navigateToNoteDetailsScreen,
-                    onViewAllClick = { navController.navigate(Screen.HomeGraph.AllNotes(it)) },
-                    onViewAllPinnedClick = { navController.navigate(Screen.HomeGraph.AllPinnedNotes) }
-                )
-            }
-
-            composable<Screen.HomeGraph.AllNotes> {
-                val args = it.toRoute<Screen.HomeGraph.AllNotes>()
-                AllNotesScreen(
-                    type = args.type,
-                    onBackClick = navController::navigateUp,
-                    onNoteClick = navController::navigateToNoteDetailsScreen
-                )
-            }
-
-            composable<Screen.HomeGraph.AllPinnedNotes> {
-                AllPinnedNotesScreen(
-                    onBackClick = navController::navigateUp,
-                    onNoteClick = navController::navigateToNoteDetailsScreen
-                )
-            }
+    NavHost(navController = navController, startDestination = HomeGraph) {
+        homeGraph(
+            navController = navController,
+            onNoteClick = navController::navigateToNoteDetailsScreen
+        ) { content ->
+            MainScreenDecoration(
+                content = content,
+                onPlusClick = navController::navigateToCreateNewNotesGraph,
+                onScreenClick = {
+                    when (it) {
+                        BottomBarScreen.HOME -> {}
+                        BottomBarScreen.FINISHED -> navController.navigateToAllFinishedNotesScreen()
+                        BottomBarScreen.SEARCH -> navController.navigateToNoteSearchScreen()
+                        BottomBarScreen.SETTINGS -> navController.navigate(Screen.Settings)
+                    }
+                },
+            )
         }
 
         noteAllFinishedNotesScreen(onNoteClick = navController::navigateToNoteDetailsScreen) { content ->

@@ -15,7 +15,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object CreateNewNotesGraph {
     @Serializable
-    data object SelectNoteType
+    data object SelectNoteType  //TODO
 
     @Serializable
     data class CreateNote(val type: NoteType)
