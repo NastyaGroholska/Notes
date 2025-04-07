@@ -2,7 +2,6 @@ package com.ahrokholska.notes_home.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ahrokholska.api.model.NotePreview
 import com.ahrokholska.notes_home.domain.useCase.GetPinnedNotesUseCase
 import com.ahrokholska.notes_home.domain.useCase.getLast10Notes.GetLast10BuySomethingNotesUseCase
 import com.ahrokholska.notes_home.domain.useCase.getLast10Notes.GetLast10GoalsNotesUseCase
@@ -27,27 +26,7 @@ internal class HomeScreenViewModel @Inject constructor(
 ) : ViewModel() {
     val pinnedNotes = getPinnedNotesUseCase().map { list ->
         list.mapIndexed { index, item ->
-            when (item) {
-                is NotePreview.BuyingSomething -> item.toUI(    //TODO
-                    index = index, inCombinedList = true
-                )
-
-                is NotePreview.Goals -> item.toUI(
-                    index = index, inCombinedList = true
-                )
-
-                is NotePreview.Guidance -> item.toUI(
-                    index = index, inCombinedList = true
-                )
-
-                is NotePreview.InterestingIdea -> item.toUI(
-                    index = index, inCombinedList = true
-                )
-
-                is NotePreview.RoutineTasks -> item.toUI(
-                    index = index, inCombinedList = true
-                )
-            }
+            item.toUI(index)
         }
     }.stateIn(viewModelScope, SharingStarted.Lazily, null)
 

@@ -13,12 +13,12 @@ import com.ahrokholska.note_presentation.model.NoteType
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object CreateNewNotesGraph {
+internal data object CreateNewNotesGraph {
     @Serializable
-    data object SelectNoteType  //TODO
+    internal data object SelectNoteType
 
     @Serializable
-    data class CreateNote(val type: NoteType)
+    internal data class CreateNote(val type: NoteType)
 }
 
 fun NavGraphBuilder.createNewNotesGraph(
