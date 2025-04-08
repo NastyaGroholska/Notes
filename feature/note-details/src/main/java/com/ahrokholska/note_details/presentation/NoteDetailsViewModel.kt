@@ -1,6 +1,5 @@
 package com.ahrokholska.note_details.presentation
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ahrokholska.api.model.NoteType
@@ -11,14 +10,13 @@ import com.ahrokholska.note_details.domain.useCase.UnPinNoteUseCase
 import kotlinx.coroutines.launch
 
 internal open class NoteDetailsViewModel(
-    savedStateHandle: SavedStateHandle,
+    protected val id: Int,
     private val type: NoteType,
     private val pinNoteUseCase: PinNoteUseCase,
     private val unPinNoteUseCase: UnPinNoteUseCase,
     private val deleteNoteUseCase: DeleteNoteUseCase,
     private val finishNoteUseCase: FinishNoteUseCase,
 ) : ViewModel() {
-    protected val id = savedStateHandle.get<Int>("id") ?: 0     //TODO change
     protected var isDeleting = false
 
     fun deleteNote(onSuccess: () -> Unit) {

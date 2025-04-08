@@ -1,6 +1,5 @@
 package com.ahrokholska.note_details.presentation.noteTypes.goal
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.ahrokholska.api.model.NoteType
 import com.ahrokholska.note_details.domain.useCase.ChangeGoalsSubtaskCheckUseCase
@@ -12,16 +11,18 @@ import com.ahrokholska.note_details.domain.useCase.UnPinNoteUseCase
 import com.ahrokholska.note_details.domain.useCase.getNoteDetails.GetGoalsNoteDetailsUseCase
 import com.ahrokholska.note_details.presentation.NoteDetailsViewModel
 import com.ahrokholska.presentation_domain_mapper.toPresentation
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-internal class GoalsDetailsScreenViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+@HiltViewModel(assistedFactory = GoalsDetailsScreenViewModel.Factory::class)
+internal class GoalsDetailsScreenViewModel @AssistedInject constructor(
+    @Assisted id: Int,
     pinNoteUseCase: PinNoteUseCase,
     unPinNoteUseCase: UnPinNoteUseCase,
     getGoalsNoteDetailsUseCase: GetGoalsNoteDetailsUseCase,
@@ -30,8 +31,7 @@ internal class GoalsDetailsScreenViewModel @Inject constructor(
     private val changeGoalsTaskCheckUseCase: ChangeGoalsTaskCheckUseCase,
     private val changeGoalsSubtaskCheckUseCase: ChangeGoalsSubtaskCheckUseCase
 ) : NoteDetailsViewModel(
-    savedStateHandle, NoteType.Goals, pinNoteUseCase, unPinNoteUseCase, deleteNoteUseCase,
-    finishNoteUseCase
+    id, NoteType.Goals, pinNoteUseCase, unPinNoteUseCase, deleteNoteUseCase, finishNoteUseCase
 ) {
     val note = getGoalsNoteDetailsUseCase(id)
         .map { it?.toPresentation() }
@@ -49,5 +49,10 @@ internal class GoalsDetailsScreenViewModel @Inject constructor(
         viewModelScope.launch {
             changeGoalsSubtaskCheckUseCase(id, taskIndex, subtaskIndex, checked)
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(id: Int): GoalsDetailsScreenViewModel
     }
 }

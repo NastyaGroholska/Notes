@@ -3,6 +3,7 @@ package com.ahrokholska.notes_home.presentation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -10,6 +11,7 @@ import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import com.ahrokholska.note_presentation.model.NoteType
 import com.ahrokholska.notes_home.presentation.allNotes.AllNotesScreen
+import com.ahrokholska.notes_home.presentation.allNotes.AllNotesScreenViewModel
 import com.ahrokholska.notes_home.presentation.allPinnedNotes.AllPinnedNotesScreen
 import com.ahrokholska.notes_home.presentation.home.HomeScreen
 import kotlinx.serialization.Serializable
@@ -44,8 +46,12 @@ fun NavGraphBuilder.homeGraph(
 
         composable<HomeGraph.AllNotes> {
             val args = it.toRoute<HomeGraph.AllNotes>()
+            val type = args.type
             AllNotesScreen(
-                type = args.type,
+                viewModel = hiltViewModel<AllNotesScreenViewModel, AllNotesScreenViewModel.Factory>(
+                    creationCallback = { factory -> factory.create(type = type) }
+                ),
+                type = type,
                 onBackClick = navController::navigateUp,
                 onNoteClick = onNoteClick
             )

@@ -15,6 +15,7 @@ fun NavGraphBuilder.noteDetailsScreen(onExit: () -> Unit) {
     composable<NoteDetails> {
         val args = it.toRoute<NoteDetails>()
         NoteDetailsScreen(
+            id = args.id,
             type = args.type,
             onBackClick = onExit
         )

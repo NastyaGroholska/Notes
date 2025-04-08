@@ -1,6 +1,5 @@
 package com.ahrokholska.note_details.presentation.noteTypes.buy
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.ahrokholska.api.model.NoteType
 import com.ahrokholska.note_details.domain.useCase.ChangeBuySomethingItemCheckUseCase
@@ -11,16 +10,18 @@ import com.ahrokholska.note_details.domain.useCase.UnPinNoteUseCase
 import com.ahrokholska.note_details.domain.useCase.getNoteDetails.GetBuySomethingNoteDetailsUseCase
 import com.ahrokholska.note_details.presentation.NoteDetailsViewModel
 import com.ahrokholska.presentation_domain_mapper.toPresentation
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-internal class BuySomethingDetailsScreenViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+@HiltViewModel(assistedFactory = BuySomethingDetailsScreenViewModel.Factory::class)
+internal class BuySomethingDetailsScreenViewModel @AssistedInject constructor(
+    @Assisted id: Int,
     pinNoteUseCase: PinNoteUseCase,
     unPinNoteUseCase: UnPinNoteUseCase,
     getBuySomethingNoteDetailsUseCase: GetBuySomethingNoteDetailsUseCase,
@@ -28,7 +29,7 @@ internal class BuySomethingDetailsScreenViewModel @Inject constructor(
     finishNoteUseCase: FinishNoteUseCase,
     private val changeBuySomethingItemCheckUseCase: ChangeBuySomethingItemCheckUseCase
 ) : NoteDetailsViewModel(
-    savedStateHandle, NoteType.BuyingSomething, pinNoteUseCase, unPinNoteUseCase, deleteNoteUseCase,
+    id, NoteType.BuyingSomething, pinNoteUseCase, unPinNoteUseCase, deleteNoteUseCase,
     finishNoteUseCase
 ) {
     val note = getBuySomethingNoteDetailsUseCase(id)
@@ -40,5 +41,10 @@ internal class BuySomethingDetailsScreenViewModel @Inject constructor(
         viewModelScope.launch {
             changeBuySomethingItemCheckUseCase(id, index, checked)
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(id: Int): BuySomethingDetailsScreenViewModel
     }
 }
