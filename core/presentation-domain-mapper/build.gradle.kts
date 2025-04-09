@@ -44,4 +44,6 @@ dependencies {
 
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
+
+    testImplementation(libs.junit)
 }
