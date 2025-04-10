@@ -21,6 +21,7 @@ import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
 
 @Composable
 fun MainScreenDecoration(
+    currentScreen: BottomBarScreen,
     onPlusClick: () -> Unit = {},
     onScreenClick: (screen: BottomBarScreen) -> Unit = {},
     content: @Composable (scrollBottomPadding: Dp) -> Unit
@@ -42,7 +43,7 @@ fun MainScreenDecoration(
                 .onGloballyPositioned {
                     bottomBarHeight = with(density) { it.size.height.toDp() }
                 },
-            currentScreen = BottomBarScreen.SEARCH,
+            currentScreen = currentScreen,
             onPlusClick = onPlusClick,
             onScreenClick = onScreenClick,
         )
@@ -52,7 +53,7 @@ fun MainScreenDecoration(
 @Preview
 @Composable
 private fun MainScreenDecorationPreview() {
-    MainScreenDecoration {
+    MainScreenDecoration(currentScreen = BottomBarScreen.SEARCH,) {
         Text("Content")
     }
 }

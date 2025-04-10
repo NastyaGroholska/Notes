@@ -31,6 +31,7 @@ fun Navigation() {
         ) { content ->
             MainScreenDecoration(
                 content = content,
+                currentScreen = BottomBarScreen.HOME,
                 onPlusClick = navController::navigateToCreateNewNotesGraph,
                 onScreenClick = {
                     when (it) {
@@ -46,6 +47,7 @@ fun Navigation() {
         noteAllFinishedNotesScreen(onNoteClick = navController::navigateToNoteDetailsScreen) { content ->
             MainScreenDecoration(
                 content = content,
+                currentScreen = BottomBarScreen.FINISHED,
                 onPlusClick = {
                     navController.navigateToCreateNewNotesGraph {
                         popUpToAllFinishedNotesScreen(inclusive = true)
@@ -75,6 +77,7 @@ fun Navigation() {
         ) { content ->
             MainScreenDecoration(
                 content = content,
+                currentScreen = BottomBarScreen.SEARCH,
                 onPlusClick = {
                     navController.navigateToCreateNewNotesGraph {
                         popUpToNoteSearchScreen(inclusive = true)
